@@ -11,7 +11,7 @@ const stripHtml = (value) => {
 };
 
 /* =============================== */
-/* BUILD IMAGE PATH */
+/* BUILD IMAGE PATH   this is changes  */
 /* =============================== */
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0 && fileArray[0].filename) {
