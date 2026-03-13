@@ -5,147 +5,145 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../../configs/api";
 
-export default function EmbeddedSection() {
+export default function Services() {
+
   const navigate = useNavigate();
+
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    const res = await axios.get(
-      `${BASE_URL}/api/embeddedsection`
-    );
+
+    const res = await axios.get(`${BASE_URL}/api/services`);
+
     setData(res.data);
+
   };
 
   useEffect(() => {
+
     fetchData();
+
   }, []);
 
   const handleDelete = async (id) => {
-    await axios.delete(
-      `${BASE_URL}/api/embeddedsection/${id}`
-    );
+
+    await axios.delete(`${BASE_URL}/api/services/${id}`);
+
     fetchData();
+
   };
 
   return (
+
     <div className="mt-12 mb-8 px-6">
+
       <Card>
+
         <CardHeader
           variant="gradient"
           color="gray"
           className="flex justify-between items-center p-6"
         >
+
           <Typography variant="h6" color="white">
-            Embedded Section
+            Services
           </Typography>
 
           <Button
             size="sm"
             color="white"
             onClick={() =>
-              navigate("/dashboard/master/embedded-section/add")
+              navigate("/dashboard/master/services/add")
             }
           >
             Add
           </Button>
+
         </CardHeader>
 
         <CardBody className="overflow-x-auto">
+
           <table className="w-full border border-blue-gray-200 table-auto">
+
             <thead className="bg-blue-gray-50">
+
               <tr>
+
                 {[
+                  "Title",
                   "Heading",
-                  "Paragraph 1",
-                  "Images",
-                  "Video",
+                  "Paragraph",
+                  "Image",
                   "Action",
                 ].map((head) => (
+
                   <th
                     key={head}
                     className="border border-blue-gray-200 px-4 py-3 text-left text-xs font-bold uppercase text-blue-gray-600"
                   >
                     {head}
                   </th>
+
                 ))}
+
               </tr>
+
             </thead>
 
             <tbody>
+
               {data.map((item) => (
+
                 <tr key={item.id} className="hover:bg-blue-gray-50">
 
-                  {/* Heading */}
-                  <td className="border border-blue-gray-200 px-4 py-3 max-w-xs">
+                  <td className="border border-blue-gray-200 px-4 py-3">
                     <div
-                      className="line-clamp-2"
-                      dangerouslySetInnerHTML={{
-                        __html: item.heading,
-                      }}
+                      dangerouslySetInnerHTML={{ __html: item.title }}
                     />
                   </td>
 
-                  {/* Paragraph 1 */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.heading }}
+                    />
+                  </td>
+
                   <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
                     <div
                       className="line-clamp-2"
-                      dangerouslySetInnerHTML={{
-                        __html: item.paragraph1,
-                      }}
+                      dangerouslySetInnerHTML={{ __html: item.paragraph }}
                     />
                   </td>
 
-                
                   <td className="border border-blue-gray-200 px-4 py-3">
-                    <div className="flex gap-2 flex-wrap">
-                      {[item.image1, item.image2, item.image3, item.image4]
-                        .filter(Boolean)
-                        .map((img, index) => (
-                          <img
-                            key={index}
-                            src={`${BASE_URL}/${img}`}
-                            className="h-12 w-12 object-cover rounded"
-                            alt=""
-                          />
-                        ))}
-                    </div>
-                  </td>
-                 
-                  <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.video && (
-                      item.video.endsWith(".mp4") ||
-                        item.video.endsWith(".webm") ||
-                        item.video.endsWith(".mov") ? (
-                        <video
-                          src={`${BASE_URL}/${item.video}`}
-                          className="h-14 w-20 rounded"
-                          controls
-                        />
-                      ) : (
-                        <img
-                          src={`${BASE_URL}/${item.video}`}
-                          className="h-14 w-20 object-cover rounded"
-                          alt=""
-                        />
-                      )
+
+                    {item.image && (
+
+                      <img
+                        src={`${BASE_URL}/${item.image}`}
+                        className="h-14 w-20 object-cover rounded"
+                        alt=""
+                      />
+
                     )}
+
                   </td>
 
-                  {/* Action */}
                   <td className="border border-blue-gray-200 px-4 py-3">
+
                     <div className="flex gap-2">
+
                       <Button
                         size="sm"
                         variant="outlined"
                         onClick={() =>
-                          navigate(
-                            `/dashboard/master/embedded-section/edit/${item.id}`
-                          )
+                          navigate(`/dashboard/master/services/edit/${item.id}`)
                         }
                       >
                         Edit
@@ -160,15 +158,25 @@ export default function EmbeddedSection() {
                       >
                         Delete
                       </Button>
+
                     </div>
+
                   </td>
 
                 </tr>
+
               ))}
+
             </tbody>
+
           </table>
+
         </CardBody>
+
       </Card>
+
     </div>
+
   );
+
 }

@@ -43,12 +43,12 @@ import WhatSection from "./pages/master/wh_section/WhatSection";
 import WhatSectionForm from "./pages/master/wh_section/WhatSectionForm";
 import Image from "./pages/master/image/Image";
 import ImageForm from "./pages/master/image/ImageForm";
-import EmbeddedSection from "./pages/master/embedded_section/EmbeddedSection";
-import EmbeddedSectionForm from "./pages/master/embedded_section/EmbeddedSectionForm";
-import NetworkSection from "./pages/master/network_section/NetworkSection";
-import NetworkSectionForm from "./pages/master/network_section/NetworkSectionForm";
-import CloudSection from "./pages/master/cloud_section/CloudSection";
-import CloudSectionForm from "./pages/master/cloud_section/CloudSectionForm";
+// import EmbeddedSection from "./pages/master/embedded_section/Services";
+
+import ServicesCategory from "./pages/master/services_category/ServicesCategory";
+import ServicesCategoryForm from "./pages/master/services_category/ServicesCategoryForm";
+import ServicesSubCat from "./pages/master/services_sub_cat/ServicesSubCat";
+import ServicesSubCatForm from "./pages/master/services_sub_cat/ServicesSubCatForm";
 import ManagementSection from "./pages/master/management_section/ManagementSection";
 import ManagementSectionForm from "./pages/master/management_section/ManagementSectionForm";
 import SupportedContent from "./pages/master/supported_content/SupportedContent";
@@ -68,8 +68,8 @@ import ContactMessages from "./pages/master/contact_messages/ContactMessages";
 import ContactMessageForm from "./pages/master/contact_messages/ContactMessagesForm";
 import ContactSettings from "./pages/master/contact_settings/ContactSettings";
 import ContactSettingsForm from "./pages/master/contact_settings/ContactSettingsForm"
-
-
+import Services from "./pages/master/services/Services";
+import ServicesForm from "./pages/master/services/ServicesForm";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -343,52 +343,52 @@ export const routes = [
       {
         icon: <Cog6ToothIcon {...icon} />,
         name: "embedded-section",
-        path: "/master/embedded-section",
-        element: <EmbeddedSection />,
+        path: "/master/services",
+        element: <Services />,
       },
       {
         name: "Add Embedded Section",
-        path: "/master/embedded-section/add",
-        element: <EmbeddedSectionForm />,
+        path: "/master/services/add",
+        element: <ServicesForm/>,
       },
       {
         name: "Edit Embedded Section",
-        path: "/master/embedded-section/edit/:id",
-        element: <EmbeddedSectionForm />,
+        path: "/master/services/edit/:id",
+        element: <ServicesForm/>,
       },
       //Network Section
       {
         icon: <Cog6ToothIcon {...icon} />,
         name: "network-section",
-        path: "/master/network-section",
-        element: <NetworkSection />,
+        path: "/master/services-category",
+        element: <ServicesCategory/>,
       },
       {
         name: "Add Network Section",
-        path: "/master/network-section/add",
-        element: <NetworkSectionForm />,
+        path: "/master/services-category/add",
+        element: <ServicesCategoryForm />,
       },
       {
         name: "Edit Network Section",
-        path: "/master/network-section/edit/:id",
-        element: <NetworkSectionForm />,
+        path: "/master/services-category/edit/:id",
+        element: <ServicesCategoryForm />,
       },
       //Cloud Section
       {
         icon: <Cog6ToothIcon {...icon} />,
         name: "cloud-section",
-        path: "/master/cloud-section",
-        element: <CloudSection />,
+        path: "/master/services-sub-cat",
+        element: <ServicesSubCat />,
       },
       {
         name: "Add Cloud Section",
-        path: "/master/cloud-section/add",
-        element: <CloudSectionForm />,
+        path: "/master/services-sub-cat/add",
+        element: <ServicesSubCatForm />,
       },
       {
         name: "Edit Cloud Section",
-        path: "/master/cloud-section/edit/:id",
-        element: <CloudSectionForm />,
+        path: "/master/services-sub-cat/edit/:id",
+        element: <ServicesSubCatForm />,
       },
       //Management Section
       {

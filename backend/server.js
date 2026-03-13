@@ -10,9 +10,10 @@ const aboutUsBenefitsRoutes = require("./routes/aboutUsBenefitsRoutes")
 const slidesRoutes = require("./routes/slidesRoutes");
 const whatSectionRoutes = require("./routes/whatSectionRoutes");
 const imageButton = require("./routes/imageButton")
-const embeddedRoutes = require("./routes/embeddedRoutes");
-const networkSectionRoutes = require("./routes/networkSectionRoutes");
-const cloudSectionRoutes = require("./routes/cloudSectionRoutes");
+const servicesRoutes = require("./routes/servicesRoutes");
+// const networkSectionRoutes = require("./routes/networkSectionRoutes");
+const servicesCategoryRoutes = require("./routes/servicesCategoryRoutes")
+const servicesDetailsRoutes = require("./routes/servicesDetailsRoutes")
 const managementSectionRoutes = require("./routes/managementSectionRoutes");
 const supportedContentRoutes = require("./routes/supportedContentRoutes");
 const offerRoutes = require("./routes/offerRoutes");
@@ -49,9 +50,9 @@ app.use("/api/solution-cat", solutionCatRoutes);
 app.use("/api/solution-sub-cat", solutionSubCatRoutes);
 app.use("/api/what-section" , whatSectionRoutes);
 app.use("/api/slides" , slidesRoutes);
-app.use("/api/embeddedsection" , embeddedRoutes);
-app.use("/api/networksection" , networkSectionRoutes);
-app.use("/api/cloudsection" , cloudSectionRoutes);
+app.use("/api/services" , servicesRoutes);
+app.use("/api/services-category" , servicesCategoryRoutes);
+app.use("/api/services-sub-cat" , servicesDetailsRoutes);
 app.use("/api/managementsection" , managementSectionRoutes);
 app.use("/api/image" , imageButton );
 app.use("/api/supported-content" , supportedContentRoutes);

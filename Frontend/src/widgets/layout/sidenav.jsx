@@ -204,21 +204,21 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        <NavLink to="/dashboard/master/embedded-section">
+        <NavLink to="/dashboard/master/services">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            Embedded Section
+            Services
           </Button>
         </NavLink>
 
-        <NavLink to="/dashboard/master/network-section">
+        <NavLink to="/dashboard/master/services-category">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            Network Section
+            Service Category
           </Button>
         </NavLink>
 
-        <NavLink to="/dashboard/master/cloud-section">
+        <NavLink to="/dashboard/master/services-sub-cat">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            Cloud Section
+            Service Sub Category
           </Button>
         </NavLink>
 

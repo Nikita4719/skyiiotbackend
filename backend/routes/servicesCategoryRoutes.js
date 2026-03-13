@@ -1,32 +1,20 @@
 const express = require("express");
 const router = express.Router();
+const controller = require("../controllers/servicesCategoryController");
 const upload = require("../middleware/upload");
-const controller = require("../controllers/embeddedController");
 
 router.get("/", controller.getAll);
 router.get("/:id", controller.getOne);
 
 router.post(
   "/",
-  upload.fields([
-    { name: "image1" },
-    { name: "image2" },
-    { name: "image3" },
-    { name: "image4" },
-    { name: "video" },
-  ]),
+  upload.fields([{ name: "icon", maxCount: 1 }]),
   controller.create
 );
 
 router.put(
   "/:id",
-  upload.fields([
-    { name: "image1" },
-    { name: "image2" },
-    { name: "image3" },
-    { name: "image4" },
-    { name: "video" },
-  ]),
+  upload.fields([{ name: "icon", maxCount: 1 }]),
   controller.update
 );
 
