@@ -38,6 +38,19 @@ export default function Footer() {
         }
     };
 
+    const handleLinkChange = (footerId, index, newLink) => {
+        const updatedData = data.map((item) => {
+            if (item.id === footerId) {
+                const newLinks = [...item.links];
+                newLinks[index].link = newLink;
+                return { ...item, links: newLinks };
+            }
+            return item;
+        });
+        setData(updatedData);
+    };
+
+
     return (
         <div className="mt-12 mb-8 flex flex-col gap-12 px-6">
             <Card>
@@ -72,6 +85,7 @@ export default function Footer() {
                                     "QR Code 2",
                                     "QR Code 3",
                                     "QR Code 4",
+                                    "Links",
                                     "Action",
                                 ].map((head) => (
                                     <th key={head} className="border-b py-3 px-5 text-left">
@@ -144,6 +158,27 @@ export default function Footer() {
                                                 )}
                                             </td>
                                         ))}
+
+                                        {/* Links Column */}
+                                        <td className="py-3 px-5 border-b">
+                                            {item.links && item.links.length > 0 ? (
+                                                <ul className="text-[11px]">
+                                                    {item.links.map((linkObj, index) => (
+                                                        <li key={index}>
+                                                            <input
+                                                                type="text"
+                                                                value={linkObj.link}
+                                                                onChange={(e) => handleLinkChange(item.id, index, e.target.value)}
+                                                                className="w-full border px-1 rounded text-[11px]"
+                                                            />
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            ) : (
+                                                "-"
+                                            )}
+                                        </td>
+
 
                                         {/* Action */}
                                         <td className="py-3 px-5 border-b flex gap-2">

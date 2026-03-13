@@ -14,7 +14,8 @@ export default function FooterForm() {
     contact_email: "",
     contact_phone: "",
     address: "",
-    qr_codes: ["", "", "", ""], // 4 QR codes
+    qr_codes: ["", "", "", ""],
+    links: [],
   });
 
   const [preview, setPreview] = useState(["", "", "", ""]);
@@ -33,6 +34,7 @@ export default function FooterForm() {
           contact_phone: data.contact_phone || "",
           address: data.address || "",
           qr_codes: qr,
+          links: data.links || [],
         });
         setPreview(qr);
       })
@@ -78,6 +80,9 @@ export default function FooterForm() {
         else dataToSend.append("existing_qr[]", qr || "");
       });
 
+      // Append links as JSON string
+      dataToSend.append("links", JSON.stringify(formData.links));
+
       await axios.put(`${BASE_URL}/api/footer`, dataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -89,6 +94,13 @@ export default function FooterForm() {
       alert("Error saving footer. Check console.");
     }
   };
+
+ const handleLinkChange = (index, newLink) => {
+  const updatedLinks = [...formData.links];
+  updatedLinks[index].link = newLink;
+  setFormData((prev) => ({ ...prev, links: updatedLinks }));
+};
+
 
   return (
     <div className="mt-12 mb-8 px-6">
@@ -149,7 +161,7 @@ export default function FooterForm() {
               onChange={handleChange}
               className="border rounded-xl p-2 w-full"
               required
-              pattern="[0-9]{10}"
+              pattern="(\+91[-\s]?)?[0-9]{10}"
               maxLength={14}
             />
           </div>
@@ -189,6 +201,28 @@ export default function FooterForm() {
               </label>
             </div>
           ))}
+
+          {/* Links */}
+          <div className="col-span-12">
+            <Typography className="mb-2 font-medium">Links (Solution URLs)</Typography>
+            {formData.links.map((linkObj, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={linkObj.name}
+                  readOnly
+                  className="border rounded-xl p-2 w-1/3 bg-gray-100"
+                />
+                <input
+                  type="text"
+                  value={linkObj.link}
+                  onChange={(e) => handleLinkChange(index, e.target.value)}
+                  className="border rounded-xl p-2 w-2/3"
+                />
+              </div>
+            ))}
+          </div>
+
 
           <div className="col-span-12">
             <Button type="submit" fullWidth>
