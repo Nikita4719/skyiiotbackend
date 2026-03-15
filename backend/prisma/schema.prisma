@@ -302,10 +302,11 @@ model Footer {
   id            Int      @id @default(autoincrement())
   title         String?  
   content       String?  
-    email       String?
+   contact_email       String?
   contact_phone String
   address       String
   qr_code       String   @db.Text  // store JSON array of image paths
+  links         Json?    // new field for name+URL
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
