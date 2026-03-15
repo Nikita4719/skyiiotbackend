@@ -13,12 +13,14 @@ import {
   Cog6ToothIcon,
   UserCircleIcon,
   CheckCircleIcon,
+  EnvelopeIcon,
 } from "@heroicons/react/24/solid";
 import './sidenav.css';
 
 export function Sidenav() {
   const [openCMS, setOpenCMS] = useState(false);
   const [openSolution, setOpenSolution] = useState(false);
+  const [openNavbar, setOpenNavbar] = useState(false);
   const [openMaster, setOpenMaster] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
 
@@ -45,6 +47,44 @@ export function Sidenav() {
           </Button>
         )}
       </NavLink>
+
+     {/*Navbar */}
+
+        <Button
+        variant="text"
+        onClick={() => setOpenNavbar(!openNavbar)}
+        className="flex items-center justify-between mb-2"
+        fullWidth
+      >
+        <div className="flex items-start gap-3">
+          < EnvelopeIcon className="w-5 h-5" />
+          Navbar
+        </div>
+        <ChevronDownIcon className="w-4 h-4" />
+      </Button>
+
+        <Collapse open={openNavbar}>
+
+        <NavLink to="/dashboard/navbar/navbar-top">
+          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
+            Header Top
+          </Button>
+        </NavLink>
+
+        <NavLink to="/dashboard/navbar/navbar-logo">
+          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
+            Navbar Logo
+          </Button>
+        </NavLink>
+
+        <NavLink to="/dashboard/navbar/navbar-menu">
+          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
+            Navbar Menu
+          </Button>
+        </NavLink>
+
+        </Collapse>
+
 
      {/* Solution */}
 

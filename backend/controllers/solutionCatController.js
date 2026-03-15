@@ -1,121 +1,190 @@
-const db = require("../config/db");
+const prisma = require("../config/prisma");
 
-// CREATE
-exports.createSolutionCat = (req, res) => {
-  const { title } = req.body;
-  const image = req.file ? req.file.filename : null;
+/* ================= HELPER: STRIP HTML ================= */
 
-  if (!title || !image) {
-    return res.status(400).json({ message: "Title and Image required" });
-  }
+const stripHtml = (value) => {
+  if (!value || typeof value !== "string") return value;
 
-  const sql = "INSERT INTO solution_cat (title, image) VALUES (?, ?)";
-
-  db.query(sql, [title, image], (err, result) => {
-    if (err) return res.status(500).json(err);
-
-    res.status(201).json({
-      id: result.insertId,
-      title,
-      image,
-    });
-  });
+  return value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
 };
 
-// GET ALL
-exports.getAllSolutionCat = (req, res) => {
-  const sql = `
-    SELECT sc.id AS catId, sc.title AS catTitle, sc.image AS catImage,
-           ssc.id AS subId, ssc.para1, ssc.para2, ssc.input1, ssc.input2, ssc.input3, ssc.input4, ssc.image2
-    FROM solution_cat sc
-    LEFT JOIN solution_sub_categories ssc
-    ON sc.id = ssc.solutionCatId
-    ORDER BY sc.id DESC
-  `;
+/* ================= HELPER: IMAGE PATH ================= */
 
-  db.query(sql, (err, results) => {
-    if (err) return res.status(500).json(err);
+const buildImagePath = (fileArray, existingImage = null) => {
+  if (fileArray && fileArray.length > 0) {
+    return `uploads/${fileArray[0].filename}`;
+  }
 
-    const categories = [];
-    results.forEach(row => {
-      let cat = categories.find(c => c.id === row.catId);
-      if (!cat) {
-        cat = {
-          id: row.catId,
-          title: row.catTitle,
-          image: row.catImage,
-          subcategories: []
-        };
-        categories.push(cat);
-      }
+  return existingImage;
+};
 
-      if (row.subId) {
-        cat.subcategories.push({
-          id: row.subId,
-          para1: row.para1,
-          para2: row.para2,
-          input1: row.input1,
-          input2: row.input2,
-          input3: row.input3,
-          input4: row.input4,
-          image2: row.image2
-        });
+/* ================= GET ALL ================= */
+
+exports.getAll = async (req, res) => {
+  try {
+
+    const records = await prisma.solution_cat.findMany({
+      orderBy: { id: "desc" },
+      include: {
+        solution_sub_categories: true
       }
     });
 
-    res.json(categories);
-  });
-};
+    res.json(records);
 
-// GET SINGLE
-exports.getSingleSolutionCat = (req, res) => {
-  const { id } = req.params;
+  } catch (error) {
+    console.error(error);
 
-  db.query(
-    "SELECT * FROM solution_cat WHERE id = ?",
-    [id],
-    (err, result) => {
-      if (err) return res.status(500).json(err);
-      res.json(result[0]);
-    }
-  );
-};
-
-// UPDATE
-exports.updateSolutionCat = (req, res) => {
-  const { id } = req.params;
-  const { title } = req.body;
-  const image = req.file ? req.file.filename : null;
-
-  let sql;
-  let values;
-
-  if (image) {
-    sql =
-      "UPDATE solution_cat SET title = ?, image = ? WHERE id = ?";
-    values = [title, image, id];
-  } else {
-    sql =
-      "UPDATE solution_cat SET title = ? WHERE id = ?";
-    values = [title, id];
+    res.status(500).json({
+      error: "Failed to fetch records"
+    });
   }
-
-  db.query(sql, values, (err) => {
-    if (err) return res.status(500).json(err);
-    res.json({ message: "Updated successfully" });
-  });
 };
 
-// DELETE
-exports.deleteSolutionCat = (req, res) => {
-  const { id } = req.params;
+/* ================= GET ONE ================= */
 
-  db.query(
-    "DELETE FROM solution_cat WHERE id = ?",
-    [id],
-    (err) => {
-      if (err) return res.status(500).json(err);
-      res.json({ message: "Deleted successfully" });
+exports.getOne = async (req, res) => {
+  try {
+
+    const id = Number(req.params.id);
+
+    const record = await prisma.solution_cat.findUnique({
+      where: { id },
+      include: {
+        solution_sub_categories: true
+      }
+    });
+
+    if (!record) {
+      return res.status(404).json({
+        message: "Record not found"
+      });
     }
-  );
+
+    res.json(record);
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to fetch record"
+    });
+  }
+};
+
+/* ================= CREATE ================= */
+
+exports.create = async (req, res) => {
+  try {
+
+    const files = req.files || {};
+
+    if (!files.image || files.image.length === 0) {
+      return res.status(400).json({
+        message: "Image is required"
+      });
+    }
+
+    const data = {
+      title: stripHtml(req.body.title),
+      image: `uploads/${files.image[0].filename}`
+    };
+
+    const created = await prisma.solution_cat.create({
+      data
+    });
+
+    res.json({
+      message: "Created successfully",
+      data: created
+    });
+
+  } catch (error) {
+    console.error("CREATE ERROR:", error);
+
+    res.status(500).json({
+      error: error.message
+    });
+  }
+};
+/* ================= UPDATE ================= */
+
+exports.update = async (req, res) => {
+  try {
+
+    const id = Number(req.params.id);
+    const files = req.files || {};
+
+    const existing = await prisma.solution_cat.findUnique({
+      where: { id }
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        message: "Record not found"
+      });
+    }
+
+    const data = {
+      title: req.body.title
+        ? stripHtml(req.body.title)
+        : existing.title,
+
+      image: buildImagePath(files.image, existing.image)
+    };
+
+    const updated = await prisma.solution_cat.update({
+      where: { id },
+      data
+    });
+
+    res.json({
+      message: "Updated successfully",
+      data: updated
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to update record"
+    });
+  }
+};
+
+/* ================= DELETE ================= */
+
+exports.remove = async (req, res) => {
+  try {
+
+    const id = Number(req.params.id);
+
+    const existing = await prisma.solution_cat.findUnique({
+      where: { id }
+    });
+
+    if (!existing) {
+      return res.status(404).json({
+        message: "Record not found"
+      });
+    }
+
+    await prisma.solution_cat.delete({
+      where: { id }
+    });
+
+    res.json({
+      message: "Deleted successfully"
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to delete record"
+    });
+  }
 };

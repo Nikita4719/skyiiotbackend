@@ -39,6 +39,9 @@ export default function SolutionImageForm() {
             image4: res.data.image4
               ? `${BASE_URL}/${res.data.image4}`
               : null,
+              imagechart: res.data.imagechart
+    ? `${BASE_URL}/${res.data.imagechart}`
+    : null,
           });
         });
     }
@@ -101,6 +104,20 @@ export default function SolutionImageForm() {
             </div>
           ))}
 
+<Typography>Chart Image</Typography>
+
+<input
+  type="file"
+  name="imagechart"
+/>
+
+{preview.imagechart && (
+  <img
+    src={preview.imagechart}
+    className="h-20 mt-3"
+    alt=""
+  />
+)}
           <Button type="submit" fullWidth>
             {id ? "Update" : "Save"}
           </Button>
