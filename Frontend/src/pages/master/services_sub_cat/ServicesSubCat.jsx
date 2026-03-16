@@ -32,7 +32,7 @@ export default function ServicesSubCat() {
 
   const handleDelete = async (id) => {
 
-    await axios.delete(`${BASE_URL}/api/services-details/${id}`);
+    await axios.delete(`${BASE_URL}/api/services-sub-cat/${id}`);
 
     fetchData();
 

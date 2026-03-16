@@ -146,14 +146,14 @@ export default function ServicesSubCatForm() {
     if (id) {
 
       await axios.put(
-        `${BASE_URL}/api/services-details/${id}`,
+        `${BASE_URL}/api/services-sub-cat/${id}`,
         data
       );
 
     } else {
 
       await axios.post(
-        `${BASE_URL}/api/services-details`,
+        `${BASE_URL}/api/services-sub-cat`,
         data
       );
 
