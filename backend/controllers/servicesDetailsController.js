@@ -131,8 +131,13 @@ exports.create = async (req, res) => {
 
         image: files.image?.[0]
           ? `uploads/${files.image[0].filename}`
+          : null,
+
+        imagebg: files.imagebg?.[0]
+          ? `uploads/${files.imagebg[0].filename}`
           : null
       }
+
     });
 
     res.status(201).json(created);
@@ -208,6 +213,16 @@ exports.update = async (req, res) => {
 
     }
 
+    if (files.imagebg?.[0]) {
+
+      if (existing.imagebg) {
+        deleteFile(existing.imagebg);
+      }
+
+      data.imagebg = `uploads/${files.imagebg[0].filename}`;
+
+    }
+
     const updated = await prisma.services_sub_cat.update({
 
       where: { id },
@@ -242,6 +257,10 @@ exports.remove = async (req, res) => {
 
     if (existing.image) {
       deleteFile(existing.image);
+    }
+
+    if (existing.imagebg) {
+      deleteFile(existing.imagebg);
     }
 
     await prisma.services_sub_cat.delete({

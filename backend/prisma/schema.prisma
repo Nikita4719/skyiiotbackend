@@ -181,6 +181,7 @@ model services_sub_cat {
   title                 String?   @db.Text
   description           String?   @db.LongText
   image                 String?   @db.VarChar(255)
+  imagebg               String?   @db.VarChar(255)
   subheading            String?   @db.Text
   subspan1              String?   @db.Text
   subspan2              String?   @db.Text
