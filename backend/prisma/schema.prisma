@@ -210,7 +210,7 @@ model smarter_section {
 model solution_cat {
   id                      Int                       @id @default(autoincrement())
   title                   String                    @db.VarChar(255)
-  image                   String                    @db.VarChar(255)
+  image                   String?                   @db.VarChar(255) // <-- made nullable
   created_at              DateTime?                 @default(now()) @db.Timestamp(0)
   solution_sub_categories solution_sub_categories[]
 }
@@ -222,37 +222,29 @@ model solution_images {
   image2     String?   @db.VarChar(255)
   image3     String?   @db.VarChar(255)
   image4     String?   @db.VarChar(255)
-   imagechart String?   @db.VarChar(255)
+  imagechart String?   @db.VarChar(255)
   created_at DateTime? @default(now()) @db.Timestamp(0)
 }
 
 model solution_sub_categories {
   id            Int           @id @default(autoincrement())
-
-  solutionCatId Int?
-
+  solutionCatId Int?          
   heading       String?       @db.Text
   description1  String?       @db.Text
   description2  String?       @db.Text
-
   image1        String?       @db.VarChar(255)
   imagechart    String?       @db.VarChar(255)
-
   para1         String?       @db.Text
   para2         String?       @db.Text
   para3         String?       @db.Text
   para4         String?       @db.Text
-
   image2        String?       @db.Text
-
   created_at    DateTime?     @default(now()) @db.Timestamp(0)
 
   solution_cat  solution_cat? @relation(fields: [solutionCatId], references: [id], onDelete: Cascade)
 
   @@index([solutionCatId])
 }
-
-
 
 model supported_content {
   id         Int       @id @default(autoincrement())
@@ -314,7 +306,7 @@ model Footer {
   id            Int      @id @default(autoincrement())
   title         String?  
   content       String?  
-    email       String?
+  contact_email       String?
   contact_phone String
   address       String
   qr_code       String   @db.Text  // store JSON array of image paths

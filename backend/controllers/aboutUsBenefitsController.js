@@ -57,58 +57,62 @@ exports.create = async (req, res) => {
 
 /* GET ALL */
 exports.getAll = async (req, res) => {
-
   try {
-
     const data = await prisma.aboutusbenefits.findMany({
       orderBy: { id: "desc" }
     });
 
-    res.json(data);
+    // Map images array to image1, image2, image3, image4 for frontend
+    const formattedData = data.map(item => {
+      const imgs = item.images || [];
+      return {
+        ...item,
+        image1: imgs[0] || null,
+        image2: imgs[1] || null,
+        image3: imgs[2] || null,
+        image4: imgs[3] || null,
+      };
+    });
+
+    res.json(formattedData);
 
   } catch (error) {
-
     console.error(error);
-
     res.status(500).json({
       message: "Failed to fetch About Us Benefits"
     });
-
   }
-
 };
 
 /* GET ONE */
 exports.getOne = async (req, res) => {
-
   const id = parseInt(req.params.id);
-
   if (isNaN(id))
     return res.status(400).json({ message: "Invalid ID" });
 
   try {
-
-    const data = await prisma.aboutusbenefits.findUnique({
+    const item = await prisma.aboutusbenefits.findUnique({
       where: { id }
     });
 
-    if (!data)
-      return res.status(404).json({
-        message: "About Us Benefits not found"
-      });
+    if (!item)
+      return res.status(404).json({ message: "About Us Benefits not found" });
 
-    res.json(data);
+    const imgs = item.images || [];
+    const formattedItem = {
+      ...item,
+      image1: imgs[0] || null,
+      image2: imgs[1] || null,
+      image3: imgs[2] || null,
+      image4: imgs[3] || null,
+    };
+
+    res.json(formattedItem);
 
   } catch (error) {
-
     console.error(error);
-
-    res.status(500).json({
-      message: "Failed to fetch About Us Benefits"
-    });
-
+    res.status(500).json({ message: "Failed to fetch About Us Benefits" });
   }
-
 };
 
 /* UPDATE */
