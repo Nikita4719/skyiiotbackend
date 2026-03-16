@@ -7,7 +7,8 @@ import BASE_URL from "../../../configs/api";
 
 export default function FooterForm() {
   const navigate = useNavigate();
-
+  const [logo, setLogo] = useState(null);
+  const [logoPreview, setLogoPreview] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -36,9 +37,18 @@ export default function FooterForm() {
           qr_codes: qr,
           links: data.links || [],
         });
-        setPreview(qr);
+        setLogoPreview(
+          data.logo ? `${BASE_URL}/uploads/qrcodes/${data.logo}` : ""
+        );
+
+        setPreview(
+          qr.map((img) =>
+            img ? `${BASE_URL}/uploads/qrcodes/${img}` : ""
+          )
+        );
       })
       .catch((err) => console.error("Error fetching footer:", err));
+
   }, []);
 
   // Handle text/textarea inputs
@@ -67,21 +77,25 @@ export default function FooterForm() {
     try {
       const dataToSend = new FormData();
 
-      // Append text fields
       dataToSend.append("title", formData.title || "");
       dataToSend.append("content", formData.content || "");
       dataToSend.append("contact_email", formData.contact_email || "");
       dataToSend.append("contact_phone", formData.contact_phone || "");
       dataToSend.append("address", formData.address || "");
+      if (logo) {
+        dataToSend.append("logo", logo);
+      }
 
-      // Append QR codes
+      // QR codes
       formData.qr_codes.forEach((qr) => {
-        if (qr instanceof File) dataToSend.append("qr_codes", qr);
-        else dataToSend.append("existing_qr[]", qr || "");
+        if (qr instanceof File) {
+          dataToSend.append("qr_codes", qr);
+        }
       });
 
-      // Append links as JSON string
+      // links
       dataToSend.append("links", JSON.stringify(formData.links));
+
 
       await axios.put(`${BASE_URL}/api/footer`, dataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -89,17 +103,18 @@ export default function FooterForm() {
 
       alert("Footer saved successfully!");
       navigate("/dashboard/cms/footer");
+
     } catch (err) {
       console.error("Error saving footer:", err);
       alert("Error saving footer. Check console.");
     }
   };
 
- const handleLinkChange = (index, newLink) => {
-  const updatedLinks = [...formData.links];
-  updatedLinks[index].link = newLink;
-  setFormData((prev) => ({ ...prev, links: updatedLinks }));
-};
+  const handleLinkChange = (index, newLink) => {
+    const updatedLinks = [...formData.links];
+    updatedLinks[index].link = newLink;
+    setFormData((prev) => ({ ...prev, links: updatedLinks }));
+  };
 
 
   return (
@@ -176,6 +191,37 @@ export default function FooterForm() {
               className="border rounded-xl p-2 w-full"
               rows={3}
             />
+          </div>
+
+          <div className="col-span-12 md:col-span-3">
+            <Typography className="mb-2 font-medium">Logo</Typography>
+
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
+
+              {logoPreview ? (
+                <img
+                  src={logoPreview}
+                  alt="Logo Preview"
+                  className="h-full object-cover rounded-xl"
+                />
+              ) : (
+                <Typography color="gray">Click to upload Logo</Typography>
+              )}
+
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setLogo(file);
+                    setLogoPreview(URL.createObjectURL(file));
+                  }
+                }}
+              />
+
+            </label>
           </div>
 
           {/* QR Codes */}

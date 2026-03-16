@@ -76,6 +76,7 @@ export default function Footer() {
                         <thead>
                             <tr>
                                 {[
+                                    "Logo",
                                     "Title",
                                     "Content",
                                     "Email",
@@ -109,7 +110,20 @@ export default function Footer() {
 
                                 return (
                                     <tr key={item.id}>
-
+                                        
+                                            <td className="py-3 px-5 border-b">
+                                                {item.logo ? (
+                                                    <img
+                                                        src={`${BASE_URL}/uploads/qrcodes/${item.logo}`}
+                                                        alt="logo"
+                                                        className="h-12 w-12 object-contain rounded"
+                                                    />
+                                                ) : (
+                                                    "-"
+                                                )}
+                                            </td>
+                                            {/* {item.logo} */}
+                                        
                                         {/* Title */}
                                         <td className="py-3 px-5 border-b">
                                             {item.title || "-"}
