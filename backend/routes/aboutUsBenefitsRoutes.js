@@ -8,19 +8,13 @@ router.get("/:id", controller.getOne);
 
 router.post(
   "/",
-  upload.fields([
-    { name: "image1", maxCount: 1 },
-    { name: "image2", maxCount: 1 },
-  ]),
+  upload.array("images", 10),
   controller.create
 );
 
 router.put(
   "/:id",
-  upload.fields([
-    { name: "image1", maxCount: 1 },
-    { name: "image2", maxCount: 1 },
-  ]),
+  upload.array("images", 10),
   controller.update
 );
 

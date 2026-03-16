@@ -47,18 +47,26 @@ exports.createSolutionImage = async (req, res) => {
     const newRecord = await prisma.solution_images.create({
       data: {
         title,
+
         image1: files.image1?.[0]
           ? normalizePath(files.image1[0].path)
           : null,
+
         image2: files.image2?.[0]
           ? normalizePath(files.image2[0].path)
           : null,
+
         image3: files.image3?.[0]
           ? normalizePath(files.image3[0].path)
           : null,
+
         image4: files.image4?.[0]
           ? normalizePath(files.image4[0].path)
           : null,
+
+        imagechart: files.imagechart?.[0]
+          ? normalizePath(files.imagechart[0].path)
+          : null, // NEW
       },
     });
 
@@ -67,7 +75,6 @@ exports.createSolutionImage = async (req, res) => {
       message: "Created Successfully",
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -109,8 +116,6 @@ exports.getSingleSolutionImage = async (req, res) => {
 exports.updateSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    if (!id) return res.status(400).json({ message: "Invalid ID" });
-
     const { title } = req.body;
     const files = req.files || {};
 
@@ -126,6 +131,7 @@ exports.updateSolutionImage = async (req, res) => {
     let image2 = existing.image2;
     let image3 = existing.image3;
     let image4 = existing.image4;
+    let imagechart = existing.imagechart;
 
     if (files.image1?.[0]) {
       deleteFile(existing.image1);
@@ -147,6 +153,11 @@ exports.updateSolutionImage = async (req, res) => {
       image4 = normalizePath(files.image4[0].path);
     }
 
+    if (files.imagechart?.[0]) {
+      deleteFile(existing.imagechart);
+      imagechart = normalizePath(files.imagechart[0].path);
+    }
+
     await prisma.solution_images.update({
       where: { id },
       data: {
@@ -155,15 +166,16 @@ exports.updateSolutionImage = async (req, res) => {
         image2,
         image3,
         image4,
+        imagechart,
       },
     });
 
     res.json({ message: "Updated Successfully" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 /* ================= DELETE ================= */
 exports.deleteSolutionImage = async (req, res) => {
@@ -180,7 +192,7 @@ exports.deleteSolutionImage = async (req, res) => {
     }
 
     // Delete all images from disk
-    [existing.image1, existing.image2, existing.image3, existing.image4]
+    [existing.image1, existing.image2, existing.image3, existing.image4,existing.imagechart]
       .filter(Boolean)
       .forEach((imgPath) => deleteFile(imgPath));
 

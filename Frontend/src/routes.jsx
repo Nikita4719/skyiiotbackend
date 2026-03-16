@@ -9,6 +9,15 @@ import {
 import { Home } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
+//NAVABR
+import HeaderTop from "./pages/navbar/header_top/HeaderTopTable";
+import HeaderTopForm from "./pages/navbar/header_top/HeaderTopForm";
+import NavbarMenuForm from "./pages/navbar/navbarmenu/NavbarMenuForm";
+import NavbarMenuTable from "./pages/navbar/navbarmenu/NavbarMenuTable";
+import NavbarLogo from "./pages/navbar/navbarlogo/NavbarLogo";
+import NavbarLogoForm from "./pages/navbar/navbarlogo/NavbarLogoForm";
+
+
 //SOLUTION ROUTES
 import SolutionCat from "./pages/solution/solutioncat/SolutionCat";
 import SolutionCatForm from "./pages/solution/solutioncat/SolutionCatForm";
@@ -85,6 +94,53 @@ export const routes = [
         path: "/home",
         element: <Home />,
       },
+      //NAVBAR
+
+       {
+        name: "navbar",
+        path: "/navbar/navbar-top",
+        element: <HeaderTop />,
+      },
+      {
+        path: "/navbar/navbar-top/add",
+        element: <HeaderTopForm />,
+      },
+      {
+        path: "/navbar/navbar-top/edit/:id",
+        element: <HeaderTopForm />,
+      },
+    //NAVABR LOGO
+{
+        name: "navbar logo",
+        path: "/navbar/navbar-logo",
+        element: <NavbarLogo />,
+      },
+      {
+        path: "/navbar/navbar-logo/add",
+        element: <NavbarLogoForm />,
+      },
+      {
+        path: "/navbar/navbar-logo/edit/:id",
+        element: <NavbarLogoForm />,
+      },
+
+//NAVBAR MENU
+
+{
+        name: "navbar-menu",
+        path: "/navbar/navbar-menu",
+        element: <NavbarMenuTable/>,
+      },
+      {
+        path: "/navbar/navbar-menu/add",
+        element: <NavbarMenuForm />,
+      },
+      {
+        path: "/navbar/navbar-menu/edit/:id",
+        element: <NavbarMenuForm />,
+      },
+
+
       //SOLUTION CAT
       {
         name: "solution category",

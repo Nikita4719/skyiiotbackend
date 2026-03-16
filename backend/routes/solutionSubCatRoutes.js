@@ -7,16 +7,14 @@ const {
   getAll,
   getOne,
   update,
-  remove,
+  remove
 } = require("../controllers/solutionSubCatController");
 
-// =============================
-// Multer Config
-// =============================
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
+
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
@@ -24,11 +22,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// =============================
-// Routes
-// =============================
-router.post("/", upload.array("image2"), create);
-router.put("/:id", upload.array("image2"), update);
+router.post(
+  "/",
+  upload.fields([
+    { name: "image1", maxCount: 1 },
+    { name: "imagechart", maxCount: 1 },
+    { name: "image2", maxCount: 20 }
+  ]),
+  create
+);
+
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "image1", maxCount: 1 },
+    { name: "imagechart", maxCount: 1 },
+    { name: "image2", maxCount: 20 }
+  ]),
+  update
+);
 
 router.get("/", getAll);
 router.get("/:id", getOne);

@@ -31,6 +31,10 @@ const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
 const systemArchitectureRoutes = require("./routes/systemArchitectureRoutes");
 const footerRoutes = require("./routes/footerRoutes");
 const contactSettingsRoutes = require("./routes/contactSettingsRoutes");
+const headerTopRoutes = require("./routes/headerTopRoutes");
+const navbarMenuRoutes = require("./routes/navbarMenuRoutes");
+const navbarLogoRoutes = require("./routes/navbarLogoRoutes");
+
 const app = express();
 
 app.use(cors());
@@ -38,6 +42,9 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+app.use("/api/header-top", headerTopRoutes);
+app.use("/api/navbar-menu", navbarMenuRoutes);
+app.use("/api/navbar-logo", navbarLogoRoutes);
 app.use("/api/footer", footerRoutes);
 app.use("/api", contactSettingsRoutes);
 app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));

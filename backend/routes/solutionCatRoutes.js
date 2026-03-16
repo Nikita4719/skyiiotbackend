@@ -2,19 +2,15 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 
-const {
-  createSolutionCat,
-  getAllSolutionCat,
-  getSingleSolutionCat,
-  updateSolutionCat,
-  deleteSolutionCat,
-} = require("../controllers/solutionCatController");
+const controller = require("../controllers/solutionCatController");
 
-// Multer config
+/* ================= MULTER CONFIG ================= */
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
+
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
@@ -22,11 +18,28 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Routes
-router.post("/", upload.single("image"), createSolutionCat);
-router.get("/", getAllSolutionCat);
-router.get("/:id", getSingleSolutionCat);
-router.put("/:id", upload.single("image"), updateSolutionCat);
-router.delete("/:id", deleteSolutionCat);
+/* ================= ROUTES ================= */
+
+router.get("/", controller.getAll);
+
+router.get("/:id", controller.getOne);
+
+router.post(
+  "/",
+  upload.fields([
+    { name: "image", maxCount: 1 }
+  ]),
+  controller.create
+);
+
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "image", maxCount: 1 }
+  ]),
+  controller.update
+);
+
+router.delete("/:id", controller.remove);
 
 module.exports = router;
