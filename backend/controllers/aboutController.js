@@ -26,7 +26,7 @@ const deleteImage = (imagePath) => {
 };
 
 /* =============================== */
-/* CREATE */
+/* CREATE by vinay*/
 /* =============================== */
 exports.create = (req, res) => {
   const files = req.files || {};
