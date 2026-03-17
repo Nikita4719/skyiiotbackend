@@ -262,11 +262,11 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        <NavLink to="/dashboard/master/management-section">
+        {/* <NavLink to="/dashboard/master/management-section">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
             Management Section
           </Button>
-        </NavLink>
+        </NavLink> */}
 
         <NavLink to="/dashboard/master/supported-section">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
