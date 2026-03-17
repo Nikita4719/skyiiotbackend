@@ -5,21 +5,6 @@ const fs = require("fs");
 const path = require("path");
 
 /* ======================= */
-/* HELPER: STRIP HTML */
-/* ======================= */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return null;
-
-  const clean = value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return clean.length ? clean : null;
-};
-
-/* ======================= */
 /* HELPER: Delete Image */
 /* ======================= */
 const deleteImage = (imagePath) => {
@@ -80,10 +65,7 @@ exports.getOne = async (req, res) => {
 /* ======================= */
 exports.create = async (req, res) => {
   try {
-    const cleanTitle = stripHtml(req.body.title);
-    const cleanDescription = stripHtml(req.body.description);
-
-    if (!cleanTitle) {
+    if (!req.body.title) {
       return res.status(400).json({ message: "Title is required" });
     }
 
@@ -93,8 +75,8 @@ exports.create = async (req, res) => {
 
     const created = await prisma.what_section.create({
       data: {
-        title: cleanTitle,
-        description: cleanDescription,
+        title: req.body.title, // ✅ FIX
+        description: req.body.description ?? null, // ✅ FIX
         image: imagePath,
       },
     });
@@ -141,12 +123,12 @@ exports.update = async (req, res) => {
       data: {
         title:
           req.body.title !== undefined
-            ? stripHtml(req.body.title)
+            ? req.body.title // ✅ FIX
             : oldData.title,
 
         description:
           req.body.description !== undefined
-            ? stripHtml(req.body.description)
+            ? req.body.description // ✅ FIX
             : oldData.description,
 
         image: imagePath,

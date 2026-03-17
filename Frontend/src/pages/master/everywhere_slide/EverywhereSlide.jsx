@@ -59,17 +59,17 @@ export default function EverywhereSlide() {
           <table className="w-full border table-auto text-sm">
             <thead className="bg-blue-gray-50">
               <tr>
-                <th className="border px-3 py-2">Image</th>
-                <th className="border px-3 py-2">Heading</th>
-                <th className="border px-3 py-2">Paragraph</th>
-                <th className="border px-3 py-2">Action</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Image</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Heading</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Paragraph</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Action</th>
               </tr>
             </thead>
 
             <tbody>
               {data.map((item) => (
                 <tr key={item.id}>
-                  <td className="border px-3 py-2 text-center">
+                  <td className="border border-blue-gray-200 px-3 py-2 text-center">
                     {item.image && (
                       <img
                         src={`${BASE_URL}/${item.image}`}
@@ -80,20 +80,20 @@ export default function EverywhereSlide() {
                   </td>
 
                   <td
-                    className="border px-3 py-2"
+                    className="border border-blue-gray-200 px-3 py-2"
                     dangerouslySetInnerHTML={{
                       __html: item.heading,
                     }}
                   />
 
                   <td
-                    className="border px-3 py-2"
+                    className="border border-blue-gray-200 px-3 py-2"
                     dangerouslySetInnerHTML={{
                       __html: item.paragraph,
                     }}
                   />
 
-                  <td className="border px-3 py-2">
+                  <td className="border border-blue-gray-200 px-3 py-2">
                     <div className="flex gap-2">
                       <Button
                         size="sm"

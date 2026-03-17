@@ -11,10 +11,8 @@ const slidesRoutes = require("./routes/slidesRoutes");
 const whatSectionRoutes = require("./routes/whatSectionRoutes");
 const imageButton = require("./routes/imageButton")
 const servicesRoutes = require("./routes/servicesRoutes");
-// const networkSectionRoutes = require("./routes/networkSectionRoutes");
 const servicesCategoryRoutes = require("./routes/servicesCategoryRoutes")
 const servicesDetailsRoutes = require("./routes/servicesDetailsRoutes")
-const managementSectionRoutes = require("./routes/managementSectionRoutes");
 const supportedContentRoutes = require("./routes/supportedContentRoutes");
 const offerRoutes = require("./routes/offerRoutes");
 const everywhereSlideRoutes = require("./routes/everywhereSlideRoutes");
@@ -60,7 +58,6 @@ app.use("/api/slides" , slidesRoutes);
 app.use("/api/services" , servicesRoutes);
 app.use("/api/services-category" , servicesCategoryRoutes);
 app.use("/api/services-sub-cat" , servicesDetailsRoutes);
-app.use("/api/managementsection" , managementSectionRoutes);
 app.use("/api/image" , imageButton );
 app.use("/api/supported-content" , supportedContentRoutes);
 app.use("/api/offer" , offerRoutes);
@@ -72,8 +69,6 @@ app.use("/api/ai-powered" , aiPoweredRoutes);
 app.use("/api/faqs" , faqsRoutes);
 app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
-// app.use("/api/faqs" , faqsRoutes);
-// app.use("/api/faqs" , faqsRoutes);
 app.use("/api/contact-messages", contactMessagesRoutes);
 
 app.listen(process.env.PORT, () => {

@@ -2,12 +2,6 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* STRIP HTML */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-  return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
-};
-
 /* DELETE IMAGE */
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
@@ -22,15 +16,15 @@ const deleteImage = (imagePath) => {
 /* CREATE */
 exports.create = async (req, res) => {
   try {
-
     const data = {};
 
+    // ✅ FIX: stripHtml removed
     for (let i = 1; i <= 8; i++) {
-      data[`heading${i}`] = stripHtml(req.body[`heading${i}`]) ?? null;
+      data[`heading${i}`] = req.body[`heading${i}`] ?? null;
     }
 
     for (let i = 1; i <= 4; i++) {
-      data[`paragraph${i}`] = stripHtml(req.body[`paragraph${i}`]) ?? null;
+      data[`paragraph${i}`] = req.body[`paragraph${i}`] ?? null;
     }
 
     data.images = req.files
@@ -45,13 +39,10 @@ exports.create = async (req, res) => {
     });
 
   } catch (error) {
-
     console.error(error);
-
     res.status(500).json({
       message: "Failed to create About Us Benefits"
     });
-
   }
 };
 
@@ -91,7 +82,7 @@ exports.getOne = async (req, res) => {
     return res.status(400).json({ message: "Invalid ID" });
 
   try {
-    const item = await prisma.aboutusbenefits.findUnique({
+    const data = await prisma.aboutusbenefits.findUnique({
       where: { id }
     });
 
@@ -111,20 +102,20 @@ exports.getOne = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to fetch About Us Benefits" });
+    res.status(500).json({
+      message: "Failed to fetch About Us Benefits"
+    });
   }
 };
 
 /* UPDATE */
 exports.update = async (req, res) => {
-
   const id = parseInt(req.params.id);
 
   if (isNaN(id))
     return res.status(400).json({ message: "Invalid ID" });
 
   try {
-
     const existing = await prisma.aboutusbenefits.findUnique({
       where: { id }
     });
@@ -136,34 +127,31 @@ exports.update = async (req, res) => {
 
     const updatedData = {};
 
+    // ✅ FIX: stripHtml removed
     for (let i = 1; i <= 8; i++) {
-
       updatedData[`heading${i}`] =
         req.body[`heading${i}`] !== undefined
-          ? stripHtml(req.body[`heading${i}`])
+          ? req.body[`heading${i}`]
           : existing[`heading${i}`];
-
     }
 
     for (let i = 1; i <= 4; i++) {
-
       updatedData[`paragraph${i}`] =
         req.body[`paragraph${i}`] !== undefined
-          ? stripHtml(req.body[`paragraph${i}`])
+          ? req.body[`paragraph${i}`]
           : existing[`paragraph${i}`];
-
     }
 
     let images = existing.images || [];
 
     if (req.files && req.files.length > 0) {
 
+      // delete old images
       if (images.length > 0) {
         images.forEach(deleteImage);
       }
 
       images = req.files.map(file => "uploads/" + file.filename);
-
     }
 
     updatedData.images = images;
@@ -179,27 +167,21 @@ exports.update = async (req, res) => {
     });
 
   } catch (error) {
-
     console.error(error);
-
     res.status(500).json({
       message: "Failed to update About Us Benefits"
     });
-
   }
-
 };
 
 /* DELETE */
 exports.remove = async (req, res) => {
-
   const id = parseInt(req.params.id);
 
   if (isNaN(id))
     return res.status(400).json({ message: "Invalid ID" });
 
   try {
-
     const existing = await prisma.aboutusbenefits.findUnique({
       where: { id }
     });
@@ -222,13 +204,9 @@ exports.remove = async (req, res) => {
     });
 
   } catch (error) {
-
     console.error(error);
-
     res.status(500).json({
       message: "Failed to delete About Us Benefits"
     });
-
   }
-
 };

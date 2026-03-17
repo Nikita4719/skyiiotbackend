@@ -1,17 +1,6 @@
 const prisma = require("../config/prisma");
 
 /* =============================== */
-/* HELPER: STRIP HTML */
-/* =============================== */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-  return value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-};
-
-/* =============================== */
 /* HELPER: BUILD FULL IMAGE URL */
 /* =============================== */
 const buildImagePath = (req, file, existingImage = null) => {
@@ -29,8 +18,9 @@ exports.create = async (req, res) => {
     const file = req.file;
 
     const data = {
-      heading: stripHtml(req.body.heading) ?? null,
-      paragraph: stripHtml(req.body.paragraph) ?? null,
+      // ✅ HTML tags ke sath store hoga
+      heading: req.body.heading ?? null,
+      paragraph: req.body.paragraph ?? null,
       image: buildImagePath(req, file),
     };
 
@@ -104,12 +94,13 @@ exports.update = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
 
     const updatedData = {
+      // ✅ HTML preserve hoga
       heading: req.body.heading
-        ? stripHtml(req.body.heading)
+        ? req.body.heading
         : existing.heading,
 
       paragraph: req.body.paragraph
-        ? stripHtml(req.body.paragraph)
+        ? req.body.paragraph
         : existing.paragraph,
 
       image: buildImagePath(req, file, existing.image),

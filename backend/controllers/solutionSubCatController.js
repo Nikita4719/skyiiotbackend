@@ -3,17 +3,6 @@ const fs = require("fs");
 const path = require("path");
 
 
-/* STRIP HTML */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-
-  return value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-};
-
-
 /* DELETE MULTIPLE IMAGES */
 
 const deleteImages = (imageString) => {
@@ -47,7 +36,6 @@ exports.create = async (req, res) => {
 
   try {
 
-
     const image1 = req.files?.image1?.[0]
       ? "uploads/" + req.files.image1[0].filename
       : null;
@@ -56,9 +44,9 @@ exports.create = async (req, res) => {
       ? JSON.stringify(req.files.image2.map(f => "uploads/" + f.filename))
       : null;
 
-      const imagechart = req.files?.imagechart?.[0]
-  ? "uploads/" + req.files.imagechart[0].filename
-  : null;
+    const imagechart = req.files?.imagechart?.[0]
+      ? "uploads/" + req.files.imagechart[0].filename
+      : null;
 
     const data = {
 
@@ -66,18 +54,18 @@ exports.create = async (req, res) => {
         ? parseInt(req.body.solutionCatId)
         : null,
 
-      heading: stripHtml(req.body.heading),
+      heading: req.body.heading, // ✅ FIX
 
-      description1: stripHtml(req.body.description1),
-      description2: stripHtml(req.body.description2),
+      description1: req.body.description1, // ✅ FIX
+      description2: req.body.description2, // ✅ FIX
 
       image1,
-       imagechart,
+      imagechart,
 
-      para1: stripHtml(req.body.para1),
-      para2: stripHtml(req.body.para2),
-      para3: stripHtml(req.body.para3),
-      para4: stripHtml(req.body.para4),
+      para1: req.body.para1, // ✅ FIX
+      para2: req.body.para2, // ✅ FIX
+      para3: req.body.para3, // ✅ FIX
+      para4: req.body.para4, // ✅ FIX
 
       image2
     };
@@ -208,21 +196,21 @@ exports.update = async (req, res) => {
 
     let imagechart = existing.imagechart;
 
-if (req.files?.imagechart?.[0]) {
+    if (req.files?.imagechart?.[0]) {
 
-  if (existing.imagechart) {
+      if (existing.imagechart) {
 
-    const oldPath = path.join(__dirname, "../", existing.imagechart);
+        const oldPath = path.join(__dirname, "../", existing.imagechart);
 
-    if (fs.existsSync(oldPath)) {
-      fs.unlinkSync(oldPath);
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
+
+      }
+
+      imagechart = "uploads/" + req.files.imagechart[0].filename;
+
     }
-
-  }
-
-  imagechart = "uploads/" + req.files.imagechart[0].filename;
-
-}
 
     let image2 = existing.image2;
 
@@ -242,18 +230,18 @@ if (req.files?.imagechart?.[0]) {
 
       data: {
 
-        heading: stripHtml(req.body.heading),
+        heading: req.body.heading, // ✅ FIX
 
-        description1: stripHtml(req.body.description1),
-        description2: stripHtml(req.body.description2),
+        description1: req.body.description1, // ✅ FIX
+        description2: req.body.description2, // ✅ FIX
 
-        para1: stripHtml(req.body.para1),
-        para2: stripHtml(req.body.para2),
-        para3: stripHtml(req.body.para3),
-        para4: stripHtml(req.body.para4),
+        para1: req.body.para1, // ✅ FIX
+        para2: req.body.para2, // ✅ FIX
+        para3: req.body.para3, // ✅ FIX
+        para4: req.body.para4, // ✅ FIX
 
         image1,
-         imagechart,
+        imagechart,
         image2
 
       }
@@ -310,13 +298,14 @@ exports.remove = async (req, res) => {
 
     if (existing.imagechart) {
 
-  const chartPath = path.join(__dirname, "../", existing.imagechart);
+      const chartPath = path.join(__dirname, "../", existing.imagechart);
 
-  if (fs.existsSync(chartPath)) {
-    fs.unlinkSync(chartPath);
-  }
+      if (fs.existsSync(chartPath)) {
+        fs.unlinkSync(chartPath);
+      }
 
-}
+    }
+
     await prisma.solution_sub_categories.delete({
       where: { id }
     });

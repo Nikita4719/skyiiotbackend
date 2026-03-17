@@ -124,36 +124,46 @@ export default function ServicesSubCat() {
 
                   {/* SUBHEADING */}
                   <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.subheading}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.subheading }}
+                    />
                   </td>
 
                   {/* SUBSPAN1 */}
                   <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.subspan1}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.subspan1 }}
+                    />
                   </td>
 
                   {/* SUBSPAN2 */}
                   <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.subspan2}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.subspan2 }}
+                    />
                   </td>
 
                   {/* SUBTITLE PARA1 */}
                   <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
-                    <div className="line-clamp-2">
-                      {item.subtitle_para1}
-                    </div>
+                    <div
+                      className="line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: item.subtitle_para1 }}
+                    />
                   </td>
 
                   {/* SUBTITLE PARA2 */}
                   <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
-                    <div className="line-clamp-2">
-                      {item.subtitle_para2}
-                    </div>
+                    <div
+                      className="line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: item.subtitle_para2 }}
+                    />
                   </td>
 
                   {/* CATEGORY LINK */}
                   <td className="border border-blue-gray-200 px-4 py-3">
-                    {item.category?.link}
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.category?.link }}
+                    />
                   </td>
 
                   {/* IMAGE */}
@@ -169,9 +179,9 @@ export default function ServicesSubCat() {
 
                     )}
 
-                    {/* IMAGEBG */}
                   </td>
 
+                  {/* IMAGEBG */}
                   <td className="border border-blue-gray-200 px-4 py-3">
 
                     {item.imagebg && (
@@ -185,6 +195,7 @@ export default function ServicesSubCat() {
                     )}
 
                   </td>
+
                   {/* ACTION */}
                   <td className="border border-blue-gray-200 px-4 py-3">
 

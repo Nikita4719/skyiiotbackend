@@ -1,16 +1,5 @@
 const prisma = require("../config/prisma");
 
-/* ================= HELPER: STRIP HTML ================= */
-
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-
-  return value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-};
-
 /* ================= HELPER: IMAGE PATH ================= */
 
 const buildImagePath = (fileArray, existingImage = null) => {
@@ -89,7 +78,7 @@ exports.create = async (req, res) => {
     }
 
     const data = {
-      title: stripHtml(req.body.title),
+      title: req.body.title, // ✅ FIX: direct store (no stripHtml)
       image: `uploads/${files.image[0].filename}`
     };
 
@@ -110,6 +99,7 @@ exports.create = async (req, res) => {
     });
   }
 };
+
 /* ================= UPDATE ================= */
 
 exports.update = async (req, res) => {
@@ -130,7 +120,7 @@ exports.update = async (req, res) => {
 
     const data = {
       title: req.body.title
-        ? stripHtml(req.body.title)
+        ? req.body.title // ✅ FIX: direct update (no stripHtml)
         : existing.title,
 
       image: buildImagePath(files.image, existing.image)

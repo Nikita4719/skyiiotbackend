@@ -31,11 +31,28 @@ export default function SolutionSubCat() {
     }
   };
 
+  /* ======================= */
+  /* STRIP HTML TAGS */
+  /* ======================= */
+  const stripHtml = (value) => {
+    if (!value || typeof value !== "string") return "";
+    return value
+      .replace(/<[^>]*>/g, "")   // remove HTML tags
+      .replace(/&nbsp;/g, " ")   // fix spaces
+      .trim();
+  };
+
+  /* ======================= */
+  /* TRUNCATE TEXT */
+  /* ======================= */
   const truncateText = (text, maxLength = 120) => {
     if (!text) return "";
-    return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
+
+    const cleanText = stripHtml(text); // ✅ clean text first
+
+    return cleanText.length > maxLength
+      ? cleanText.substring(0, maxLength) + "..."
+      : cleanText;
   };
 
   return (
@@ -128,6 +145,7 @@ export default function SolutionSubCat() {
                         "No Image"
                       )}
                     </td>
+
                     <td className="border p-3 max-w-xs">
                       {truncateText(item.description1)}
                     </td>
@@ -156,13 +174,13 @@ export default function SolutionSubCat() {
                       <div className="flex gap-2 flex-wrap">
                         {images.length > 0
                           ? images.map((img, i) => (
-                            <img
-                              key={i}
-                              src={`${BASE_URL}/${img}`}
-                              className="h-12 rounded"
-                              alt="multi"
-                            />
-                          ))
+                              <img
+                                key={i}
+                                src={`${BASE_URL}/${img}`}
+                                className="h-12 rounded"
+                                alt="multi"
+                              />
+                            ))
                           : "No Image"}
                       </div>
                     </td>

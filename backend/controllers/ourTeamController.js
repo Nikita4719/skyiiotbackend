@@ -16,21 +16,6 @@ const normalizePath = (filePath) => {
 };
 
 /* ======================= */
-/* STRIP HTML */
-/* ======================= */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return null;
-
-  const clean = value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return clean.length ? clean : null;
-};
-
-/* ======================= */
 /* DELETE FILE */
 /* ======================= */
 const deleteFile = (filePathFromDb) => {
@@ -82,9 +67,10 @@ exports.create = async (req, res) => {
     const file = req.files?.image?.[0];
 
     const data = {
-      heading: stripHtml(req.body.heading),
-      paragraph: stripHtml(req.body.paragraph),
-      image: file ? normalizePath(file.path) : null, // ✅ FIXED
+      // ✅ HTML preserved
+      heading: req.body.heading ?? null,
+      paragraph: req.body.paragraph ?? null,
+      image: file ? normalizePath(file.path) : null,
     };
 
     const created = await prisma.our_team.create({ data });
@@ -114,12 +100,15 @@ exports.update = async (req, res) => {
     const file = req.files?.image?.[0];
 
     let updatedData = {
+      // ✅ HTML preserved
       heading: req.body.heading
-        ? stripHtml(req.body.heading)
+        ? req.body.heading
         : existing.heading,
+
       paragraph: req.body.paragraph
-        ? stripHtml(req.body.paragraph)
+        ? req.body.paragraph
         : existing.paragraph,
+
       image: existing.image,
     };
 

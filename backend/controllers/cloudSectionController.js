@@ -7,21 +7,7 @@ const path = require("path");
 ======================================= */
 const uploadsDir = path.join(__dirname, "../uploads");
 
-/* =======================================
-   HELPER: Strip HTML
-======================================= */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
 
-  return value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-};
-
-/* =======================================
-   HELPER: Delete File
-======================================= */
 const deleteFile = (filePath) => {
   if (!filePath) return;
 
@@ -82,16 +68,17 @@ exports.getOne = async (req, res) => {
 };
 
 /* =======================================
-   CREATE
+   CREATE (FIXED)
 ======================================= */
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
 
     const data = {
-      heading: stripHtml(req.body.heading) || null,
-      paragraph1: stripHtml(req.body.paragraph1) || null,
-      paragraph2: stripHtml(req.body.paragraph2) || null,
+      // ✅ अब HTML tags ke sath store hoga
+      heading: req.body.heading || null,
+      paragraph1: req.body.paragraph1 || null,
+      paragraph2: req.body.paragraph2 || null,
 
       image1: buildPath(files.image1?.[0]?.filename),
       image2: buildPath(files.image2?.[0]?.filename),
@@ -112,7 +99,7 @@ exports.create = async (req, res) => {
 };
 
 /* =======================================
-   UPDATE
+   UPDATE (FIXED)
 ======================================= */
 exports.update = async (req, res) => {
   try {
@@ -133,16 +120,17 @@ exports.update = async (req, res) => {
     }
 
     const data = {
+      // ✅ अब HTML tags preserve honge
       heading: req.body.heading
-        ? stripHtml(req.body.heading)
+        ? req.body.heading
         : existing.heading,
 
       paragraph1: req.body.paragraph1
-        ? stripHtml(req.body.paragraph1)
+        ? req.body.paragraph1
         : existing.paragraph1,
 
       paragraph2: req.body.paragraph2
-        ? stripHtml(req.body.paragraph2)
+        ? req.body.paragraph2
         : existing.paragraph2,
 
       image1: existing.image1,
@@ -151,11 +139,11 @@ exports.update = async (req, res) => {
       image4: existing.image4,
     };
 
-    // Slides parity safe image replacement
+    // Image replacement
     ["image1", "image2", "image3", "image4"].forEach((field) => {
       if (files[field]?.[0]?.filename) {
         if (existing[field]) {
-          deleteFile(existing[field]); // delete old image
+          deleteFile(existing[field]);
         }
 
         data[field] = buildPath(files[field][0].filename);
@@ -196,7 +184,7 @@ exports.remove = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
     }
 
-    // Delete associated images
+    // Delete images
     ["image1", "image2", "image3", "image4"].forEach((field) => {
       if (existing[field]) {
         deleteFile(existing[field]);
