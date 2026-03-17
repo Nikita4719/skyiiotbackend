@@ -39,7 +39,13 @@ exports.getAll = async (req, res) => {
       orderBy: { id: "desc" },
     });
 
-    res.json(records);
+    const cleanedRecords = records.map((item) => ({
+      ...item,
+      heading: stripHtml(item.heading),
+      para: stripHtml(item.para),
+    }));
+
+    res.json(cleanedRecords);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch records" });
@@ -58,7 +64,13 @@ exports.getOne = async (req, res) => {
 
     if (!record) return res.status(404).json({ message: "Record not found" });
 
-    res.json(record);
+    const cleanedRecord = {
+      ...record,
+      heading: stripHtml(record.heading),
+      para: stripHtml(record.para),
+    };
+
+    res.json(cleanedRecord);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch record" });
@@ -68,10 +80,10 @@ exports.getOne = async (req, res) => {
 /* ================= CREATE ================= */
 exports.create = async (req, res) => {
   try {
-    const cleanHeading = stripHtml(req.body.heading);
-    const cleanPara = stripHtml(req.body.para);
+    const heading = req.body.heading;
+    const para = req.body.para;
 
-    if (!cleanHeading || !cleanPara) {
+    if (!heading || !para) {
       return res
         .status(400)
         .json({ message: "Heading and Paragraph are required" });
@@ -81,7 +93,6 @@ exports.create = async (req, res) => {
     let media_type = null;
 
     if (req.file) {
-      // ✅ save full relative path properly
       media = `uploads/${req.file.filename}`;
       media_type = req.file.mimetype.startsWith("video")
         ? "video"
@@ -90,8 +101,8 @@ exports.create = async (req, res) => {
 
     await prisma.smarter_section.create({
       data: {
-        heading: cleanHeading,
-        para: cleanPara,
+        heading,
+        para,
         media,
         media_type,
       },
@@ -128,23 +139,23 @@ exports.update = async (req, res) => {
         : "image";
     }
 
-    const cleanHeading = req.body.heading
-      ? stripHtml(req.body.heading)
-      : existing.heading;
+   const heading = req.body.heading
+  ? req.body.heading
+  : existing.heading;
 
-    const cleanPara = req.body.para
-      ? stripHtml(req.body.para)
-      : existing.para;
+const para = req.body.para
+  ? req.body.para
+  : existing.para;
 
     await prisma.smarter_section.update({
-      where: { id },
-      data: {
-        heading: cleanHeading,
-        para: cleanPara,
-        media,
-        media_type,
-      },
-    });
+  where: { id },
+  data: {
+    heading,
+    para,
+    media,
+    media_type,
+  },
+});
 
     res.json({ message: "Updated Successfully" });
   } catch (error) {

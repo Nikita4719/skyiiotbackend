@@ -15,7 +15,7 @@ export default function ServicesSubCatForm() {
   const [services, setServices] = useState([]);
   const [categories, setCategories] = useState([]);
   const [preview, setPreview] = useState(null);
-
+  const [previewBg, setPreviewBg] = useState(null);
   const [formData, setFormData] = useState({
 
     service_id: "",
@@ -27,7 +27,8 @@ export default function ServicesSubCatForm() {
     subspan2: "",
     subtitle_para1: "",
     subtitle_para2: "",
-    image: null
+    image: null,
+    imagebg: null
 
   });
 
@@ -38,7 +39,7 @@ export default function ServicesSubCatForm() {
 
     if (id) {
 
-      axios.get(`${BASE_URL}/api/services-details/${id}`)
+      axios.get(`${BASE_URL}/api/services-sub-cat/${id}`)
         .then(res => {
 
           const data = res.data;
@@ -53,7 +54,8 @@ export default function ServicesSubCatForm() {
             subspan2: data.subspan2,
             subtitle_para1: data.subtitle_para1,
             subtitle_para2: data.subtitle_para2,
-            image: null
+            image: null,
+            imagebg:null
           });
 
           if (data.category?.service_id) {
@@ -62,6 +64,10 @@ export default function ServicesSubCatForm() {
 
           if (data.image) {
             setPreview(`${BASE_URL}/${data.image}`);
+          }
+
+          if (data.imagebg) {
+            setPreviewBg(`${BASE_URL}/${data.imagebg}`);
           }
 
         });
@@ -126,6 +132,19 @@ export default function ServicesSubCatForm() {
     });
 
     setPreview(URL.createObjectURL(file));
+
+  };
+
+  const handleFileBg = (e) => {
+
+    const file = e.target.files[0];
+
+    setFormData({
+      ...formData,
+      imagebg: file
+    });
+
+    setPreviewBg(URL.createObjectURL(file));
 
   };
 
@@ -290,6 +309,14 @@ export default function ServicesSubCatForm() {
 
           {preview && (
             <img src={preview} className="h-20" alt="" />
+          )}
+
+          <Typography>Image BG</Typography>
+
+          <input type="file" onChange={handleFileBg} />
+
+          {previewBg && (
+            <img src={previewBg} className="h-20" alt="" />
           )}
 
           <Button type="submit">

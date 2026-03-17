@@ -40,178 +40,193 @@ export default function ServicesSubCat() {
 
   return (
 
-   <div className="mt-12 mb-8 px-6">
+    <div className="mt-12 mb-8 px-6">
 
-  <Card>
+      <Card>
 
-    <CardHeader
-      variant="gradient"
-      color="gray"
-      className="flex justify-between items-center p-6"
-    >
+        <CardHeader
+          variant="gradient"
+          color="gray"
+          className="flex justify-between items-center p-6"
+        >
 
-      <Typography variant="h6" color="white">
-        Services Sub Categories
-      </Typography>
+          <Typography variant="h6" color="white">
+            Services Sub Categories
+          </Typography>
 
-      <Button
-        size="sm"
-        color="white"
-        onClick={() =>
-          navigate("/dashboard/master/services-sub-cat/add")
-        }
-      >
-        Add
-      </Button>
+          <Button
+            size="sm"
+            color="white"
+            onClick={() =>
+              navigate("/dashboard/master/services-sub-cat/add")
+            }
+          >
+            Add
+          </Button>
 
-    </CardHeader>
+        </CardHeader>
 
-    <CardBody className="overflow-x-auto">
+        <CardBody className="overflow-x-auto">
 
-      <table className="w-full border border-blue-gray-200 table-auto">
+          <table className="w-full border border-blue-gray-200 table-auto">
 
-        <thead className="bg-blue-gray-50">
+            <thead className="bg-blue-gray-50">
 
-          <tr>
+              <tr>
 
-            {[
-              "Title",
-              "Description",
-              "Subheading",
-              "Subspan 1",
-              "Subspan 2",
-              "Subtitle Para 1",
-              "Subtitle Para 2",
-              "Category Link",
-              "Image",
-              "Action",
-            ].map((head) => (
+                {[
+                  "Title",
+                  "Description",
+                  "Subheading",
+                  "Subspan 1",
+                  "Subspan 2",
+                  "Subtitle Para 1",
+                  "Subtitle Para 2",
+                  "Category Link",
+                  "Image",
+                  "Image BG",
+                  "Action",
+                ].map((head) => (
 
-              <th
-                key={head}
-                className="border border-blue-gray-200 px-4 py-3 text-left text-xs font-bold uppercase text-blue-gray-600"
-              >
-                {head}
-              </th>
-
-            ))}
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          {data.map((item) => (
-
-            <tr key={item.id} className="hover:bg-blue-gray-50">
-
-              {/* TITLE */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-                <div
-                  dangerouslySetInnerHTML={{ __html: item.title }}
-                />
-              </td>
-
-              {/* DESCRIPTION */}
-              <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
-                <div
-                  className="line-clamp-2"
-                  dangerouslySetInnerHTML={{ __html: item.description }}
-                />
-              </td>
-
-              {/* SUBHEADING */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-                {item.subheading}
-              </td>
-
-              {/* SUBSPAN1 */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-                {item.subspan1}
-              </td>
-
-              {/* SUBSPAN2 */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-                {item.subspan2}
-              </td>
-
-              {/* SUBTITLE PARA1 */}
-              <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
-                <div className="line-clamp-2">
-                  {item.subtitle_para1}
-                </div>
-              </td>
-
-              {/* SUBTITLE PARA2 */}
-              <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
-                <div className="line-clamp-2">
-                  {item.subtitle_para2}
-                </div>
-              </td>
-
-              {/* CATEGORY LINK */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-                {item.category?.link}
-              </td>
-
-              {/* IMAGE */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-
-                {item.image && (
-
-                  <img
-                    src={`${BASE_URL}/${item.image}`}
-                    className="h-14 w-20 object-cover rounded"
-                    alt=""
-                  />
-
-                )}
-
-              </td>
-
-              {/* ACTION */}
-              <td className="border border-blue-gray-200 px-4 py-3">
-
-                <div className="flex gap-2">
-
-                  <Button
-                    size="sm"
-                    variant="outlined"
-                    onClick={() =>
-                      navigate(`/dashboard/master/services-sub-cat/edit/${item.id}`)
-                    }
+                  <th
+                    key={head}
+                    className="border border-blue-gray-200 px-4 py-3 text-left text-xs font-bold uppercase text-blue-gray-600"
                   >
-                    Edit
-                  </Button>
+                    {head}
+                  </th>
 
-                  <Button
-                    size="sm"
-                    color="red"
-                    onClick={() =>
-                      handleDelete(item.id)
-                    }
-                  >
-                    Delete
-                  </Button>
+                ))}
 
-                </div>
+              </tr>
 
-              </td>
+            </thead>
 
-            </tr>
+            <tbody>
 
-          ))}
+              {data.map((item) => (
 
-        </tbody>
+                <tr key={item.id} className="hover:bg-blue-gray-50">
 
-      </table>
+                  {/* TITLE */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: item.title }}
+                    />
+                  </td>
 
-    </CardBody>
+                  {/* DESCRIPTION */}
+                  <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
+                    <div
+                      className="line-clamp-2"
+                      dangerouslySetInnerHTML={{ __html: item.description }}
+                    />
+                  </td>
 
-  </Card>
+                  {/* SUBHEADING */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.subheading}
+                  </td>
 
-</div>
+                  {/* SUBSPAN1 */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.subspan1}
+                  </td>
+
+                  {/* SUBSPAN2 */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.subspan2}
+                  </td>
+
+                  {/* SUBTITLE PARA1 */}
+                  <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
+                    <div className="line-clamp-2">
+                      {item.subtitle_para1}
+                    </div>
+                  </td>
+
+                  {/* SUBTITLE PARA2 */}
+                  <td className="border border-blue-gray-200 px-4 py-3 max-w-sm">
+                    <div className="line-clamp-2">
+                      {item.subtitle_para2}
+                    </div>
+                  </td>
+
+                  {/* CATEGORY LINK */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+                    {item.category?.link}
+                  </td>
+
+                  {/* IMAGE */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+
+                    {item.image && (
+
+                      <img
+                        src={`${BASE_URL}/${item.image}`}
+                        className="h-14 w-20 object-cover rounded"
+                        alt=""
+                      />
+
+                    )}
+
+                    {/* IMAGEBG */}
+                  </td>
+
+                  <td className="border border-blue-gray-200 px-4 py-3">
+
+                    {item.imagebg && (
+
+                      <img
+                        src={`${BASE_URL}/${item.imagebg}`}
+                        className="h-14 w-20 object-cover rounded"
+                        alt=""
+                      />
+
+                    )}
+
+                  </td>
+                  {/* ACTION */}
+                  <td className="border border-blue-gray-200 px-4 py-3">
+
+                    <div className="flex gap-2">
+
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        onClick={() =>
+                          navigate(`/dashboard/master/services-sub-cat/edit/${item.id}`)
+                        }
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        color="red"
+                        onClick={() =>
+                          handleDelete(item.id)
+                        }
+                      >
+                        Delete
+                      </Button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </CardBody>
+
+      </Card>
+
+    </div>
 
   );
 
