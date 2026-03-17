@@ -17,25 +17,17 @@ export default function ServicesCategory() {
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-
     const res = await axios.get(`${BASE_URL}/api/services-category`);
-
     setData(res.data);
-
   };
 
   useEffect(() => {
-
     fetchData();
-
   }, []);
 
   const handleDelete = async (id) => {
-
     await axios.delete(`${BASE_URL}/api/services-category/${id}`);
-
     fetchData();
-
   };
 
   return (
@@ -44,17 +36,17 @@ export default function ServicesCategory() {
 
       <Card>
 
-         <CardHeader
+        <CardHeader
           variant="gradient"
           color="gray"
           className="flex justify-between items-center p-6"
-        > 
+        >
           <Typography variant="h6">
             Services Category
           </Typography>
 
           <Button
-           size="sm"
+            size="sm"
             color="white"
             onClick={() =>
               navigate("/dashboard/master/services-category/add")
@@ -69,17 +61,13 @@ export default function ServicesCategory() {
 
           <table className="w-full border">
 
-             <thead className="bg-blue-gray-50">
-
+            <thead className="bg-blue-gray-50">
               <tr>
-
                 <th className="border border-blue-gray-200 p-3">Service</th>
                 <th className="border border-blue-gray-200 p-3">Icon</th>
                 <th className="border border-blue-gray-200 p-3">Link</th>
                 <th className="border border-blue-gray-200 p-3">Action</th>
-
               </tr>
-
             </thead>
 
             <tbody>
@@ -88,29 +76,33 @@ export default function ServicesCategory() {
 
                 <tr key={item.id}>
 
-                  <td className="border border-blue-gray-200 p-3">
-                    {item.service?.title}
-                  </td>
+                  {/* ✅ HTML render */}
+                  <td
+                    className="border border-blue-gray-200 p-3"
+                    dangerouslySetInnerHTML={{
+                      __html: item.service?.title || ""
+                    }}
+                  />
 
                   <td className="border border-blue-gray-200 p-3">
-
                     {item.icon && (
-
                       <img
                         src={`${BASE_URL}/${item.icon}`}
                         className="h-12"
                         alt=""
                       />
-
                     )}
-
                   </td>
 
-                  <td className="border border-blue-gray-200 p-3">
-                    {item.link}
-                  </td>
+                  {/* ✅ HTML render */}
+                  <td
+                    className="border border-blue-gray-200 p-3"
+                    dangerouslySetInnerHTML={{
+                      __html: item.link || ""
+                    }}
+                  />
 
-                   <td className="border border-blue-gray-200 px-4 py-3">
+                  <td className="border border-blue-gray-200 px-4 py-3">
 
                     <div className="flex gap-2">
 

@@ -20,21 +20,6 @@ const deleteFile = (filePathFromDb) => {
 };
 
 /* =============================== */
-/* HELPER: Strip HTML */
-/* =============================== */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return null;
-
-  const clean = value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return clean.length ? clean : null;
-};
-
-/* =============================== */
 /* GET ALL */
 /* =============================== */
 exports.getAll = async (req, res) => {
@@ -78,10 +63,10 @@ exports.getOne = async (req, res) => {
 /* =============================== */
 exports.create = async (req, res) => {
   try {
-    const cleanHeading = stripHtml(req.body.heading);
-    const cleanParagraph = stripHtml(req.body.paragraph);
+    const heading = req.body.heading ?? null;
+    const paragraph = req.body.paragraph ?? null;
 
-    if (!cleanHeading) {
+    if (!heading) {
       return res.status(400).json({ message: "Heading is required" });
     }
 
@@ -91,8 +76,8 @@ exports.create = async (req, res) => {
 
     const created = await prisma.image_button_section.create({
       data: {
-        heading: cleanHeading,
-        paragraph: cleanParagraph,
+        heading: heading,       // ✅ HTML preserved
+        paragraph: paragraph,   // ✅ HTML preserved
         image: imagePath,
       },
     });
@@ -138,12 +123,12 @@ exports.update = async (req, res) => {
       data: {
         heading:
           req.body.heading !== undefined
-            ? stripHtml(req.body.heading)
+            ? req.body.heading   // ✅ HTML preserved
             : existing.heading,
 
         paragraph:
           req.body.paragraph !== undefined
-            ? stripHtml(req.body.paragraph)
+            ? req.body.paragraph // ✅ HTML preserved
             : existing.paragraph,
 
         image: imagePath,
