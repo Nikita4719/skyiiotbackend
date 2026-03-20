@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")      
+  url      = env("DATABASE_URL")
 }
 
 model about_us {
@@ -31,7 +31,7 @@ model aboutusbenefits {
   paragraph2 String?   @db.LongText
   paragraph3 String?   @db.LongText
   paragraph4 String?   @db.LongText
-  images      Json?
+  images     Json?
   created_at DateTime? @default(now()) @db.Timestamp(0)
 }
 
@@ -76,13 +76,12 @@ model cms_faqs {
   @@index([faq_id], map: "faq_id")
 }
 
-
 model everywhere_slide {
   id         Int       @id @default(autoincrement())
-  heading    String?   @db.Text
-  paragraph  String?   @db.Text
-  image      String?   @db.VarChar(255)
   created_at DateTime? @default(now()) @db.Timestamp(0)
+  heading    String?   @db.Text
+  image      String?   @db.VarChar(255)
+  paragraph  String?   @db.Text
 }
 
 model faqs {
@@ -146,50 +145,50 @@ model orders {
 
 model our_team {
   id        Int      @id @default(autoincrement())
-  heading   String?  @db.Text
-  paragraph String?  @db.Text
-  image     String?
   createdAt DateTime @default(now())
+  heading   String?  @db.Text
+  image     String?
+  paragraph String?  @db.Text
 }
 
 model services {
-  id         Int       @id @default(autoincrement())
-  title      String?   @db.Text
-  heading    String?   @db.Text
-  paragraph  String?   @db.LongText
-  image      String?   @db.VarChar(255)
-  created_at DateTime? @default(now()) @db.Timestamp(0)
-
+  id         Int                 @id @default(autoincrement())
+  title      String?             @db.Text
+  heading    String?             @db.Text
+  paragraph  String?             @db.LongText
+  created_at DateTime?           @default(now()) @db.Timestamp(0)
+  image      String?             @db.VarChar(255)
   categories services_category[]
 }
 
 model services_category {
-  id         Int       @id @default(autoincrement())
+  id         Int                @id @default(autoincrement())
   service_id Int
-  icon       String?   @db.VarChar(255)
-  link       String?   @db.Text
-  created_at DateTime? @default(now()) @db.Timestamp(0)
+  icon       String?            @db.VarChar(255)
+  link       String?            @db.Text
+  created_at DateTime?          @default(now()) @db.Timestamp(0)
+  service    services           @relation(fields: [service_id], references: [id], onDelete: Cascade)
+  details    services_sub_cat[]
 
-  service services @relation(fields: [service_id], references: [id], onDelete: Cascade)
-
-  details services_sub_cat[]
+  @@index([service_id], map: "services_category_service_id_fkey")
 }
 
 model services_sub_cat {
-  id                    Int       @id @default(autoincrement())
-  services_category_id  Int
-  title                 String?   @db.Text
-  description           String?   @db.LongText
-  image                 String?   @db.VarChar(255)
-  imagebg               String?   @db.VarChar(255)
-  subheading            String?   @db.Text
-  subspan1              String?   @db.Text
-  subspan2              String?   @db.Text
-  subtitle_para1        String?   @db.LongText
-  subtitle_para2        String?   @db.LongText
-  created_at            DateTime? @default(now()) @db.Timestamp(0)
+  id                   Int               @id @default(autoincrement())
+  services_category_id Int
+  title                String?           @db.Text
+  description          String?           @db.LongText
+  image                String?           @db.VarChar(255)
+  subheading           String?           @db.Text
+  subspan1             String?           @db.Text
+  subspan2             String?           @db.Text
+  subtitle_para1       String?           @db.LongText
+  subtitle_para2       String?           @db.LongText
+  created_at           DateTime?         @default(now()) @db.Timestamp(0)
+  imagebg              String?           @db.VarChar(255)
+  category             services_category @relation(fields: [services_category_id], references: [id], onDelete: Cascade)
 
-  category services_category @relation(fields: [services_category_id], references: [id], onDelete: Cascade)
+  @@index([services_category_id], map: "services_sub_cat_services_category_id_fkey")
 }
 
 model slides {
@@ -211,7 +210,7 @@ model smarter_section {
 model solution_cat {
   id                      Int                       @id @default(autoincrement())
   title                   String                    @db.VarChar(255)
-  image                   String?                   @db.VarChar(255) // <-- made nullable
+  image                   String?                   @db.VarChar(255)
   created_at              DateTime?                 @default(now()) @db.Timestamp(0)
   solution_sub_categories solution_sub_categories[]
 }
@@ -223,13 +222,13 @@ model solution_images {
   image2     String?   @db.VarChar(255)
   image3     String?   @db.VarChar(255)
   image4     String?   @db.VarChar(255)
-  imagechart String?   @db.VarChar(255)
   created_at DateTime? @default(now()) @db.Timestamp(0)
+  imagechart String?   @db.VarChar(255)
 }
 
 model solution_sub_categories {
   id            Int           @id @default(autoincrement())
-  solutionCatId Int?          
+  solutionCatId Int?
   heading       String?       @db.Text
   description1  String?       @db.Text
   description2  String?       @db.Text
@@ -241,10 +240,9 @@ model solution_sub_categories {
   para4         String?       @db.Text
   image2        String?       @db.Text
   created_at    DateTime?     @default(now()) @db.Timestamp(0)
+  solution_cat  solution_cat? @relation(fields: [solutionCatId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "solution_sub_categories_ibfk_1")
 
-  solution_cat  solution_cat? @relation(fields: [solutionCatId], references: [id], onDelete: Cascade)
-
-  @@index([solutionCatId])
+  @@index([solutionCatId], map: "solutionCatId")
 }
 
 model supported_content {
@@ -253,10 +251,10 @@ model supported_content {
   paragraph1 String?   @db.Text
   paragraph2 String?   @db.Text
   image1     String?   @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
   image2     String?   @db.VarChar(255)
   image3     String?   @db.VarChar(255)
   image4     String?   @db.VarChar(255)
-  created_at DateTime? @default(now()) @db.Timestamp(0)
 }
 
 model testimonials {
@@ -286,11 +284,6 @@ model what_section {
   created_at  DateTime? @default(now()) @db.Timestamp(0)
 }
 
-enum smarter_section_media_type {
-  image
-  video
-}
-
 model contact_messages {
   id         Int       @id @default(autoincrement())
   first_name String?   @db.VarChar(255)
@@ -302,26 +295,21 @@ model contact_messages {
   updated_at DateTime? @default(now()) @db.Timestamp(0)
 }
 
-
 model Footer {
   id            Int      @id @default(autoincrement())
-  title         String?  
-  content       String?  
-  contact_email       String?
+  contact_email String
   contact_phone String
   address       String
-  qr_code       String   @db.Text  // store JSON array of image paths
-  links         Json?    // new field for name+URL
-  logo          String? 
+  qr_code       String   @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-}
+  content       String?
+  title         String?
+  links         Json?
+  logo          String?  @db.VarChar(255)
 
-model ContactSettings {
-  id       Int    @id @default(autoincrement())
-  bg_image String?
+  @@map("footer")
 }
-
 
 model header_top {
   id            Int     @id @default(autoincrement())
@@ -346,4 +334,28 @@ model navbar_menu {
   link      String  @db.VarChar(255)
   order_no  Int?
   is_button Boolean @default(false)
+}
+
+model contact_settings {
+  id       Int     @id @default(autoincrement())
+  map_url  String? @db.Text
+  bg_image String? @db.VarChar(255)
+}
+
+model embedded {
+  id         Int       @id @default(autoincrement())
+  heading    String?   @db.Text
+  paragraph1 String?   @db.LongText
+  paragraph2 String?   @db.LongText
+  image1     String?   @db.VarChar(255)
+  image2     String?   @db.VarChar(255)
+  image3     String?   @db.VarChar(255)
+  image4     String?   @db.VarChar(255)
+  video      String?   @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+enum smarter_section_media_type {
+  image
+  video
 }
