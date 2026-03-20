@@ -3,14 +3,6 @@ const fs = require("fs");
 const path = require("path");
 
 /* =============================== */
-/* STRIP HTML */
-/* =============================== */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-  return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
-};
-
-/* =============================== */
 /* BUILD IMAGE PATH */
 /* =============================== */
 const buildImagePath = (fileArray, existingImage = null) => {
@@ -34,15 +26,15 @@ const deleteImage = (imagePath) => {
 };
 
 /* =============================== */
-/* CREATE */
+/* CREATE by vinay*/
 /* =============================== */
 exports.create = (req, res) => {
   const files = req.files || {};
 
   const data = {
-    title: stripHtml(req.body.title) ?? null,
-    heading: stripHtml(req.body.heading) ?? null,
-    paragraph: stripHtml(req.body.paragraph) ?? null,
+    title: req.body.title ?? null, // ✅ FIX
+    heading: req.body.heading ?? null, // ✅ FIX
+    paragraph: req.body.paragraph ?? null, // ✅ FIX
     image1: buildImagePath(files.image1),
     image2: buildImagePath(files.image2),
   };
@@ -114,7 +106,6 @@ exports.update = (req, res) => {
       let image1 = existing.image1;
       let image2 = existing.image2;
 
-      // If new image uploaded → delete old
       if (files.image1 && files.image1.length > 0) {
         deleteImage(existing.image1);
         image1 = buildImagePath(files.image1);
@@ -126,9 +117,9 @@ exports.update = (req, res) => {
       }
 
       const updatedData = {
-        title: req.body.title !== undefined ? stripHtml(req.body.title) : existing.title,
-        heading: req.body.heading !== undefined ? stripHtml(req.body.heading) : existing.heading,
-        paragraph: req.body.paragraph !== undefined ? stripHtml(req.body.paragraph) : existing.paragraph,
+        title: req.body.title !== undefined ? req.body.title : existing.title, // ✅ FIX
+        heading: req.body.heading !== undefined ? req.body.heading : existing.heading, // ✅ FIX
+        paragraph: req.body.paragraph !== undefined ? req.body.paragraph : existing.paragraph, // ✅ FIX
         image1,
         image2,
       };

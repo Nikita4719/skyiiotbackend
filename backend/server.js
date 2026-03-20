@@ -10,10 +10,9 @@ const aboutUsBenefitsRoutes = require("./routes/aboutUsBenefitsRoutes")
 const slidesRoutes = require("./routes/slidesRoutes");
 const whatSectionRoutes = require("./routes/whatSectionRoutes");
 const imageButton = require("./routes/imageButton")
-const embeddedRoutes = require("./routes/embeddedRoutes");
-const networkSectionRoutes = require("./routes/networkSectionRoutes");
-const cloudSectionRoutes = require("./routes/cloudSectionRoutes");
-const managementSectionRoutes = require("./routes/managementSectionRoutes");
+const servicesRoutes = require("./routes/servicesRoutes");
+const servicesCategoryRoutes = require("./routes/servicesCategoryRoutes")
+const servicesDetailsRoutes = require("./routes/servicesDetailsRoutes")
 const supportedContentRoutes = require("./routes/supportedContentRoutes");
 const offerRoutes = require("./routes/offerRoutes");
 const everywhereSlideRoutes = require("./routes/everywhereSlideRoutes");
@@ -30,13 +29,29 @@ const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
 const systemArchitectureRoutes = require("./routes/systemArchitectureRoutes");
 const footerRoutes = require("./routes/footerRoutes");
 const contactSettingsRoutes = require("./routes/contactSettingsRoutes");
+const headerTopRoutes = require("./routes/headerTopRoutes");
+const navbarMenuRoutes = require("./routes/navbarMenuRoutes");
+const navbarLogoRoutes = require("./routes/navbarLogoRoutes");
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-// app.use("/uploads", express.static("uploads"));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+// app.use(
+//   "/uploads",
+//   express.static(path.join(__dirname, "uploads"))
+// );
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// app.use(
+//   "/uploads",
+//   express.static(path.join(__dirname, "../uploads"))
+// );
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
+// console.log("Serving uploads from:", path.join(__dirname, "uploads"));
+app.use("/api/header-top", headerTopRoutes);
+app.use("/api/navbar-menu", navbarMenuRoutes);
+app.use("/api/navbar-logo", navbarLogoRoutes);
 app.use("/api/footer", footerRoutes);
 app.use("/api", contactSettingsRoutes);
 app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
@@ -49,10 +64,9 @@ app.use("/api/solution-cat", solutionCatRoutes);
 app.use("/api/solution-sub-cat", solutionSubCatRoutes);
 app.use("/api/what-section" , whatSectionRoutes);
 app.use("/api/slides" , slidesRoutes);
-app.use("/api/embeddedsection" , embeddedRoutes);
-app.use("/api/networksection" , networkSectionRoutes);
-app.use("/api/cloudsection" , cloudSectionRoutes);
-app.use("/api/managementsection" , managementSectionRoutes);
+app.use("/api/services" , servicesRoutes);
+app.use("/api/services-category" , servicesCategoryRoutes);
+app.use("/api/services-sub-cat" , servicesDetailsRoutes);
 app.use("/api/image" , imageButton );
 app.use("/api/supported-content" , supportedContentRoutes);
 app.use("/api/offer" , offerRoutes);
@@ -64,10 +78,15 @@ app.use("/api/ai-powered" , aiPoweredRoutes);
 app.use("/api/faqs" , faqsRoutes);
 app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
-// app.use("/api/faqs" , faqsRoutes);
-// app.use("/api/faqs" , faqsRoutes);
 app.use("/api/contact-messages", contactMessagesRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
+// app.get("/check", (req, res) => {
+//   res.send("Backend working");
+// });
+// app.get("/uploads/:img", (req, res) => {
+//   const filePath = path.join(__dirname, "uploads", req.params.img);
+//   res.sendFile(filePath);
+// });

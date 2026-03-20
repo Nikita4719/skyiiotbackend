@@ -8,11 +8,6 @@ const ROOT_DIR = path.join(__dirname, "../");
 /* HELPERS */
 /* ======================= */
 
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return null;
-  return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
-};
-
 const normalizePath = (filePath) =>
   filePath ? filePath.replace(/\\/g, "/") : null;
 
@@ -54,9 +49,9 @@ exports.createTestimonial = async (req, res) => {
   try {
     const created = await prisma.testimonials.create({
       data: {
-        heading: stripHtml(req.body.heading),
-        para1: stripHtml(req.body.para1),
-        para2: stripHtml(req.body.para2),
+        heading: req.body.heading, // ✅ FIX
+        para1: req.body.para1, // ✅ FIX
+        para2: req.body.para2, // ✅ FIX
         image1: images.image1 || null,
         image2: images.image2 || null,
         image3: images.image3 || null,
@@ -137,13 +132,13 @@ exports.updateTestimonial = async (req, res) => {
       where: { id },
       data: {
         heading: req.body.heading
-          ? stripHtml(req.body.heading)
+          ? req.body.heading // ✅ FIX
           : existing.heading,
         para1: req.body.para1
-          ? stripHtml(req.body.para1)
+          ? req.body.para1 // ✅ FIX
           : existing.para1,
         para2: req.body.para2
-          ? stripHtml(req.body.para2)
+          ? req.body.para2 // ✅ FIX
           : existing.para2,
         image1: newImages.image1 ?? existing.image1,
         image2: newImages.image2 ?? existing.image2,

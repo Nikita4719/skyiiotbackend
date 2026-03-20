@@ -7,14 +7,16 @@ import BASE_URL from "../../../configs/api";
 
 export default function FooterForm() {
   const navigate = useNavigate();
-
+  const [logo, setLogo] = useState(null);
+  const [logoPreview, setLogoPreview] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     contact_email: "",
     contact_phone: "",
     address: "",
-    qr_codes: ["", "", "", ""], // 4 QR codes
+    qr_codes: ["", "", "", ""],
+    links: [],
   });
 
   const [preview, setPreview] = useState(["", "", "", ""]);
@@ -33,10 +35,20 @@ export default function FooterForm() {
           contact_phone: data.contact_phone || "",
           address: data.address || "",
           qr_codes: qr,
+          links: data.links || [],
         });
-        setPreview(qr);
+        setLogoPreview(
+          data.logo ? `${BASE_URL}/uploads/qrcodes/${data.logo}` : ""
+        );
+
+        setPreview(
+          qr.map((img) =>
+            img ? `${BASE_URL}/uploads/qrcodes/${img}` : ""
+          )
+        );
       })
       .catch((err) => console.error("Error fetching footer:", err));
+
   }, []);
 
   // Handle text/textarea inputs
@@ -65,18 +77,25 @@ export default function FooterForm() {
     try {
       const dataToSend = new FormData();
 
-      // Append text fields
       dataToSend.append("title", formData.title || "");
       dataToSend.append("content", formData.content || "");
       dataToSend.append("contact_email", formData.contact_email || "");
       dataToSend.append("contact_phone", formData.contact_phone || "");
       dataToSend.append("address", formData.address || "");
+      if (logo) {
+        dataToSend.append("logo", logo);
+      }
 
-      // Append QR codes
+      // QR codes
       formData.qr_codes.forEach((qr) => {
-        if (qr instanceof File) dataToSend.append("qr_codes", qr);
-        else dataToSend.append("existing_qr[]", qr || "");
+        if (qr instanceof File) {
+          dataToSend.append("qr_codes", qr);
+        }
       });
+
+      // links
+      dataToSend.append("links", JSON.stringify(formData.links));
+
 
       await axios.put(`${BASE_URL}/api/footer`, dataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -84,11 +103,19 @@ export default function FooterForm() {
 
       alert("Footer saved successfully!");
       navigate("/dashboard/cms/footer");
+
     } catch (err) {
       console.error("Error saving footer:", err);
       alert("Error saving footer. Check console.");
     }
   };
+
+  const handleLinkChange = (index, newLink) => {
+    const updatedLinks = [...formData.links];
+    updatedLinks[index].link = newLink;
+    setFormData((prev) => ({ ...prev, links: updatedLinks }));
+  };
+
 
   return (
     <div className="mt-12 mb-8 px-6">
@@ -149,7 +176,7 @@ export default function FooterForm() {
               onChange={handleChange}
               className="border rounded-xl p-2 w-full"
               required
-              pattern="[0-9]{10}"
+              pattern="(\+91[-\s]?)?[0-9]{10}"
               maxLength={14}
             />
           </div>
@@ -164,6 +191,37 @@ export default function FooterForm() {
               className="border rounded-xl p-2 w-full"
               rows={3}
             />
+          </div>
+
+          <div className="col-span-12 md:col-span-3">
+            <Typography className="mb-2 font-medium">Logo</Typography>
+
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
+
+              {logoPreview ? (
+                <img
+                  src={logoPreview}
+                  alt="Logo Preview"
+                  className="h-full object-cover rounded-xl"
+                />
+              ) : (
+                <Typography color="gray">Click to upload Logo</Typography>
+              )}
+
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setLogo(file);
+                    setLogoPreview(URL.createObjectURL(file));
+                  }
+                }}
+              />
+
+            </label>
           </div>
 
           {/* QR Codes */}
@@ -189,6 +247,28 @@ export default function FooterForm() {
               </label>
             </div>
           ))}
+
+          {/* Links */}
+          <div className="col-span-12">
+            <Typography className="mb-2 font-medium">Links (Solution URLs)</Typography>
+            {formData.links.map((linkObj, index) => (
+              <div key={index} className="flex gap-2 mb-2">
+                <input
+                  type="text"
+                  value={linkObj.name}
+                  readOnly
+                  className="border rounded-xl p-2 w-1/3 bg-gray-100"
+                />
+                <input
+                  type="text"
+                  value={linkObj.link}
+                  onChange={(e) => handleLinkChange(index, e.target.value)}
+                  className="border rounded-xl p-2 w-2/3"
+                />
+              </div>
+            ))}
+          </div>
+
 
           <div className="col-span-12">
             <Button type="submit" fullWidth>

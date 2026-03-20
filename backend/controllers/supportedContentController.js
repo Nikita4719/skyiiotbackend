@@ -1,18 +1,9 @@
 const prisma = require("../config/prisma");
 
-/* ================= HELPER: STRIP HTML ================= */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-  return value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .trim();
-};
-
 /* ================= HELPER: BUILD IMAGE PATH ================= */
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
-    return `uploads/${fileArray[0].filename}`; // ✅ Correct Path
+    return `uploads/${fileArray[0].filename}`;
   }
   return existingImage;
 };
@@ -51,9 +42,9 @@ exports.create = async (req, res) => {
     const files = req.files || {};
 
     const data = {
-      heading: stripHtml(req.body.heading) ?? null,
-      paragraph1: stripHtml(req.body.paragraph1) ?? null,
-      paragraph2: stripHtml(req.body.paragraph2) ?? null,
+      heading: req.body.heading ?? null, // ✅ FIX
+      paragraph1: req.body.paragraph1 ?? null, // ✅ FIX
+      paragraph2: req.body.paragraph2 ?? null, // ✅ FIX
       image1: buildImagePath(files.image1),
       image2: buildImagePath(files.image2),
       image3: buildImagePath(files.image3),
@@ -84,13 +75,13 @@ exports.update = async (req, res) => {
 
     const data = {
       heading: req.body.heading
-        ? stripHtml(req.body.heading)
+        ? req.body.heading // ✅ FIX
         : existing.heading,
       paragraph1: req.body.paragraph1
-        ? stripHtml(req.body.paragraph1)
+        ? req.body.paragraph1 // ✅ FIX
         : existing.paragraph1,
       paragraph2: req.body.paragraph2
-        ? stripHtml(req.body.paragraph2)
+        ? req.body.paragraph2 // ✅ FIX
         : existing.paragraph2,
       image1: buildImagePath(files.image1, existing.image1),
       image2: buildImagePath(files.image2, existing.image2),

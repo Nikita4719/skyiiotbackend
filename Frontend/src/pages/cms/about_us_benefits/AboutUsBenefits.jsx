@@ -14,14 +14,12 @@ export default function AboutUsBenefits() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
 
-  // Fetch Data
   const fetchData = async () => {
     try {
       const res = await axios.get(
         `${BASE_URL}/api/aboutusbenefits`
       );
 
-      // If backend returns { success: true, data }
       if (res.data.data) {
         setData(res.data.data);
       } else {
@@ -36,7 +34,6 @@ export default function AboutUsBenefits() {
     fetchData();
   }, []);
 
-  // Delete
   const handleDelete = async (id) => {
     try {
       await axios.delete(
@@ -75,48 +72,44 @@ export default function AboutUsBenefits() {
           <table className="w-full border table-auto text-sm whitespace-normal">
             <thead className="bg-blue-gray-50">
               <tr>
-                {/* 8 Headings */}
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+
+                {[1,2,3,4,5,6,7,8].map((i)=>(
                   <th
                     key={`heading${i}`}
-                    className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase"
+                    className="border border-blue-gray-200 px-3 py-2 text-xs font-bold uppercase"
                   >
                     Heading {i}
                   </th>
                 ))}
 
-                {/* 4 Paragraphs */}
-                {[1, 2, 3, 4].map((i) => (
+                {[1,2,3,4].map((i)=>(
                   <th
                     key={`paragraph${i}`}
-                    className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase"
+                    className="border border-blue-gray-200 px-3 py-2 text-xs font-bold uppercase"
                   >
                     Paragraph {i}
                   </th>
                 ))}
 
-                <th className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase">
-                  Image 1
+                <th className="border border-blue-gray-200 px-3 py-2 text-xs font-bold uppercase">
+                  Images
                 </th>
 
-                <th className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase">
-                  Image 2
-                </th>
-
-                <th className="border border-blue-gray-200  px-3 py-2 text-xs font-bold uppercase">
+                <th className="border border-blue-gray-200 px-3 py-2 text-xs font-bold uppercase">
                   Action
                 </th>
+
               </tr>
             </thead>
 
             <tbody>
               {data.map((item) => (
                 <tr
-                  key={item._id}
+                  key={item.id}
                   className="hover:bg-blue-gray-50"
                 >
-                  {/* 8 Headings */}
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+
+                  {[1,2,3,4,5,6,7,8].map((i)=>(
                     <td
                       key={`heading${i}`}
                       className="border border-blue-gray-200 px-3 py-2 max-w-xs"
@@ -124,58 +117,62 @@ export default function AboutUsBenefits() {
                       <div
                         className="line-clamp-2 overflow-hidden text-ellipsis"
                         dangerouslySetInnerHTML={{
-                          __html: item[`heading${i}`] || "",
+                          __html: item[`heading${i}`] || ""
                         }}
                       />
                     </td>
                   ))}
 
-                  {/* 4 Paragraphs */}
-                  {[1, 2, 3, 4].map((i) => (
+                  {[1,2,3,4].map((i)=>(
                     <td
                       key={`paragraph${i}`}
-                      className="border border-blue-gray-200  px-3 py-2 max-w-sm"
+                      className="border border-blue-gray-200 px-3 py-2 max-w-sm"
                     >
                       <div
                         className="line-clamp-2 overflow-hidden text-ellipsis"
                         dangerouslySetInnerHTML={{
-                          __html: item[`paragraph${i}`] || "",
+                          __html: item[`paragraph${i}`] || ""
                         }}
                       />
                     </td>
                   ))}
 
-                  {/* Image 1 */}
-                  <td className="border border-blue-gray-200  px-3 py-2 text-center">
-                    {item.image1 && (
-                      <img
-                        src={`${BASE_URL}/${item.image1}`}
-                        className="h-14 w-14 object-cover rounded-lg mx-auto"
-                        alt=""
-                      />
-                    )}
-                  </td>
+<td className="border border-blue-gray-200 px-3 py-2 min-w-[220px]">
+  <div className="flex flex-wrap gap-2 max-w-[220px]">
+    {item.images && item.images.map((img, index) => (
+      <div key={index} className="w-[60px] h-[60px] flex-shrink-0">
+        <img
+          src={`${BASE_URL}/${img}`}
+          alt="img"
+          className="w-full h-full object-cover rounded border"
+        />
+      </div>
+    ))}
+  </div>
+</td>
+                  {/* <td className="border border-blue-gray-200 px-3 py-2 text-center">
+                    <div className="flex gap-2 flex-wrap justify-center">
 
-                  {/* Image 2 */}
-                  <td className="border border-blue-gray-200  px-3 py-2 text-center">
-                    {item.image2 && (
-                      <img
-                        src={`${BASE_URL}/${item.image2}`}
-                        className="h-14 w-14 object-cover rounded-lg mx-auto"
-                        alt=""
-                      />
-                    )}
-                  </td>
+                      {item.images?.map((img,i)=>(
+                        <img
+                          key={i}
+                          src={`${BASE_URL}/${img}`}
+                          className="h-14 w-14 object-cover rounded-lg"
+                          alt=""
+                        />
+                      ))}
 
-                  {/* Actions */}
-                  <td className="border border-blue-gray-200  px-3 py-2">
+                    </div>
+                  </td> */}
+
+                  <td className="border border-blue-gray-200 px-3 py-2">
                     <div className="flex gap-2">
+
                       <Button
                         size="sm"
                         variant="outlined"
                         onClick={() =>
                           navigate(`/dashboard/cms/about-us-benefits/edit/${item.id}`)
-
                         }
                       >
                         Edit
@@ -190,6 +187,7 @@ export default function AboutUsBenefits() {
                       >
                         Delete
                       </Button>
+
                     </div>
                   </td>
 

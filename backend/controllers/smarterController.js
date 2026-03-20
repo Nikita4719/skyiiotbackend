@@ -2,20 +2,7 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-const ROOT_DIR = path.join(__dirname, "../"); // ✅ fixed (no space)
-
-/* ================= STRIP HTML ================= */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return null;
-
-  const clean = value
-    .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return clean.length ? clean : null;
-};
+const ROOT_DIR = path.join(__dirname, "../");
 
 /* ================= DELETE FILE ================= */
 const deleteFile = (filePathFromDb) => {
@@ -39,7 +26,9 @@ exports.getAll = async (req, res) => {
       orderBy: { id: "desc" },
     });
 
+    // ✅ NO HTML STRIP
     res.json(records);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch records" });
@@ -58,7 +47,9 @@ exports.getOne = async (req, res) => {
 
     if (!record) return res.status(404).json({ message: "Record not found" });
 
+    // ✅ NO HTML STRIP
     res.json(record);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch record" });
@@ -68,10 +59,10 @@ exports.getOne = async (req, res) => {
 /* ================= CREATE ================= */
 exports.create = async (req, res) => {
   try {
-    const cleanHeading = stripHtml(req.body.heading);
-    const cleanPara = stripHtml(req.body.para);
+    const heading = req.body.heading;
+    const para = req.body.para;
 
-    if (!cleanHeading || !cleanPara) {
+    if (!heading || !para) {
       return res
         .status(400)
         .json({ message: "Heading and Paragraph are required" });
@@ -81,7 +72,6 @@ exports.create = async (req, res) => {
     let media_type = null;
 
     if (req.file) {
-      // ✅ save full relative path properly
       media = `uploads/${req.file.filename}`;
       media_type = req.file.mimetype.startsWith("video")
         ? "video"
@@ -90,14 +80,16 @@ exports.create = async (req, res) => {
 
     await prisma.smarter_section.create({
       data: {
-        heading: cleanHeading,
-        para: cleanPara,
+        // ✅ HTML preserved
+        heading,
+        para,
         media,
         media_type,
       },
     });
 
     res.status(201).json({ message: "Created Successfully" });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to create record" });
@@ -122,31 +114,28 @@ exports.update = async (req, res) => {
     if (req.file) {
       deleteFile(existing.media);
 
-      media = `uploads/${req.file.filename}`; // ✅ fixed
+      media = `uploads/${req.file.filename}`;
       media_type = req.file.mimetype.startsWith("video")
         ? "video"
         : "image";
     }
 
-    const cleanHeading = req.body.heading
-      ? stripHtml(req.body.heading)
-      : existing.heading;
-
-    const cleanPara = req.body.para
-      ? stripHtml(req.body.para)
-      : existing.para;
+    const heading = req.body.heading ?? existing.heading;
+    const para = req.body.para ?? existing.para;
 
     await prisma.smarter_section.update({
       where: { id },
       data: {
-        heading: cleanHeading,
-        para: cleanPara,
+        // ✅ HTML preserved
+        heading,
+        para,
         media,
         media_type,
       },
     });
 
     res.json({ message: "Updated Successfully" });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to update record" });
@@ -172,6 +161,7 @@ exports.remove = async (req, res) => {
     });
 
     res.json({ message: "Deleted Successfully" });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to delete record" });

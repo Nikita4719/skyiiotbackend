@@ -2,27 +2,7 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =============================== */
-/* STRIP HTML */
-/* =============================== */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return value;
-  return value.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
-};
-
-/* =============================== */
-/* BUILD IMAGE PATH */
-/* =============================== */
-const buildImagePath = (fileArray, existingImage = null) => {
-  if (fileArray && fileArray.length > 0 && fileArray[0].filename) {
-    return "uploads/" + fileArray[0].filename;
-  }
-  return existingImage;
-};
-
-/* =============================== */
 /* DELETE IMAGE */
-/* =============================== */
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -33,184 +13,200 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* =============================== */
 /* CREATE */
-/* =============================== */
-exports.create = (req, res) => {
-  const files = req.files || {};
+exports.create = async (req, res) => {
+  try {
+    const data = {};
 
-  const data = {};
+    // ✅ FIX: stripHtml removed
+    for (let i = 1; i <= 8; i++) {
+      data[`heading${i}`] = req.body[`heading${i}`] ?? null;
+    }
 
-  // headings 1–8
-  for (let i = 1; i <= 8; i++) {
-    data[`heading${i}`] = stripHtml(req.body[`heading${i}`]) ?? null;
-  }
+    for (let i = 1; i <= 4; i++) {
+      data[`paragraph${i}`] = req.body[`paragraph${i}`] ?? null;
+    }
 
-  // paragraphs 1–4
-  for (let i = 1; i <= 4; i++) {
-    data[`paragraph${i}`] = stripHtml(req.body[`paragraph${i}`]) ?? null;
-  }
+    data.images = req.files
+      ? req.files.map(file => "uploads/" + file.filename)
+      : [];
 
-  data.image1 = buildImagePath(files.image1);
-  data.image2 = buildImagePath(files.image2);
+    const created = await prisma.aboutusbenefits.create({ data });
 
-  prisma.aboutusbenefits.create({ data })
-    .then((created) => {
-      res.status(201).json({
-        message: "About Us Benefits created successfully",
-        data: created,
-      });
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        message: "Failed to create About Us Benefits",
-      });
+    res.status(201).json({
+      message: "About Us Benefits created successfully",
+      data: created
     });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to create About Us Benefits"
+    });
+  }
 };
 
-/* =============================== */
 /* GET ALL */
-/* =============================== */
-exports.getAll = (req, res) => {
-  prisma.aboutusbenefits.findMany({
-    orderBy: { id: "desc" },
-  })
-    .then((data) => res.json(data))
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        message: "Failed to fetch About Us Benefits",
-      });
+exports.getAll = async (req, res) => {
+  try {
+    const data = await prisma.aboutusbenefits.findMany({
+      orderBy: { id: "desc" }
     });
+
+    // Map images array to image1, image2, image3, image4 for frontend
+    const formattedData = data.map(item => {
+      const imgs = item.images || [];
+      return {
+        ...item,
+        image1: imgs[0] || null,
+        image2: imgs[1] || null,
+        image3: imgs[2] || null,
+        image4: imgs[3] || null,
+      };
+    });
+
+    res.json(formattedData);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to fetch About Us Benefits"
+    });
+  }
 };
 
-/* =============================== */
 /* GET ONE */
-/* =============================== */
-exports.getOne = (req, res) => {
+exports.getOne = async (req, res) => {
   const id = parseInt(req.params.id);
-
   if (isNaN(id))
     return res.status(400).json({ message: "Invalid ID" });
 
-  prisma.aboutusbenefits.findUnique({ where: { id } })
-    .then((data) => {
-      if (!data)
-        return res.status(404).json({
-          message: "About Us Benefits not found",
-        });
-
-      res.json(data);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        message: "Failed to fetch About Us Benefits",
-      });
+  try {
+    const data = await prisma.aboutusbenefits.findUnique({
+      where: { id }
     });
+
+    if (!item)
+      return res.status(404).json({ message: "About Us Benefits not found" });
+
+    const imgs = item.images || [];
+    const formattedItem = {
+      ...item,
+      image1: imgs[0] || null,
+      image2: imgs[1] || null,
+      image3: imgs[2] || null,
+      image4: imgs[3] || null,
+    };
+
+    res.json(formattedItem);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to fetch About Us Benefits"
+    });
+  }
 };
 
-/* =============================== */
 /* UPDATE */
-/* =============================== */
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = parseInt(req.params.id);
-  const files = req.files || {};
 
   if (isNaN(id))
     return res.status(400).json({ message: "Invalid ID" });
 
-  prisma.aboutusbenefits.findUnique({ where: { id } })
-    .then((existing) => {
-      if (!existing)
-        return res.status(404).json({
-          message: "About Us Benefits not found",
-        });
-
-      let image1 = existing.image1;
-      let image2 = existing.image2;
-
-      if (files.image1 && files.image1.length > 0) {
-        deleteImage(existing.image1);
-        image1 = buildImagePath(files.image1);
-      }
-
-      if (files.image2 && files.image2.length > 0) {
-        deleteImage(existing.image2);
-        image2 = buildImagePath(files.image2);
-      }
-
-      const updatedData = {};
-
-      for (let i = 1; i <= 8; i++) {
-        updatedData[`heading${i}`] =
-          req.body[`heading${i}`] !== undefined
-            ? stripHtml(req.body[`heading${i}`])
-            : existing[`heading${i}`];
-      }
-
-      for (let i = 1; i <= 4; i++) {
-        updatedData[`paragraph${i}`] =
-          req.body[`paragraph${i}`] !== undefined
-            ? stripHtml(req.body[`paragraph${i}`])
-            : existing[`paragraph${i}`];
-      }
-
-      updatedData.image1 = image1;
-      updatedData.image2 = image2;
-
-      return prisma.aboutusbenefits.update({
-        where: { id },
-        data: updatedData,
-      });
-    })
-    .then((updated) => {
-      if (updated) {
-        res.json({
-          message: "About Us Benefits updated successfully",
-          data: updated,
-        });
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        message: "Failed to update About Us Benefits",
-      });
+  try {
+    const existing = await prisma.aboutusbenefits.findUnique({
+      where: { id }
     });
+
+    if (!existing)
+      return res.status(404).json({
+        message: "About Us Benefits not found"
+      });
+
+    const updatedData = {};
+
+    // ✅ FIX: stripHtml removed
+    for (let i = 1; i <= 8; i++) {
+      updatedData[`heading${i}`] =
+        req.body[`heading${i}`] !== undefined
+          ? req.body[`heading${i}`]
+          : existing[`heading${i}`];
+    }
+
+    for (let i = 1; i <= 4; i++) {
+      updatedData[`paragraph${i}`] =
+        req.body[`paragraph${i}`] !== undefined
+          ? req.body[`paragraph${i}`]
+          : existing[`paragraph${i}`];
+    }
+
+    let images = existing.images || [];
+
+    if (req.files && req.files.length > 0) {
+
+      // delete old images
+      if (images.length > 0) {
+        images.forEach(deleteImage);
+      }
+
+      images = req.files.map(file => "uploads/" + file.filename);
+    }
+
+    updatedData.images = images;
+
+    const updated = await prisma.aboutusbenefits.update({
+      where: { id },
+      data: updatedData
+    });
+
+    res.json({
+      message: "About Us Benefits updated successfully",
+      data: updated
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to update About Us Benefits"
+    });
+  }
 };
 
-/* =============================== */
 /* DELETE */
-/* =============================== */
-exports.remove = (req, res) => {
+exports.remove = async (req, res) => {
   const id = parseInt(req.params.id);
 
   if (isNaN(id))
     return res.status(400).json({ message: "Invalid ID" });
 
-  prisma.aboutusbenefits.findUnique({ where: { id } })
-    .then((existing) => {
-      if (!existing)
-        return res.status(404).json({
-          message: "About Us Benefits not found",
-        });
-
-      deleteImage(existing.image1);
-      deleteImage(existing.image2);
-
-      return prisma.aboutusbenefits.delete({ where: { id } });
-    })
-    .then(() => {
-      res.json({
-        message: "About Us Benefits deleted successfully",
-      });
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        message: "Failed to delete About Us Benefits",
-      });
+  try {
+    const existing = await prisma.aboutusbenefits.findUnique({
+      where: { id }
     });
+
+    if (!existing)
+      return res.status(404).json({
+        message: "About Us Benefits not found"
+      });
+
+    if (existing.images) {
+      existing.images.forEach(deleteImage);
+    }
+
+    await prisma.aboutusbenefits.delete({
+      where: { id }
+    });
+
+    res.json({
+      message: "About Us Benefits deleted successfully"
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Failed to delete About Us Benefits"
+    });
+  }
 };

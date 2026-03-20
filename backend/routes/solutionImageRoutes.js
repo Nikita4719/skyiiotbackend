@@ -15,6 +15,7 @@ const cpUpload = upload.fields([
   { name: "image2", maxCount: 1 },
   { name: "image3", maxCount: 1 },
   { name: "image4", maxCount: 1 },
+  { name: "imagechart", maxCount: 1 }, // NEW
 ]);
 
 router.post("/", cpUpload, createSolutionImage);

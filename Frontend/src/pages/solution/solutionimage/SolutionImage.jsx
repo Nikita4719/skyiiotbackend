@@ -75,7 +75,7 @@ export default function SolutionImage() {
 
                   <td className="border-blue-gray-200  border px-3 py-2">
                     <div className="flex gap-2">
-                      {[item.image1, item.image2, item.image3, item.image4]
+                      {[item.image1, item.image2, item.image3, item.image4, item.imagechart]
                         .filter(Boolean)
                         .map((img, i) => (
                           <img
