@@ -1,9 +1,9 @@
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    Typography,
-    Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+  Button,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -11,168 +11,182 @@ import axios from "axios";
 import BASE_URL from "../../../configs/api";
 
 export default function Footer() {
-    const navigate = useNavigate();
-    const [data, setData] = useState([]);
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
 
-    useEffect(() => {
-        const fetchFooter = async () => {
-            try {
-                const res = await axios.get(`${BASE_URL}/api/footer`);
-                console.log(res);
-                if (res.data) setData([res.data]); // wrap in array
-            } catch (err) {
-                console.error("Error fetching footer:", err);
-            }
-        };
-        fetchFooter();
-    }, []);
+  const fetchFooter = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/footer`);
+      if (res.data) setData([res.data]); // single object → array
+    } catch (err) {
+      console.error("Error fetching footer:", err);
+    }
+  };
 
-    const handleDelete = async () => {
-        if (!window.confirm("Are you sure you want to delete the footer?")) return;
-        try {
-            await axios.delete(`${BASE_URL}/api/footer`);
-            alert("Footer deleted successfully!");
-            setData([]);
-        } catch (err) {
-            console.error("Error deleting footer:", err);
-        }
-    };
+  useEffect(() => {
+    fetchFooter();
+  }, []);
 
-    return (
-        <div className="mt-12 mb-8 flex flex-col gap-12 px-6">
-            <Card>
-                <CardHeader
-                    variant="gradient"
-                    color="gray"
-                    className="mb-8 p-6 flex justify-between items-center"
-                >
-                    <Typography variant="h6" color="white">
-                        Footer Section
-                    </Typography>
-                    <Button
-                        color="white"
-                        size="sm"
-                        onClick={() => navigate("/dashboard/cms/footer/add")}
-                    >
-                        Add
-                    </Button>
-                </CardHeader>
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete the footer?")) return;
 
-                <CardBody className="overflow-x-auto">
-                    <table className="w-full min-w-[1300px] table-auto">
-                        <thead>
-                            <tr>
-                                {[
-                                    "Title",
-                                    "Content",
-                                    "Email",
-                                    "Phone",
-                                    "Address",
-                                    "QR Code 1",
-                                    "QR Code 2",
-                                    "QR Code 3",
-                                    "QR Code 4",
-                                    "Action",
-                                ].map((head) => (
-                                    <th key={head} className="border-b py-3 px-5 text-left">
-                                        <Typography
-                                            variant="small"
-                                            className="text-[11px] font-bold uppercase text-blue-gray-400"
-                                        >
-                                            {head}
-                                        </Typography>
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
+    try {
+      await axios.delete(`${BASE_URL}/api/footer`);
+      setData([]);
+    } catch (err) {
+      console.error("Error deleting footer:", err);
+    }
+  };
 
-                        <tbody>
-                            {data.map((item) => {
-                                const qrCodes =
-                                    item.qr_code && item.qr_code !== "null"
-                                        ? JSON.parse(item.qr_code)
-                                        : [];
+  return (
+    <div className="mt-12 mb-8 px-6">
+      <Card>
+        <CardHeader
+          variant="gradient"
+          color="gray"
+          className="flex justify-between items-center p-6"
+        >
+          <Typography variant="h6" color="white">
+            Footer Section
+          </Typography>
 
-                                return (
-                                    <tr key={item.id}>
+          <Button
+            size="sm"
+            color="white"
+            onClick={() => navigate("/dashboard/cms/footer/add")}
+          >
+            Add
+          </Button>
+        </CardHeader>
 
-                                        {/* Title */}
-                                        <td className="py-3 px-5 border-b">
-                                            {item.title || "-"}
-                                        </td>
+        <CardBody className="overflow-x-auto">
+          <table className="w-full border border-blue-gray-200 table-auto">
+            <thead className="bg-blue-gray-50">
+              <tr>
+                {[
+                  "Title",
+                  "Content",
+                  "Email",
+                  "Phone",
+                  "Address",
+                  "QR 1",
+                  "QR 2",
+                  "QR 3",
+                  "QR 4",
+                  "Action",
+                ].map((head) => (
+                  <th
+                    key={head}
+                    className="border border-blue-gray-200 px-4 py-3 text-left text-xs font-bold uppercase text-blue-gray-600"
+                  >
+                    {head}
+                  </th>
+                ))}
+              </tr>
+            </thead>
 
-                                        {/* Content */}
-                                        <td className="py-3 px-5 border-b">
-                                            {item.content || "-"}
-                                        </td>
+            <tbody>
+              {data.map((item) => {
+                const qrCodes =
+                  item.qr_code && item.qr_code !== "null"
+                    ? JSON.parse(item.qr_code)
+                    : [];
 
-                                        {/* Email */}
-                                        <td className="py-3 px-5 border-b">
-                                            {item.contact_email || "-"}
-                                        </td>
+                return (
+                  <tr key={item.id} className="hover:bg-blue-gray-50">
 
-                                        {/* Phone */}
-                                        <td className="py-3 px-5 border-b">
-                                            {item.contact_phone || "-"}
-                                        </td>
+                    {/* Title */}
+                    <td className="border border-blue-gray-200 px-4 py-3 align-top max-w-xs">
+                      <div
+                        className="line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: item.title || "-",
+                        }}
+                      />
+                    </td>
 
-                                        {/* Address */}
-                                        <td className="py-3 px-5 border-b">
-                                            {item.address || "-"}
-                                        </td>
+                    {/* Content */}
+                    <td className="border border-blue-gray-200 px-4 py-3 align-top max-w-sm">
+                      <div
+                        className="line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: item.content || "-",
+                        }}
+                      />
+                    </td>
 
-                                        {/* QR Codes */}
-                                        {[0, 1, 2, 3].map((i) => (
-                                            <td key={i} className="py-3 px-5 border-b">
-                                                {qrCodes[i] ? (
-                                                    <img
-                                                        // src={
-                                                        //     qrCodes[i].startsWith("http")
-                                                        //         ? qrCodes[i]
-                                                        //         : `http://localhost:5000/uploads/qrcodes/${qrCodes[i]}`
-                                                        // }
-                                                        src={
-                                                            qrCodes[i].startsWith("http")
-                                                                ? qrCodes[i]
-                                                                : `${BASE_URL}/uploads/qrcodes/${qrCodes[i]}`
-                                                        }
-                                                        alt={`QR ${i + 1}`}
-                                                        className="h-12 w-12 object-cover rounded-lg"
-                                                    />
-                                                ) : (
-                                                    "-"
-                                                )}
-                                            </td>
-                                        ))}
+                    {/* Email */}
+                    <td className="border border-blue-gray-200 px-4 py-3 align-top">
+                      {item.contact_email || "-"}
+                    </td>
 
-                                        {/* Action */}
-                                        <td className="py-3 px-5 border-b flex gap-2">
-                                            <Button
-                                                size="sm"
-                                                variant="outlined"
-                                                onClick={() =>
-                                                    navigate(`/dashboard/cms/footer/edit/${item.id}`)
-                                                }
-                                            >
-                                                Edit
-                                            </Button>
+                    {/* Phone */}
+                    <td className="border border-blue-gray-200 px-4 py-3 align-top">
+                      {item.contact_phone || "-"}
+                    </td>
 
-                                            <Button
-                                                size="sm"
-                                                color="red"
-                                                onClick={() => handleDelete()}
-                                            >
-                                                Delete
-                                            </Button>
-                                        </td>
+                    {/* Address */}
+                    <td className="border border-blue-gray-200 px-4 py-3 align-top max-w-xs">
+                      <div
+                        className="line-clamp-2"
+                        dangerouslySetInnerHTML={{
+                          __html: item.address || "-",
+                        }}
+                      />
+                    </td>
 
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </CardBody>
-            </Card>
-        </div>
-    );
+                    {/* QR Codes */}
+                    {[0, 1, 2, 3].map((i) => (
+                      <td
+                        key={i}
+                        className="border border-blue-gray-200 px-4 py-3 text-center"
+                      >
+                        {qrCodes[i] ? (
+                          <img
+                            src={
+                              qrCodes[i].startsWith("http")
+                                ? qrCodes[i]
+                                : `${BASE_URL}/uploads/qrcodes/${qrCodes[i]}`
+                            }
+                            className="h-14 w-14 object-cover rounded-lg mx-auto"
+                            alt={`QR ${i + 1}`}
+                          />
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                    ))}
+
+                    {/* Actions */}
+                    <td className="border border-blue-gray-200 px-4 py-3">
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outlined"
+                          onClick={() =>
+                            navigate(`/dashboard/cms/footer/edit/${item.id}`)
+                          }
+                        >
+                          Edit
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          color="red"
+                          onClick={handleDelete}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </CardBody>
+      </Card>
+    </div>
+  );
 }

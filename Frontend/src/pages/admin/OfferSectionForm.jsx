@@ -6,9 +6,7 @@ import {
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
-export default function OfferSectionForm() {
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';export default function OfferSectionForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 

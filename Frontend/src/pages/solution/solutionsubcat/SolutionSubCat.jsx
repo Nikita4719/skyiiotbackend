@@ -76,20 +76,20 @@ export default function SolutionSubCat() {
           <table className="w-full min-w-max table-auto text-left border">
 
             <thead>
-              <tr className="border-b bg-gray-100">
-                <th className="border px-3 py-2">#</th>
-                <th className="border px-3 py-2">Category</th>
-                <th className="border px-3 py-2">Heading</th>
-                <th className="border px-3 py-2">Image1</th>
-                <th className="border px-3 py-2">Image Chart</th>
-                <th className="border px-3 py-2">Description1</th>
-                <th className="border px-3 py-2">Description2</th>
-                <th className="border px-3 py-2">Para1</th>
-                <th className="border px-3 py-2">Para2</th>
-                <th className="border px-3 py-2">Para3</th>
-                <th className="border px-3 py-2">Para4</th>
-                <th className="border px-3 py-2">Image2</th>
-                <th className="border px-3 py-2">Action</th>
+              <tr className="border-b border-blue-gray-200 bg-gray-100">
+                <th className="border border-blue-gray-200 px-3 py-2">#</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Category</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Heading</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Image1</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Image Chart</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Description1</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Description2</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Para1</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Para2</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Para3</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Para4</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Image2</th>
+                <th className="border border-blue-gray-200 px-3 py-2">Action</th>
               </tr>
             </thead>
 
@@ -110,19 +110,19 @@ export default function SolutionSubCat() {
                 return (
                   <tr key={item.id} className="border-b">
 
-                    <td className="border p-3">
+                    <td className="border border-blue-gray-200 p-3">
                       {index + 1}
                     </td>
 
-                    <td className="border p-3 font-semibold">
+                    <td className="border border-blue-gray-200 p-3 font-semibold">
                       {item.solution_cat?.title || "No Category"}
                     </td>
 
-                    <td className="border p-3">
+                    <td className="border border-blue-gray-200 p-3">
                       {truncateText(item.heading)}
                     </td>
 
-                    <td className="border p-3">
+                    <td className="border border-blue-gray-200 p-3">
                       {item.image1 ? (
                         <img
                           src={`${BASE_URL}/${item.image1}`}
@@ -134,7 +134,7 @@ export default function SolutionSubCat() {
                       )}
                     </td>
 
-                    <td className="border p-3">
+                    <td className="border border-blue-gray-200 p-3">
                       {item.imagechart ? (
                         <img
                           src={`${BASE_URL}/${item.imagechart}`}
@@ -146,31 +146,31 @@ export default function SolutionSubCat() {
                       )}
                     </td>
 
-                    <td className="border p-3 max-w-xs">
+                    <td className="border border-blue-gray-200 p-3 max-w-xs">
                       {truncateText(item.description1)}
                     </td>
 
-                    <td className="border p-3 max-w-xs">
+                    <td className="border border-blue-gray-200 p-3 max-w-xs">
                       {truncateText(item.description2)}
                     </td>
 
-                    <td className="border p-3 max-w-xs">
+                    <td className="border border-blue-gray-200 p-3 max-w-xs">
                       {truncateText(item.para1)}
                     </td>
 
-                    <td className="border p-3 max-w-xs">
+                    <td className="border border-blue-gray-200 p-3 max-w-xs">
                       {truncateText(item.para2)}
                     </td>
 
-                    <td className="border p-3 max-w-xs">
+                    <td className="border border-blue-gray-200 p-3 max-w-xs">
                       {truncateText(item.para3)}
                     </td>
 
-                    <td className="border p-3 max-w-xs">
+                    <td className="border border-blue-gray-200 p-3 max-w-xs">
                       {truncateText(item.para4)}
                     </td>
 
-                    <td className="border p-3">
+                    <td className="border border-blue-gray-200 p-3">
                       <div className="flex gap-2 flex-wrap">
                         {images.length > 0
                           ? images.map((img, i) => (
@@ -185,7 +185,7 @@ export default function SolutionSubCat() {
                       </div>
                     </td>
 
-                    <td className="border p-3 space-x-2">
+                    <td className="border border-blue-gray-200 p-3 space-x-2">
                       <Button
                         size="sm"
                         variant="outlined"

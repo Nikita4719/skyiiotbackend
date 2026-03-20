@@ -9,7 +9,8 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 import BASE_URL from "../../../configs/api";
 
@@ -62,10 +63,10 @@ export default function SolutionSubCatForm() {
 
           setPreviewImage1(`${BASE_URL}/${res.data.image1}`);
 
-           if (res.data.imagechart) {
-    setPreviewChart(`${BASE_URL}/${res.data.imagechart}`);
-  }
-  
+          if (res.data.imagechart) {
+            setPreviewChart(`${BASE_URL}/${res.data.imagechart}`);
+          }
+
           let images = [];
 
           try {
@@ -77,9 +78,9 @@ export default function SolutionSubCatForm() {
             images = [];
           }
           setFormData({
-  ...res.data,
-  image2: images
-});
+            ...res.data,
+            image2: images
+          });
 
           setPreviewImages(images.map(img => `${BASE_URL}/${img}`));
         }
@@ -97,7 +98,6 @@ export default function SolutionSubCatForm() {
 
   }, [id]);
 
-  // console.log("the data from the solution cat is", categories);
 
   const handleImage1 = (e) => {
 
@@ -220,7 +220,7 @@ export default function SolutionSubCatForm() {
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.title}
-              </option>
+              </option>c
             ))}
 
           </select>

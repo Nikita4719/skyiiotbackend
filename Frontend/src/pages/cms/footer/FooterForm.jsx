@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../configs/api";
 
-
 export default function FooterForm() {
   const navigate = useNavigate();
 
@@ -14,18 +13,22 @@ export default function FooterForm() {
     contact_email: "",
     contact_phone: "",
     address: "",
-    qr_codes: ["", "", "", ""], // 4 QR codes
+    qr_codes: ["", "", "", ""],
   });
 
   const [preview, setPreview] = useState(["", "", "", ""]);
 
-  // Fetch existing footer data
+  // ================= FETCH DATA =================
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/footer`)
       .then((res) => {
         const data = res.data || {};
-        const qr = data.qr_code ? JSON.parse(data.qr_code) : ["", "", "", ""];
+
+        const qr = data.qr_code
+          ? JSON.parse(data.qr_code)
+          : ["", "", "", ""];
+
         setFormData({
           title: data.title || "",
           content: data.content || "",
@@ -34,48 +37,65 @@ export default function FooterForm() {
           address: data.address || "",
           qr_codes: qr,
         });
-        setPreview(qr);
+
+        // ✅ FIX: Convert filenames → full URL for preview
+        const previewUrls = qr.map((item) =>
+          item
+            ? item.startsWith("http")
+              ? item
+              : `${BASE_URL}/uploads/qrcodes/${item}`
+            : ""
+        );
+
+        setPreview(previewUrls);
       })
       .catch((err) => console.error("Error fetching footer:", err));
   }, []);
 
-  // Handle text/textarea inputs
+  // ================= HANDLE INPUT =================
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value || "" }));
   };
 
-  // Handle QR image selection
+  // ================= HANDLE IMAGE =================
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
     if (file) {
       const updatedQr = [...formData.qr_codes];
       updatedQr[index] = file;
-      setFormData((prev) => ({ ...prev, qr_codes: updatedQr }));
+
+      setFormData((prev) => ({
+        ...prev,
+        qr_codes: updatedQr,
+      }));
 
       const updatedPreview = [...preview];
       updatedPreview[index] = URL.createObjectURL(file);
+
       setPreview(updatedPreview);
     }
   };
 
-  // Submit form
+  // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const dataToSend = new FormData();
 
-      // Append text fields
       dataToSend.append("title", formData.title || "");
       dataToSend.append("content", formData.content || "");
       dataToSend.append("contact_email", formData.contact_email || "");
       dataToSend.append("contact_phone", formData.contact_phone || "");
       dataToSend.append("address", formData.address || "");
 
-      // Append QR codes
       formData.qr_codes.forEach((qr) => {
-        if (qr instanceof File) dataToSend.append("qr_codes", qr);
-        else dataToSend.append("existing_qr[]", qr || "");
+        if (qr instanceof File) {
+          dataToSend.append("qr_codes", qr);
+        } else {
+          dataToSend.append("existing_qr[]", qr || "");
+        }
       });
 
       await axios.put(`${BASE_URL}/api/footer`, dataToSend, {
@@ -96,13 +116,16 @@ export default function FooterForm() {
         <Typography variant="h4" className="mb-2">
           Edit Footer
         </Typography>
+
         <Typography variant="small" color="gray" className="mb-8">
           Manage Footer Section
         </Typography>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-12 gap-8">
+        {/* ✅ FIX: All fields in single column */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
           {/* Title */}
-          <div className="col-span-12">
+          <div>
             <Typography className="mb-2 font-medium">Title</Typography>
             <input
               type="text"
@@ -114,7 +137,7 @@ export default function FooterForm() {
           </div>
 
           {/* Content */}
-          <div className="col-span-12">
+          <div>
             <Typography className="mb-2 font-medium">Content</Typography>
             <textarea
               name="content"
@@ -125,8 +148,8 @@ export default function FooterForm() {
             />
           </div>
 
-          {/* Contact Email */}
-          <div className="col-span-12 md:col-span-6">
+          {/* Email */}
+          <div>
             <Typography className="mb-2 font-medium">Email</Typography>
             <input
               type="email"
@@ -135,12 +158,11 @@ export default function FooterForm() {
               onChange={handleChange}
               className="border rounded-xl p-2 w-full"
               required
-              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
           </div>
 
-          {/* Contact Phone */}
-          <div className="col-span-12 md:col-span-6">
+          {/* Phone */}
+          <div>
             <Typography className="mb-2 font-medium">Phone</Typography>
             <input
               type="text"
@@ -155,7 +177,7 @@ export default function FooterForm() {
           </div>
 
           {/* Address */}
-          <div className="col-span-12">
+          <div>
             <Typography className="mb-2 font-medium">Address</Typography>
             <textarea
               name="address"
@@ -167,34 +189,46 @@ export default function FooterForm() {
           </div>
 
           {/* QR Codes */}
-          {formData.qr_codes.map((qr, index) => (
-            <div key={index} className="col-span-12 md:col-span-3">
-              <Typography className="mb-2 font-medium">QR Code {index + 1}</Typography>
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
-                {preview[index] ? (
-                  <img
-                    src={preview[index]}
-                    alt={`QR ${index + 1}`}
-                    className="h-full object-cover rounded-xl"
-                  />
-                ) : (
-                  <Typography color="gray">Click to upload QR {index + 1}</Typography>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, index)}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          ))}
+          {/* QR Codes */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {formData.qr_codes.map((qr, index) => (
+              <div key={index}>
+                <Typography className="mb-2 font-medium">
+                  QR Code {index + 1}
+                </Typography>
 
-          <div className="col-span-12">
+                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
+
+                  {preview[index] ? (
+                    <img
+                      src={preview[index]}
+                      alt={`QR ${index + 1}`}
+                      className="h-full object-cover rounded-xl"
+                    />
+                  ) : (
+                    <Typography color="gray">
+                      Click to upload QR {index + 1}
+                    </Typography>
+                  )}
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e, index)}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            ))}
+          </div>
+
+          {/* Submit */}
+          <div>
             <Button type="submit" fullWidth>
               Save
             </Button>
           </div>
+
         </form>
       </Card>
     </div>
