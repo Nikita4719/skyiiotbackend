@@ -53,7 +53,7 @@ app.use("/api/header-top", headerTopRoutes);
 app.use("/api/navbar-menu", navbarMenuRoutes);
 app.use("/api/navbar-logo", navbarLogoRoutes);
 app.use("/api/footer", footerRoutes);
-app.use("/api", contactSettingsRoutes);
+app.use("/api/contact-settings", contactSettingsRoutes);
 app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
 app.use("/api/system-architecture",systemArchitectureRoutes);
 app.use("/api/about", aboutRoutes);
