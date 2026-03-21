@@ -65,28 +65,28 @@ exports.getAll = async (req, res) => {
 
 /* GET ONE */
 exports.getOne = async (req, res) => {
-  const id = parseInt(req.params.id);
-
-
-  if (isNaN(id))
-    return res.status(400).json({ message: "Invalid ID" });
-
   try {
-    const data = await prisma.aboutusbenefits.findUnique({
-      where: { id }
-    });
+    const id = req.params.id;
 
-    if (!data)
+    const item = await aboutusbenefits.findByPk(id);
+
+    if (!item) {
       return res.status(404).json({
-        message: "About Us Benefits not found"
+        success: false,
+        message: "Data not found"
       });
+    }
 
-    res.json(data);
+    res.status(200).json({
+      success: true,
+      data: item
+    });
 
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Failed to fetch About Us Benefits"
+      success: false,
+      message: "Server Error"
     });
   }
 };
