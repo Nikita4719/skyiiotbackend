@@ -73,7 +73,7 @@ export default function AboutUsBenefits() {
             <thead className="bg-blue-gray-50">
               <tr>
 
-                {[1,2,3,4,5,6,7,8].map((i)=>(
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                   <th
                     key={`heading${i}`}
                     className="border border-blue-gray-200 px-3 py-2 text-xs font-bold uppercase"
@@ -82,7 +82,7 @@ export default function AboutUsBenefits() {
                   </th>
                 ))}
 
-                {[1,2,3,4].map((i)=>(
+                {[1, 2, 3, 4].map((i) => (
                   <th
                     key={`paragraph${i}`}
                     className="border border-blue-gray-200 px-3 py-2 text-xs font-bold uppercase"
@@ -109,7 +109,7 @@ export default function AboutUsBenefits() {
                   className="hover:bg-blue-gray-50"
                 >
 
-                  {[1,2,3,4,5,6,7,8].map((i)=>(
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                     <td
                       key={`heading${i}`}
                       className="border border-blue-gray-200 px-3 py-2 max-w-xs"
@@ -123,7 +123,7 @@ export default function AboutUsBenefits() {
                     </td>
                   ))}
 
-                  {[1,2,3,4].map((i)=>(
+                  {[1, 2, 3, 4].map((i) => (
                     <td
                       key={`paragraph${i}`}
                       className="border border-blue-gray-200 px-3 py-2 max-w-sm"
@@ -137,19 +137,19 @@ export default function AboutUsBenefits() {
                     </td>
                   ))}
 
-<td className="border border-blue-gray-200 px-3 py-2 min-w-[220px]">
-  <div className="flex flex-wrap gap-2 max-w-[220px]">
-    {item.images && item.images.map((img, index) => (
-      <div key={index} className="w-[60px] h-[60px] flex-shrink-0">
-        <img
-          src={`${BASE_URL}/${img}`}
-          alt="img"
-          className="w-full h-full object-cover rounded border"
-        />
-      </div>
-    ))}
-  </div>
-</td>
+                  <td className="border border-blue-gray-200 px-3 py-2 min-w-[220px]">
+                    <div className="flex flex-wrap gap-2 max-w-[220px]">
+                      {item.images && item.images.map((img, index) => (
+                        <div key={index} className="w-[60px] h-[60px] flex-shrink-0">
+                          <img
+                            src={`${BASE_URL}/${img}`}
+                            alt="img"
+                            className="w-full h-full object-cover rounded border"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </td>
                   {/* <td className="border border-blue-gray-200 px-3 py-2 text-center">
                     <div className="flex gap-2 flex-wrap justify-center">
 

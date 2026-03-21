@@ -220,7 +220,7 @@ export default function SolutionSubCatForm() {
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.title}
-              </option>c
+              </option>
             ))}
 
           </select>

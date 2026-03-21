@@ -57,20 +57,20 @@ export default function ContactSettings() {
           <table className="w-full border border-blue-gray-200">
             <thead className="bg-blue-gray-50">
               <tr>
-                <th className="border px-4 py-3">Map URL</th>
-                <th className="border px-4 py-3">BG Image</th>
-                <th className="border px-4 py-3">Action</th>
+                <th className="border border-blue-gray-200 px-4 py-3">Map URL</th>
+                <th className="border border-blue-gray-200 px-4 py-3">BG Image</th>
+                <th className="border border-blue-gray-200 px-4 py-3">Action</th>
               </tr>
             </thead>
             <tbody>
               {settings.id && (
                 <tr>
-                  <td className="border px-4 py-3 max-w-[250px]">
+                  <td className="border border-blue-gray-200 px-4 py-3 max-w-[250px]">
                     <span className="block truncate" title={settings.map_url}>
                       {settings.map_url}
                     </span>
                   </td>
-                  <td className="border px-4 py-3 max-w-[250px] truncate">
+                  <td className="border border-blue-gray-200 px-4 py-3 max-w-[250px] truncate">
                     <img
                       src={`${BASE_URL}/uploads/${settings.bg_image}`}
                       width="120"

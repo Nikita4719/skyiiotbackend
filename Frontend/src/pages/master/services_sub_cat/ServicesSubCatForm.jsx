@@ -74,6 +74,14 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';export default fun
 
   }, [id]);
 
+
+   const stripHtml = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
+
+
   const fetchCategories = async (serviceId) => {
 
     const res = await axios.get(`${BASE_URL}/api/services-category`);
@@ -205,7 +213,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';export default fun
               {services.map(item => (
 
                 <option key={item.id} value={item.id}>
-                  {item.title}
+                   {stripHtml(item.title)}
                 </option>
 
               ))}

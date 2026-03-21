@@ -19,6 +19,7 @@ export default function ContactSettingsForm() {
 
     const [mapUrl, setMapUrl] = useState("");
     const [bgImage, setBgImage] = useState("");
+   
 
     useEffect(() => {
 
@@ -44,8 +45,8 @@ export default function ContactSettingsForm() {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            alert("Updated Successfully");
-            navigate("/master/contact-settings");
+           
+            navigate("../master/contact-settings");
         } catch (error) {
             console.error(error);
             alert("Update failed!");

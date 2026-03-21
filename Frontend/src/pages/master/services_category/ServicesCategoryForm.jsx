@@ -50,6 +50,12 @@ export default function ServicesCategoryForm() {
 
   }, [id]);
 
+  const stripHtml = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
+
   const handleChange = (e) => {
 
     setFormData({
@@ -128,11 +134,9 @@ export default function ServicesCategoryForm() {
               <option value="">Select Service</option>
 
               {services.map(item => (
-
                 <option key={item.id} value={item.id}>
-                  {item.title}
+                  {stripHtml(item.title)}
                 </option>
-
               ))}
 
             </select>
