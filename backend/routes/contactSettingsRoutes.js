@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   createContactSettings,
   getContactSettings,
-//   getSingleContactSettings,
+  getSingleContactSettings, // ✅ ADD
   updateContactSettings,
   deleteContactSettings
 } = require("../controllers/contactSettingsController");
@@ -22,14 +22,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// routes
+// CREATE
 router.post("/contact-settings", upload.single("bg_image"), createContactSettings);
 
+// GET ALL
 router.get("/contact-settings", getContactSettings);
-// router.get("/contact-settings/:id", getSingleContactSettings);
 
+// ✅ GET SINGLE (VERY IMPORTANT)
+router.get("/contact-settings/:id", getSingleContactSettings);
+
+// UPDATE
 router.put("/contact-settings/:id", upload.single("bg_image"), updateContactSettings);
 
+// DELETE
 router.delete("/contact-settings/:id", deleteContactSettings);
 
 module.exports = router;

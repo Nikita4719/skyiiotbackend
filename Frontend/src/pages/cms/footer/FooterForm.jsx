@@ -6,7 +6,9 @@ import BASE_URL from "../../../configs/api";
 
 export default function FooterForm() {
   const navigate = useNavigate();
-
+  const [logo, setLogo] = useState(null);
+  // const [id, setId] = useState(null);
+  const [logoPreview, setLogoPreview] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -14,6 +16,7 @@ export default function FooterForm() {
     contact_phone: "",
     address: "",
     qr_codes: ["", "", "", ""],
+    links: [],
   });
 
   const [preview, setPreview] = useState(["", "", "", ""]);
@@ -23,6 +26,7 @@ export default function FooterForm() {
     axios
       .get(`${BASE_URL}/api/footer`)
       .then((res) => {
+       
         const data = res.data || {};
 
         const qr = data.qr_code
@@ -36,18 +40,18 @@ export default function FooterForm() {
           contact_phone: data.contact_phone || "",
           address: data.address || "",
           qr_codes: qr,
+          links: data.links || [],
         });
 
-        // ✅ FIX: Convert filenames → full URL for preview
-        const previewUrls = qr.map((item) =>
-          item
-            ? item.startsWith("http")
-              ? item
-              : `${BASE_URL}/uploads/qrcodes/${item}`
-            : ""
-        );
+       setLogoPreview(
+  data.logo ? `${BASE_URL}/uploads/${data.logo}` : "" // ✅ FIX
+);
 
-        setPreview(previewUrls);
+        setPreview(
+  qr.map((img) =>
+    img ? `${BASE_URL}/uploads/qrcodes/${img}` : ""
+  )
+);
       })
       .catch((err) => console.error("Error fetching footer:", err));
   }, []);
@@ -90,13 +94,17 @@ export default function FooterForm() {
       dataToSend.append("contact_phone", formData.contact_phone || "");
       dataToSend.append("address", formData.address || "");
 
+      if (logo) {
+        dataToSend.append("logo", logo);
+      }
+
       formData.qr_codes.forEach((qr) => {
         if (qr instanceof File) {
           dataToSend.append("qr_codes", qr);
-        } else {
-          dataToSend.append("existing_qr[]", qr || "");
         }
       });
+
+      dataToSend.append("links", JSON.stringify(formData.links));
 
       await axios.put(`${BASE_URL}/api/footer`, dataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -104,10 +112,17 @@ export default function FooterForm() {
 
       alert("Footer saved successfully!");
       navigate("/dashboard/cms/footer");
+
     } catch (err) {
       console.error("Error saving footer:", err);
-      alert("Error saving footer. Check console.");
+      alert("Error saving footer");
     }
+  };
+
+  const handleLinkChange = (index, newLink) => {
+    const updatedLinks = [...formData.links];
+    updatedLinks[index].link = newLink;
+    setFormData((prev) => ({ ...prev, links: updatedLinks }));
   };
 
   return (
@@ -117,117 +132,91 @@ export default function FooterForm() {
           Edit Footer
         </Typography>
 
-        <Typography variant="small" color="gray" className="mb-8">
-          Manage Footer Section
-        </Typography>
-
-        {/* ✅ FIX: All fields in single column */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
           {/* Title */}
-          <div>
-            <Typography className="mb-2 font-medium">Title</Typography>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="border rounded-xl p-2 w-full"
-            />
-          </div>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Title"
+            className="border p-2 rounded"
+          />
 
           {/* Content */}
-          <div>
-            <Typography className="mb-2 font-medium">Content</Typography>
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              className="border rounded-xl p-2 w-full"
-              rows={4}
-            />
-          </div>
+          <textarea
+            name="content"
+            value={formData.content}
+            onChange={handleChange}
+            placeholder="Content"
+            className="border p-2 rounded"
+          />
 
           {/* Email */}
-          <div>
-            <Typography className="mb-2 font-medium">Email</Typography>
-            <input
-              type="email"
-              name="contact_email"
-              value={formData.contact_email}
-              onChange={handleChange}
-              className="border rounded-xl p-2 w-full"
-              required
-            />
-          </div>
+          <input
+            type="email"
+            name="contact_email"
+            value={formData.contact_email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="border p-2 rounded"
+          />
 
           {/* Phone */}
-          <div>
-            <Typography className="mb-2 font-medium">Phone</Typography>
-            <input
-              type="text"
-              name="contact_phone"
-              value={formData.contact_phone}
-              onChange={handleChange}
-              className="border rounded-xl p-2 w-full"
-              required
-              pattern="[0-9]{10}"
-              maxLength={14}
-            />
-          </div>
+          <input
+            type="text"
+            name="contact_phone"
+            value={formData.contact_phone}
+            onChange={handleChange}
+            placeholder="Phone"
+            className="border p-2 rounded"
+          />
 
           {/* Address */}
-          <div>
-            <Typography className="mb-2 font-medium">Address</Typography>
-            <textarea
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="border rounded-xl p-2 w-full"
-              rows={3}
-            />
-          </div>
+          <textarea
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Address"
+            className="border p-2 rounded"
+          />
+
+          {/* Logo */}
+          <input
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                setLogo(file);
+                setLogoPreview(URL.createObjectURL(file));
+              }
+            }}
+          />
 
           {/* QR Codes */}
-          {/* QR Codes */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-4 gap-4">
             {formData.qr_codes.map((qr, index) => (
-              <div key={index}>
-                <Typography className="mb-2 font-medium">
-                  QR Code {index + 1}
-                </Typography>
-
-                <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-blue-500 transition overflow-hidden">
-
-                  {preview[index] ? (
-                    <img
-                      src={preview[index]}
-                      alt={`QR ${index + 1}`}
-                      className="h-full object-cover rounded-xl"
-                    />
-                  ) : (
-                    <Typography color="gray">
-                      Click to upload QR {index + 1}
-                    </Typography>
-                  )}
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageChange(e, index)}
-                    className="hidden"
-                  />
-                </label>
-              </div>
+              <input
+                key={index}
+                type="file"
+                onChange={(e) => handleImageChange(e, index)}
+              />
             ))}
           </div>
 
-          {/* Submit */}
-          <div>
-            <Button type="submit" fullWidth>
-              Save
-            </Button>
-          </div>
+          {/* Links */}
+          {formData.links.map((linkObj, index) => (
+            <input
+              key={index}
+              type="text"
+              value={linkObj.link}
+              onChange={(e) => handleLinkChange(index, e.target.value)}
+              className="border p-2 rounded"
+            />
+          ))}
+
+          <Button type="submit">Save</Button>
 
         </form>
       </Card>

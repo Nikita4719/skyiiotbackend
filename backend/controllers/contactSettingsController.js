@@ -1,8 +1,7 @@
 const db = require("../config/db");
 
-// CREATE CONTACT SETTINGS
+// CREATE
 exports.createContactSettings = (req, res) => {
-
     const { map_url } = req.body;
     const bg_image = req.file ? req.file.filename : null;
 
@@ -10,51 +9,57 @@ exports.createContactSettings = (req, res) => {
         return res.status(400).json({ message: "Map URL and BG Image required" });
     }
 
-    const sql = "INSERT INTO contact_settings (map_url, bg_image) VALUES (?, ?)";
-
-    db.query(sql, [map_url, bg_image], (err, result) => {
-
-        if (err) {
-            console.log(err);
-            return res.status(500).json(err);
+    // ✅ check existing
+    db.query("SELECT * FROM contactsettings", (err, result) => {
+        if (result.length > 0) {
+            return res.status(400).json({ message: "Only one record allowed" });
         }
 
-        res.json({ message: "Contact settings created successfully" });
+        const sql = "INSERT INTO contactsettings (map_url, bg_image) VALUES (?, ?)";
 
+        db.query(sql, [map_url, bg_image], (err, result) => {
+            if (err) return res.status(500).json(err);
+
+            res.json({ message: "Created successfully" });
+        });
     });
-
 };
 
-
-
-// GET CONTACT SETTINGS
+// GET ALL
 exports.getContactSettings = (req, res) => {
-
-    const sql = "SELECT * FROM contact_settings LIMIT 1";
+    const sql = "SELECT * FROM contactsettings ORDER BY id DESC";
 
     db.query(sql, (err, result) => {
-
-        if (err) {
-            console.error(err);
-            return res.status(500).json(err);
-        }
+        if (err) return res.status(500).json(err);
 
         res.json(result);
-
     });
-
 };
 
+// ✅ GET SINGLE (FIXED FOR FRONTEND)
+exports.getSingleContactSettings = (req, res) => {
+    const { id } = req.params;
 
+    const sql = "SELECT * FROM contactsettings WHERE id = ?";
 
-// UPDATE CONTACT SETTINGS
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json(err);
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: "Data not found" });
+        }
+
+        res.json(result[0]); // ✅ IMPORTANT (frontend expects object)
+    });
+};
+
+// UPDATE
 exports.updateContactSettings = (req, res) => {
-
     const { id } = req.params;
     const { map_url } = req.body;
     const bg_image = req.file ? req.file.filename : null;
 
-    let sql = "UPDATE contact_settings SET map_url=?";
+    let sql = "UPDATE contactsettings SET map_url=?";
     let values = [map_url];
 
     if (bg_image) {
@@ -66,51 +71,21 @@ exports.updateContactSettings = (req, res) => {
     values.push(id);
 
     db.query(sql, values, (err, result) => {
-
-        if (err) {
-            console.error(err);
-            return res.status(500).json(err);
-        }
+        if (err) return res.status(500).json(err);
 
         res.json({ message: "Contact settings updated successfully" });
-
     });
-
 };
 
-// DELETE CONTACT SETTINGS
+// DELETE
 exports.deleteContactSettings = (req, res) => {
+    const { id } = req.params;
 
-  const { id } = req.params;
+    const sql = "DELETE FROM contactsettings WHERE id = ?";
 
-  const sql = "DELETE FROM contact_settings WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json(err);
 
-  db.query(sql, [id], (err, result) => {
-
-    if (err) {
-      console.error(err);
-      return res.status(500).json(err);
-    }
-
-    res.json({ message: "Contact settings deleted successfully" });
-
-  });
-
+        res.json({ message: "Contact settings deleted successfully" });
+    });
 };
-// exports.getSingleContactSettings = (req, res) => {
-
-// const id = req.params.id;
-
-// const sql = "SELECT * FROM contact_settings WHERE id = ?";
-
-// db.query(sql,[id],(err,result)=>{
-
-// if(err){
-// return res.status(500).json(err);
-// }
-
-// res.json(result[0]);
-
-// });
-
-// };

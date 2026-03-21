@@ -53,7 +53,19 @@ exports.getAll = async (req, res) => {
       orderBy: { id: "desc" }
     });
 
-    res.json(data);
+    // Map images array to image1, image2, image3, image4 for frontend
+    const formattedData = data.map(item => {
+      const imgs = item.images || [];
+      return {
+        ...item,
+        image1: imgs[0] || null,
+        image2: imgs[1] || null,
+        image3: imgs[2] || null,
+        image4: imgs[3] || null,
+      };
+    });
+
+    res.json(formattedData);
 
   } catch (error) {
     console.error(error);
@@ -65,31 +77,46 @@ exports.getAll = async (req, res) => {
 
 /* GET ONE */
 exports.getOne = async (req, res) => {
+  const id = parseInt(req.params.id);
+
+  if (isNaN(id)) {
+    return res.status(400).json({ message: "Invalid ID" });
+  }
+
   try {
-    const id = req.params.id;
+    // ✅ Fetch from DB
+    const item = await prisma.aboutusbenefits.findUnique({
+      where: { id }
+    });
 
-    const item = await aboutusbenefits.findByPk(id);
-
+    // ✅ Check exists
     if (!item) {
       return res.status(404).json({
-        success: false,
-        message: "Data not found"
+        message: "About Us Benefits not found"
       });
     }
 
-    res.status(200).json({
-      success: true,
-      data: item
-    });
+    // ✅ Format images
+    const imgs = item.images || [];
+
+    const formattedItem = {
+      ...item,
+      image1: imgs[0] || null,
+      image2: imgs[1] || null,
+      image3: imgs[2] || null,
+      image4: imgs[3] || null,
+    };
+
+    res.json(formattedItem);
 
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      success: false,
       message: "Server Error"
     });
   }
 };
+
 
 /* UPDATE */
 exports.update = async (req, res) => {
