@@ -150,20 +150,6 @@ export default function AboutUsBenefits() {
                       ))}
                     </div>
                   </td>
-                  {/* <td className="border border-blue-gray-200 px-3 py-2 text-center">
-                    <div className="flex gap-2 flex-wrap justify-center">
-
-                      {item.images?.map((img,i)=>(
-                        <img
-                          key={i}
-                          src={`${BASE_URL}/${img}`}
-                          className="h-14 w-14 object-cover rounded-lg"
-                          alt=""
-                        />
-                      ))}
-
-                    </div>
-                  </td> */}
 
                   <td className="border border-blue-gray-200 px-3 py-2">
                     <div className="flex gap-2">

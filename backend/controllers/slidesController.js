@@ -1,143 +1,165 @@
-// controllers/slidesController.js
-
 const prisma = require("../config/prisma");
-// const stripHtml = require("../utils/stripHtml");
 const fs = require("fs");
 const path = require("path");
 
-
-const stripHtml = (html) => {
-  if (!html) return null;
-
-  return html.replace(/<[^>]*>/g, "").trim();
+//BUILD IMAGE PATH
+const buildImagePath = (file, existing = null) => {
+  if (file && file.filename) {
+    return "uploads/" + file.filename;
+  }
+  return existing;
 };
 
-/* ================= GET ALL ================= */
+//DELETE IMAGE
+const deleteImage = (imagePath) => {
+  if (!imagePath) return;
+
+  const fullPath = path.join(__dirname, "../", imagePath);
+
+  if (fs.existsSync(fullPath)) {
+    fs.unlinkSync(fullPath);
+  }
+};
+
+//READ
 exports.getAll = async (req, res) => {
   try {
-    const slides = await prisma.slides.findMany({
+    const data = await prisma.slides.findMany({
       orderBy: { id: "desc" },
     });
 
-    res.json(slides);
+    res.json(data);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch slides" });
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch slides" });
   }
 };
 
-/* ================= GET ONE ================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
-    const slide = await prisma.slides.findUnique({
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+
+    const data = await prisma.slides.findUnique({
       where: { id },
     });
 
-    if (!slide)
+    if (!data) {
       return res.status(404).json({ message: "Slide not found" });
+    }
 
-    res.json(slide);
+    res.json(data);
+
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch slide" });
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch slide" });
   }
 };
 
-/* ================= CREATE ================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const { title } = req.body;
 
-    const media = req.file
-      ? `uploads/${req.file.filename}`
-      : null;
+    const media = buildImagePath(req.file);
 
-    const slide = await prisma.slides.create({
+    const created = await prisma.slides.create({
       data: {
-        title: title ? stripHtml(title) : null,
+        title: title ?? null,
         media,
       },
     });
 
     res.status(201).json({
-      message: "Slide Created",
-      slide,
+      message: "Slide created successfully",
+      data: created,
     });
+
   } catch (error) {
-    res.status(500).json({ error: "Failed to create slide" });
+    console.error(error);
+    res.status(500).json({ message: "Failed to create slide" });
   }
 };
 
-/* ================= UPDATE ================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
 
     const existing = await prisma.slides.findUnique({
       where: { id },
     });
 
-    if (!existing)
+    if (!existing) {
       return res.status(404).json({ message: "Slide not found" });
-
-    let newMedia = existing.media;
-
-    if (req.file) {
-      if (existing.media) {
-        const oldPath = path.join(__dirname, "..", existing.media);
-        if (fs.existsSync(oldPath)) {
-          fs.unlinkSync(oldPath);
-        }
-      }
-
-      newMedia = `uploads/${req.file.filename}`;
     }
 
-    const updatedSlide = await prisma.slides.update({
+    let media = existing.media;
+
+    if (req.file) {
+      deleteImage(existing.media);
+      media = buildImagePath(req.file);
+    }
+
+    const updated = await prisma.slides.update({
       where: { id },
       data: {
         title:
           req.body.title !== undefined
-            ? stripHtml(req.body.title)
+            ? req.body.title
             : existing.title,
-        media: newMedia,
+        media,
       },
     });
 
     res.json({
-      message: "Slide Updated",
-      slide: updatedSlide,
+      message: "Slide updated successfully",
+      data: updated,
     });
+
   } catch (error) {
-    res.status(500).json({ error: "Failed to update slide" });
+    console.error(error);
+    res.status(500).json({ message: "Failed to update slide" });
   }
 };
 
-/* ================= DELETE ================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
-    const slide = await prisma.slides.findUnique({
+    if (isNaN(id)) {
+      return res.status(400).json({ message: "Invalid ID" });
+    }
+
+    const existing = await prisma.slides.findUnique({
       where: { id },
     });
 
-    if (!slide)
+    if (!existing) {
       return res.status(404).json({ message: "Slide not found" });
-
-    if (slide.media) {
-      const filePath = path.join(__dirname, "..", slide.media);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
     }
+
+    deleteImage(existing.media);
 
     await prisma.slides.delete({
       where: { id },
     });
 
-    res.json({ message: "Slide Deleted" });
+    res.json({
+      message: "Slide deleted successfully",
+    });
+
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete slide" });
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete slide" });
   }
 };

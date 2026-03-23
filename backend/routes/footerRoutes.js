@@ -1,5 +1,3 @@
-// routes/footerRoutes.js
-
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
@@ -10,10 +8,6 @@ const {
   deleteFooter,
 } = require("../controllers/footerController");
 
-
-/* =============================
-   MULTER STORAGE
-============================= */
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,17 +20,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
-
-/* =============================
-   ROUTES
-============================= */
-
-// get footer
 router.get("/", getFooter);
 
 
-// update footer (logo + qr codes)
 router.put(
   "/",
   upload.fields([
@@ -46,8 +32,6 @@ router.put(
   updateFooter
 );
 
-
-// delete footer
 router.delete("/", deleteFooter);
 
 

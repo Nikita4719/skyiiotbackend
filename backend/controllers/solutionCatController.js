@@ -1,6 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* ================= HELPER: IMAGE PATH ================= */
+//HELPER IMAGE PATH
 
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
@@ -10,8 +10,7 @@ const buildImagePath = (fileArray, existingImage = null) => {
   return existingImage;
 };
 
-/* ================= GET ALL ================= */
-
+//READ
 exports.getAll = async (req, res) => {
   try {
 
@@ -33,8 +32,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
-
+//EDIT
 exports.getOne = async (req, res) => {
   try {
 
@@ -64,8 +62,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
-
+//CREATE
 exports.create = async (req, res) => {
   try {
 
@@ -78,7 +75,7 @@ exports.create = async (req, res) => {
     }
 
     const data = {
-      title: req.body.title, // ✅ FIX: direct store (no stripHtml)
+      title: req.body.title,
       image: `uploads/${files.image[0].filename}`
     };
 
@@ -100,8 +97,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
-
+//UPDATE
 exports.update = async (req, res) => {
   try {
 
@@ -120,7 +116,7 @@ exports.update = async (req, res) => {
 
     const data = {
       title: req.body.title
-        ? req.body.title // ✅ FIX: direct update (no stripHtml)
+        ? req.body.title
         : existing.title,
 
       image: buildImagePath(files.image, existing.image)
@@ -145,8 +141,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
-
+//DELETE
 exports.remove = async (req, res) => {
   try {
 

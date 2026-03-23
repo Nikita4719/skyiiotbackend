@@ -1,12 +1,9 @@
-// controllers/whatSectionController.js
-
 const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* ======================= */
-/* HELPER: Delete Image */
-/* ======================= */
+//HELPER FUNCTION
+
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -21,9 +18,7 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* ======================= */
-/* GET ALL */
-/* ======================= */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const data = await prisma.what_section.findMany({
@@ -37,9 +32,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* GET ONE */
-/* ======================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -60,9 +53,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* CREATE */
-/* ======================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
     if (!req.body.title) {
@@ -75,8 +66,8 @@ exports.create = async (req, res) => {
 
     const created = await prisma.what_section.create({
       data: {
-        title: req.body.title, // ✅ FIX
-        description: req.body.description ?? null, // ✅ FIX
+        title: req.body.title,
+        description: req.body.description ?? null,
         image: imagePath,
       },
     });
@@ -91,9 +82,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* UPDATE */
-/* ======================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -109,7 +98,6 @@ exports.update = async (req, res) => {
 
     let imagePath = oldData.image;
 
-    // If new file uploaded
     if (req.file) {
       if (oldData.image) {
         deleteImage(oldData.image);
@@ -123,12 +111,12 @@ exports.update = async (req, res) => {
       data: {
         title:
           req.body.title !== undefined
-            ? req.body.title // ✅ FIX
+            ? req.body.title
             : oldData.title,
 
         description:
           req.body.description !== undefined
-            ? req.body.description // ✅ FIX
+            ? req.body.description
             : oldData.description,
 
         image: imagePath,
@@ -145,9 +133,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* DELETE */
-/* ======================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

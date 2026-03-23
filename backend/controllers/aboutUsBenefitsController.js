@@ -2,7 +2,7 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* DELETE IMAGE */
+// DELETE IMAGE 
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -13,12 +13,12 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* CREATE */
+// CREATE 
 exports.create = async (req, res) => {
   try {
     const data = {};
 
-    // ✅ FIX: stripHtml removed
+
     for (let i = 1; i <= 8; i++) {
       data[`heading${i}`] = req.body[`heading${i}`] ?? null;
     }
@@ -46,14 +46,14 @@ exports.create = async (req, res) => {
   }
 };
 
-/* GET ALL */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const data = await prisma.aboutusbenefits.findMany({
       orderBy: { id: "desc" }
     });
 
-    // Map images array to image1, image2, image3, image4 for frontend
+
     const formattedData = data.map(item => {
       const imgs = item.images || [];
       return {
@@ -75,7 +75,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* GET ONE */
+//EDIT
 exports.getOne = async (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -84,19 +84,19 @@ exports.getOne = async (req, res) => {
   }
 
   try {
-    // ✅ Fetch from DB
+
     const item = await prisma.aboutusbenefits.findUnique({
       where: { id }
     });
 
-    // ✅ Check exists
+
     if (!item) {
       return res.status(404).json({
         message: "About Us Benefits not found"
       });
     }
 
-    // ✅ Format images
+
     const imgs = item.images || [];
 
     const formattedItem = {
@@ -118,7 +118,7 @@ exports.getOne = async (req, res) => {
 };
 
 
-/* UPDATE */
+//UPDATE
 exports.update = async (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -137,7 +137,6 @@ exports.update = async (req, res) => {
 
     const updatedData = {};
 
-    // ✅ FIX: stripHtml removed
     for (let i = 1; i <= 8; i++) {
       updatedData[`heading${i}`] =
         req.body[`heading${i}`] !== undefined
@@ -156,7 +155,6 @@ exports.update = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
 
-      // delete old images
       if (images.length > 0) {
         images.forEach(deleteImage);
       }
@@ -184,7 +182,8 @@ exports.update = async (req, res) => {
   }
 };
 
-/* DELETE */
+//DELETE
+
 exports.remove = async (req, res) => {
   const id = parseInt(req.params.id);
 

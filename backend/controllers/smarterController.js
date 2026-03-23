@@ -4,7 +4,7 @@ const path = require("path");
 
 const ROOT_DIR = path.join(__dirname, "../");
 
-/* ================= DELETE FILE ================= */
+//DELETE FILE
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -19,14 +19,13 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= GET ALL ================= */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.smarter_section.findMany({
       orderBy: { id: "desc" },
     });
 
-    // ✅ NO HTML STRIP
     res.json(records);
 
   } catch (error) {
@@ -35,7 +34,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -47,7 +46,6 @@ exports.getOne = async (req, res) => {
 
     if (!record) return res.status(404).json({ message: "Record not found" });
 
-    // ✅ NO HTML STRIP
     res.json(record);
 
   } catch (error) {
@@ -56,7 +54,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const heading = req.body.heading;
@@ -80,7 +78,6 @@ exports.create = async (req, res) => {
 
     await prisma.smarter_section.create({
       data: {
-        // ✅ HTML preserved
         heading,
         para,
         media,
@@ -96,7 +93,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -126,7 +123,6 @@ exports.update = async (req, res) => {
     await prisma.smarter_section.update({
       where: { id },
       data: {
-        // ✅ HTML preserved
         heading,
         para,
         media,
@@ -142,7 +138,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

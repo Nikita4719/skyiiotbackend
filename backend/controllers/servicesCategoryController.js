@@ -12,6 +12,7 @@ const deleteFile = (filePath) => {
   }
 };
 
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.services_category.findMany({
@@ -29,6 +30,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -43,6 +45,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
+//CREATE
 exports.create = async (req, res) => {
   try {
     const { service_id, link } = req.body;
@@ -52,7 +55,7 @@ exports.create = async (req, res) => {
       data: {
         service_id: Number(service_id),
 
-        // ✅ HTML preserved (agar CKEditor use ho raha hai)
+       
         link: link ?? null,
 
         icon: files.icon?.[0]
@@ -67,6 +70,7 @@ exports.create = async (req, res) => {
   }
 };
 
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -80,7 +84,7 @@ exports.update = async (req, res) => {
     const data = {
       service_id: Number(req.body.service_id),
 
-      // ✅ HTML preserved
+     
       link:
         req.body.link !== undefined
           ? req.body.link
@@ -106,6 +110,7 @@ exports.update = async (req, res) => {
   }
 };
 
+//REMOVE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

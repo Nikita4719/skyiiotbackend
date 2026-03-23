@@ -1,23 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* ============================= */
-/* HELPER: STRIP HTML TAGS */
-/* ============================= */
-const stripHtml = (value) => {
-  if (!value || typeof value !== "string") return null;
-
-  const clean = value
-    .replace(/<[^>]*>/g, "")   // Remove HTML tags
-    .replace(/&nbsp;/g, " ")   // Replace &nbsp;
-    .replace(/\s+/g, " ")      // Remove extra spaces
-    .trim();
-
-  return clean.length ? clean : null;
-};
-
-/* ===============================
-   Get All (WITH JOIN)
-================================ */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.cms_faqs.findMany({
@@ -39,9 +22,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ===============================
-   Get One
-================================ */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -61,15 +42,12 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ===============================
-   Create
-================================ */
+//CREATE
 exports.create = async (req, res) => {
   try {
-    const { faq_id } = req.body;
-    const cleanPara = stripHtml(req.body.para);
+    const { faq_id, para } = req.body;
 
-    if (!faq_id || !cleanPara) {
+    if (!faq_id || !para) {
       return res
         .status(400)
         .json({ message: "faq_id and para are required" });
@@ -78,7 +56,7 @@ exports.create = async (req, res) => {
     await prisma.cms_faqs.create({
       data: {
         faq_id: parseInt(faq_id),
-        para: cleanPara,
+        para: para,
       },
     });
 
@@ -89,20 +67,17 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ===============================
-   Update
-================================ */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { faq_id } = req.body;
-    const cleanPara = stripHtml(req.body.para);
+    const { faq_id, para } = req.body;
 
     await prisma.cms_faqs.update({
       where: { id },
       data: {
         faq_id: parseInt(faq_id),
-        para: cleanPara,
+        para: para,
       },
     });
 
@@ -113,9 +88,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ===============================
-   Delete
-================================ */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

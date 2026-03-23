@@ -12,6 +12,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.services.findMany({
@@ -24,6 +25,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -38,6 +40,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
+//CREATE
 exports.create = async (req, res) => {
   try {
     const { title, heading, paragraph } = req.body;
@@ -45,7 +48,7 @@ exports.create = async (req, res) => {
 
     const created = await prisma.services.create({
       data: {
-        // ✅ HTML preserved
+
         title: title ?? null,
         heading: heading ?? null,
         paragraph: paragraph ?? null,
@@ -62,6 +65,7 @@ exports.create = async (req, res) => {
   }
 };
 
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -73,7 +77,7 @@ exports.update = async (req, res) => {
     const files = req.files || {};
 
     const data = {
-      // ✅ HTML preserved
+
       title: req.body.title
         ? req.body.title
         : existing.title,
@@ -106,6 +110,7 @@ exports.update = async (req, res) => {
   }
 };
 
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

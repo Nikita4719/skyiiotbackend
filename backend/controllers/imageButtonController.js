@@ -2,9 +2,7 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =============================== */
-/* HELPER: Delete File */
-/* =============================== */
+//HELPER DELETE FILE
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -19,9 +17,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* =============================== */
-/* GET ALL */
-/* =============================== */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.image_button_section.findMany({
@@ -35,9 +31,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* GET ONE */
-/* =============================== */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -58,9 +52,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* CREATE */
-/* =============================== */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const heading = req.body.heading ?? null;
@@ -76,8 +68,8 @@ exports.create = async (req, res) => {
 
     const created = await prisma.image_button_section.create({
       data: {
-        heading: heading,       // ✅ HTML preserved
-        paragraph: paragraph,   // ✅ HTML preserved
+        heading: heading,
+        paragraph: paragraph,
         image: imagePath,
       },
     });
@@ -92,9 +84,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -110,7 +100,7 @@ exports.update = async (req, res) => {
 
     let imagePath = existing.image;
 
-    // If new image uploaded
+
     if (req.file) {
       if (existing.image) {
         deleteFile(existing.image);
@@ -123,12 +113,12 @@ exports.update = async (req, res) => {
       data: {
         heading:
           req.body.heading !== undefined
-            ? req.body.heading   // ✅ HTML preserved
+            ? req.body.heading
             : existing.heading,
 
         paragraph:
           req.body.paragraph !== undefined
-            ? req.body.paragraph // ✅ HTML preserved
+            ? req.body.paragraph
             : existing.paragraph,
 
         image: imagePath,
@@ -145,9 +135,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

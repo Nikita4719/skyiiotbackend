@@ -297,17 +297,26 @@ model contact_messages {
 
 model Footer {
   id            Int      @id @default(autoincrement())
-  contact_phone String
-  address       String
-  qr_code       String   @db.Text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  content       String?
+
   title         String?
-  email         String?
+  content       String?
+
+  contact_email String?   // ✅ FIXED
+  contact_phone String?
+  address       String?
+
+  logo          String?   // ✅ ADD
+
+  qr_code       String    @db.Text
+
+  links         Json?     // ✅ ADD (array of objects)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@map("footer")
 }
+
 
 model header_top {
   id            Int     @id @default(autoincrement())

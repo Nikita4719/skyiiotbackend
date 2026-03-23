@@ -4,9 +4,9 @@ const path = require("path");
 
 const ROOT_DIR = path.join(__dirname, "../");
 
-/* ======================= */
-/* DELETE FILE */
-/* ======================= */
+
+//DELETE FILE
+
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -21,9 +21,8 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ======================= */
-/* GET ALL */
-/* ======================= */
+//READ
+
 exports.getAll = async (req, res) => {
   try {
     const data = await prisma.ai_powered.findMany({
@@ -37,9 +36,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* GET ONE */
-/* ======================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -62,19 +59,17 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* CREATE */
-/* ======================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
-    // ✅ FIX: direct values
+   
     const heading1 = req.body.heading1;
     const heading2 = req.body.heading2;
     const heading3 = req.body.heading3;
     const paragraph1 = req.body.paragraph1;
     const paragraph2 = req.body.paragraph2;
 
-    // ✅ validation
+    
     if (!heading1 || !paragraph1) {
       return res.status(400).json({
         message: "Heading1 and Paragraph1 are required",
@@ -106,9 +101,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* UPDATE */
-/* ======================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -172,9 +165,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ======================= */
-/* DELETE */
-/* ======================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

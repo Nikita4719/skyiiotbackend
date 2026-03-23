@@ -1,6 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* CREATE */
+//CREATE
 exports.createMenu = async (req, res) => {
   const { name, link, order_no, is_button } = req.body;
 
@@ -16,7 +16,7 @@ exports.createMenu = async (req, res) => {
   res.json({ message: "Created" });
 };
 
-/* GET ALL */
+//READ
 exports.getMenus = async (req, res) => {
   const data = await prisma.navbar_menu.findMany({
     orderBy: { order_no: "asc" },
@@ -25,7 +25,7 @@ exports.getMenus = async (req, res) => {
   res.json(data);
 };
 
-/* GET ONE */
+//EDIT
 exports.getMenu = async (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -36,7 +36,7 @@ exports.getMenu = async (req, res) => {
   res.json(data);
 };
 
-/* UPDATE */
+//UPDATE
 exports.updateMenu = async (req, res) => {
   const id = parseInt(req.params.id);
   const { name, link, order_no, is_button } = req.body;
@@ -54,7 +54,7 @@ exports.updateMenu = async (req, res) => {
   res.json({ message: "Updated" });
 };
 
-/* DELETE */
+//DELETE
 exports.deleteMenu = async (req, res) => {
   const id = parseInt(req.params.id);
 

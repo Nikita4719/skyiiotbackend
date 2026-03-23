@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const path = require("path");
+
 const authRoutes = require("./routes/authRoutes");
 const aboutRoutes = require("./routes/aboutRoutes");
 const aboutUsEnterpriseRoutes = require("./routes/aboutUsEnterpriseRoutes");
@@ -26,12 +27,12 @@ const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
-const systemArchitectureRoutes = require("./routes/systemArchitectureRoutes");
 const footerRoutes = require("./routes/footerRoutes");
 const contactSettingsRoutes = require("./routes/contactSettingsRoutes");
 const headerTopRoutes = require("./routes/headerTopRoutes");
 const navbarMenuRoutes = require("./routes/navbarMenuRoutes");
 const navbarLogoRoutes = require("./routes/navbarLogoRoutes");
+
 
 const app = express();
 
@@ -43,9 +44,7 @@ app.use("/api/header-top", headerTopRoutes);
 app.use("/api/navbar-menu", navbarMenuRoutes);
 app.use("/api/navbar-logo", navbarLogoRoutes);
 app.use("/api/footer", footerRoutes);
-app.use("/api", contactSettingsRoutes);
 app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
-app.use("/api/system-architecture",systemArchitectureRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);
@@ -69,6 +68,8 @@ app.use("/api/faqs" , faqsRoutes);
 app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
 app.use("/api/contact-messages", contactMessagesRoutes);
+app.use("api/contact-settings", contactSettingsRoutes);
+
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

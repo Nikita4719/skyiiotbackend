@@ -1,6 +1,6 @@
-// controllers/faqsController.js
 const prisma = require("../config/prisma");
-/* ================= GET ALL ================= */
+
+//READ
 exports.getAll = async (req, res) => {
   try {
     const faqs = await prisma.faqs.findMany({
@@ -14,7 +14,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -34,7 +34,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const { title } = req.body;
@@ -59,7 +59,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -91,7 +91,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

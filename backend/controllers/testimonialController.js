@@ -4,10 +4,7 @@ const path = require("path");
 
 const ROOT_DIR = path.join(__dirname, "../");
 
-/* ======================= */
-/* HELPERS */
-/* ======================= */
-
+//HELPER FUNCTIONS
 const normalizePath = (filePath) =>
   filePath ? filePath.replace(/\\/g, "/") : null;
 
@@ -36,7 +33,7 @@ const extractImages = (files) => {
   return result;
 };
 
-/* ================= CREATE ================= */
+//CREATE
 exports.createTestimonial = async (req, res) => {
   const files = req.files || {};
   const images = extractImages(files);
@@ -49,9 +46,9 @@ exports.createTestimonial = async (req, res) => {
   try {
     const created = await prisma.testimonials.create({
       data: {
-        heading: req.body.heading, // ✅ FIX
-        para1: req.body.para1, // ✅ FIX
-        para2: req.body.para2, // ✅ FIX
+        heading: req.body.heading,
+        para1: req.body.para1,
+        para2: req.body.para2,
         image1: images.image1 || null,
         image2: images.image2 || null,
         image3: images.image3 || null,
@@ -69,7 +66,7 @@ exports.createTestimonial = async (req, res) => {
   }
 };
 
-/* ================= GET ALL ================= */
+//READ
 exports.getAllTestimonials = async (req, res) => {
   try {
     const records = await prisma.testimonials.findMany({
@@ -83,7 +80,7 @@ exports.getAllTestimonials = async (req, res) => {
   }
 };
 
-/* ================= GET SINGLE ================= */
+//EDIT
 exports.getSingleTestimonial = async (req, res) => {
   const id = Number(req.params.id);
 
@@ -107,7 +104,7 @@ exports.getSingleTestimonial = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+//UPDATE
 exports.updateTestimonial = async (req, res) => {
   const id = Number(req.params.id);
 
@@ -132,13 +129,13 @@ exports.updateTestimonial = async (req, res) => {
       where: { id },
       data: {
         heading: req.body.heading
-          ? req.body.heading // ✅ FIX
+          ? req.body.heading
           : existing.heading,
         para1: req.body.para1
-          ? req.body.para1 // ✅ FIX
+          ? req.body.para1
           : existing.para1,
         para2: req.body.para2
-          ? req.body.para2 // ✅ FIX
+          ? req.body.para2
           : existing.para2,
         image1: newImages.image1 ?? existing.image1,
         image2: newImages.image2 ?? existing.image2,
@@ -146,7 +143,6 @@ exports.updateTestimonial = async (req, res) => {
       },
     });
 
-    // delete old images that were replaced
     await Promise.all(
       Object.keys(newImages).map((key) =>
         deleteFile(existing[key])
@@ -164,7 +160,7 @@ exports.updateTestimonial = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+//DELETE
 exports.deleteTestimonial = async (req, res) => {
   const id = Number(req.params.id);
 
@@ -185,7 +181,6 @@ exports.deleteTestimonial = async (req, res) => {
       where: { id },
     });
 
-    // delete images from disk
     await Promise.all(
       ["image1", "image2", "image3"].map((key) =>
         deleteFile(existing[key])

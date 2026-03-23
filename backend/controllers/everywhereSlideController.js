@@ -1,8 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* =============================== */
-/* HELPER: BUILD FULL IMAGE URL */
-/* =============================== */
+//HELPER BUILD IMAGE
 const buildImagePath = (req, file, existingImage = null) => {
   if (file) {
     return `uploads/${file.filename}`;
@@ -10,15 +8,13 @@ const buildImagePath = (req, file, existingImage = null) => {
   return existingImage;
 };
 
-/* =============================== */
-/* CREATE */
-/* =============================== */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const file = req.file;
 
     const data = {
-      // ✅ HTML tags ke sath store hoga
+
       heading: req.body.heading ?? null,
       paragraph: req.body.paragraph ?? null,
       image: buildImagePath(req, file),
@@ -36,9 +32,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* GET ALL */
-/* =============================== */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.everywhere_slide.findMany({
@@ -52,9 +46,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* GET BY ID */
-/* =============================== */
+//EDIT
 exports.getById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -75,9 +67,7 @@ exports.getById = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -94,7 +84,7 @@ exports.update = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
 
     const updatedData = {
-      // ✅ HTML preserve hoga
+
       heading: req.body.heading
         ? req.body.heading
         : existing.heading,
@@ -121,9 +111,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

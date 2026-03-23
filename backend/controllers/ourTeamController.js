@@ -2,22 +2,16 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* ======================= */
-/* BASE DIRECTORY */
-/* ======================= */
+//BASE DIRECTORY
 const ROOT_DIR = path.join(__dirname, "..");
 
-/* ======================= */
-/* NORMALIZE PATH */
-/* ======================= */
+//NORMALIZE PATH
 const normalizePath = (filePath) => {
   if (!filePath) return null;
   return filePath.replace(/\\/g, "/"); // Fix Windows paths
 };
 
-/* ======================= */
-/* DELETE FILE */
-/* ======================= */
+//DELETE FILE
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -28,7 +22,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= GET ALL ================= */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.our_team.findMany({
@@ -42,7 +36,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ================= GET ONE ================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -61,13 +55,13 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ================= CREATE ================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const file = req.files?.image?.[0];
 
     const data = {
-      // ✅ HTML preserved
+
       heading: req.body.heading ?? null,
       paragraph: req.body.paragraph ?? null,
       image: file ? normalizePath(file.path) : null,
@@ -85,7 +79,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -100,7 +94,7 @@ exports.update = async (req, res) => {
     const file = req.files?.image?.[0];
 
     let updatedData = {
-      // ✅ HTML preserved
+
       heading: req.body.heading
         ? req.body.heading
         : existing.heading,
@@ -113,10 +107,8 @@ exports.update = async (req, res) => {
     };
 
     if (file) {
-      // delete old image
       deleteFile(existing.image);
 
-      // save new image
       updatedData.image = normalizePath(file.path);
     }
 
@@ -135,7 +127,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ================= DELETE ================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -147,7 +139,6 @@ exports.remove = async (req, res) => {
 
     if (!existing) return res.status(404).json({ message: "Not found" });
 
-    // delete image from disk
     deleteFile(existing.image);
 
     await prisma.our_team.delete({

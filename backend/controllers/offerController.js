@@ -1,8 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* =============================== */
-/* HELPER: BUILD FULL IMAGE URL */
-/* =============================== */
+//BUILD IMAGE FULL URL
 const buildImagePath = (req, fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
     return `uploads/${fileArray[0].filename}`;
@@ -10,15 +8,13 @@ const buildImagePath = (req, fileArray, existingImage = null) => {
   return existingImage;
 };
 
-// ===============================
-// CREATE OFFER
-// ===============================
+//CREATE
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
 
     const data = {
-      // ✅ HTML preserved
+
       title: req.body.title ?? null,
       heading1: req.body.heading1 ?? null,
       heading2: req.body.heading2 ?? null,
@@ -46,9 +42,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// ===============================
-// GET ALL OFFERS
-// ===============================
+//READ
 exports.getAll = async (req, res) => {
   try {
     const offers = await prisma.offer.findMany({
@@ -62,9 +56,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// ===============================
-// GET OFFER BY ID
-// ===============================
+//EDIT
 exports.getById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -84,9 +76,7 @@ exports.getById = async (req, res) => {
   }
 };
 
-// ===============================
-// UPDATE OFFER
-// ===============================
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -101,7 +91,7 @@ exports.update = async (req, res) => {
     }
 
     const updatedData = {
-      // ✅ HTML preserved
+
       title: req.body.title ? req.body.title : existing.title,
       heading1: req.body.heading1
         ? req.body.heading1
@@ -150,9 +140,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// ===============================
-// DELETE OFFER
-// ===============================
+//DELETE
 exports.delete = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

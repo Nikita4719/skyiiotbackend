@@ -2,9 +2,9 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =============================== */
-/* BUILD IMAGE PATH */
-/* =============================== */
+
+//BUILD IMAGE PATH 
+
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0 && fileArray[0].filename) {
     return "uploads/" + fileArray[0].filename;
@@ -12,9 +12,8 @@ const buildImagePath = (fileArray, existingImage = null) => {
   return existingImage;
 };
 
-/* =============================== */
-/* DELETE IMAGE */
-/* =============================== */
+//DELETE IMAGE 
+
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -25,9 +24,7 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* =============================== */
-/* CREATE by vinay*/
-/* =============================== */
+//CREATE
 exports.create = (req, res) => {
   const files = req.files || {};
 
@@ -52,9 +49,8 @@ exports.create = (req, res) => {
     });
 };
 
-/* =============================== */
-/* GET ALL */
-/* =============================== */
+
+//READ
 exports.getAll = (req, res) => {
   prisma.about_us.findMany({
     orderBy: { id: "desc" },
@@ -66,9 +62,7 @@ exports.getAll = (req, res) => {
     });
 };
 
-/* =============================== */
-/* GET ONE */
-/* =============================== */
+//READ ALL
 exports.getOne = (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -88,9 +82,8 @@ exports.getOne = (req, res) => {
     });
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
+
+// UPDATE 
 exports.update = (req, res) => {
   const id = parseInt(req.params.id);
   const files = req.files || {};
@@ -143,9 +136,9 @@ exports.update = (req, res) => {
     });
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
+
+//DELETE
+
 exports.remove = (req, res) => {
   const id = parseInt(req.params.id);
 

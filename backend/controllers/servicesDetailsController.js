@@ -12,9 +12,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ===============================
-GET ALL
-=============================== */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.services_sub_cat.findMany({
@@ -30,9 +28,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* ===============================
-GET ONE
-=============================== */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -50,9 +46,7 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* ===============================
-CREATE
-=============================== */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const {
@@ -78,7 +72,7 @@ exports.create = async (req, res) => {
       data: {
         services_category_id: parseInt(services_category_id),
 
-        // ✅ HTML preserved
+
         title: title ?? null,
         description: description ?? null,
         subheading: subheading ?? null,
@@ -105,9 +99,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* ===============================
-UPDATE
-=============================== */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -123,7 +115,7 @@ exports.update = async (req, res) => {
         ? Number(req.body.services_category_id)
         : existing.services_category_id,
 
-      // ✅ HTML preserved
+
       title: req.body.title ?? existing.title,
       description: req.body.description ?? existing.description,
       subheading: req.body.subheading ?? existing.subheading,
@@ -159,9 +151,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* ===============================
-DELETE
-=============================== */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);

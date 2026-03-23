@@ -1,25 +1,17 @@
-// controllers/solutionImageController.js
-
 const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* ======================= */
-/* ROOT DIRECTORY */
-/* ======================= */
+//ROOT DIRECTORY
 const ROOT_DIR = path.join(__dirname, "..");
 
-/* ======================= */
-/* NORMALIZE PATH */
-/* ======================= */
+//NORMALIZE PATH
 const normalizePath = (filePath) => {
   if (!filePath) return null;
-  return filePath.replace(/\\/g, "/"); // Windows fix
+  return filePath.replace(/\\/g, "/");
 };
 
-/* ======================= */
-/* DELETE FILE */
-/* ======================= */
+//DELETE FILE
 const deleteFile = (filePathFromDb) => {
   if (!filePathFromDb) return;
 
@@ -34,7 +26,7 @@ const deleteFile = (filePathFromDb) => {
   }
 };
 
-/* ================= CREATE ================= */
+//CREATE
 exports.createSolutionImage = async (req, res) => {
   try {
     const { title } = req.body;
@@ -66,7 +58,7 @@ exports.createSolutionImage = async (req, res) => {
 
         imagechart: files.imagechart?.[0]
           ? normalizePath(files.imagechart[0].path)
-          : null, // NEW
+          : null,
       },
     });
 
@@ -79,7 +71,7 @@ exports.createSolutionImage = async (req, res) => {
   }
 };
 
-/* ================= GET ALL ================= */
+//READ
 exports.getAllSolutionImages = async (req, res) => {
   try {
     const records = await prisma.solution_images.findMany({
@@ -92,7 +84,7 @@ exports.getAllSolutionImages = async (req, res) => {
   }
 };
 
-/* ================= GET SINGLE ================= */
+//EDIT
 exports.getSingleSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -112,7 +104,7 @@ exports.getSingleSolutionImage = async (req, res) => {
   }
 };
 
-/* ================= UPDATE ================= */
+//UPDATE
 exports.updateSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -177,7 +169,7 @@ exports.updateSolutionImage = async (req, res) => {
 };
 
 
-/* ================= DELETE ================= */
+//DELETE
 exports.deleteSolutionImage = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -191,8 +183,8 @@ exports.deleteSolutionImage = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
     }
 
-    // Delete all images from disk
-    [existing.image1, existing.image2, existing.image3, existing.image4,existing.imagechart]
+
+    [existing.image1, existing.image2, existing.image3, existing.image4, existing.imagechart]
       .filter(Boolean)
       .forEach((imgPath) => deleteFile(imgPath));
 

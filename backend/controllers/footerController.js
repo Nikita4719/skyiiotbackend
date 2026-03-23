@@ -1,6 +1,6 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../config/prisma");
 
+//SLUGIFY
 const slugify = (text) =>
   text
     .toLowerCase()
@@ -8,11 +8,7 @@ const slugify = (text) =>
     .replace(/\s+/g, "-");
 
 
-
-/* ==============================
-   GET FOOTER
-============================== */
-
+//READ
 exports.getFooter = async (req, res) => {
   try {
     const footer = await prisma.footer.findFirst();
@@ -23,7 +19,7 @@ exports.getFooter = async (req, res) => {
 
     let links = footer.links;
 
-    // fallback: generate links from content if links not present
+
     if (!links && footer.content) {
       links = footer.content.split(/\r?\n/).map((item) => ({
         name: item.trim(),
@@ -36,74 +32,44 @@ exports.getFooter = async (req, res) => {
       links,
     });
 
-  } catch (err) {
-    console.error("GET FOOTER ERROR:", err);
-    res.status(500).json({
-      message: "Database error",
-      error: err.message,
-    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch footer" });
   }
 };
 
 
-
-/* ==============================
-   UPDATE / CREATE FOOTER
-============================== */
-
+//UPDATE
 exports.updateFooter = async (req, res) => {
   try {
-
     const {
       title,
       content,
       contact_email,
       contact_phone,
       address,
-      links
+      links,
     } = req.body;
 
-
-    // find existing footer
     let footer = await prisma.footer.findFirst();
 
-
-    /* ------------------------------
-       HANDLE LOGO
-    ------------------------------ */
-
-    let logo;
+    let logo = footer?.logo ?? null;
 
     if (req.files?.logo && req.files.logo.length > 0) {
       logo = req.files.logo[0].filename;
     }
 
-
-    /* ------------------------------
-       HANDLE QR CODES
-    ------------------------------ */
-
     const qrFiles = req.files?.qr_codes || [];
 
-    // existing QR codes from DB
     let existingQr = footer?.qr_code
       ? JSON.parse(footer.qr_code)
       : ["", "", "", ""];
 
-    // replace only uploaded indexes
-    if (qrFiles.length > 0) {
-      qrFiles.forEach((file, index) => {
-        existingQr[index] = file.filename;
-      });
-    }
+    qrFiles.forEach((file, index) => {
+      existingQr[index] = file.filename;
+    });
 
-    const qr_code_json = JSON.stringify(existingQr);
-
-
-
-    /* ------------------------------
-       PARSE LINKS
-    ------------------------------ */
+    const qr_code = JSON.stringify(existingQr);
 
     let parsedLinks = [];
 
@@ -115,76 +81,46 @@ exports.updateFooter = async (req, res) => {
       }
     }
 
-
-
-    /* ------------------------------
-       UPDATE OR CREATE
-    ------------------------------ */
+    const data = {
+      title: title ?? footer?.title ?? null,
+      content: content ?? footer?.content ?? null,
+      contact_email: contact_email ?? footer?.contact_email ?? null,
+      contact_phone: contact_phone ?? footer?.contact_phone ?? null,
+      address: address ?? footer?.address ?? null,
+      logo,
+      qr_code,
+      links: parsedLinks,
+    };
 
     if (footer) {
-
       footer = await prisma.footer.update({
         where: { id: footer.id },
-        data: {
-          title,
-          content,
-          contact_email,
-          contact_phone,
-          address,
-
-          ...(logo && { logo }),
-
-          qr_code: qr_code_json,
-          links: parsedLinks,
-        },
+        data,
       });
-
     } else {
-
-      footer = await prisma.footer.create({
-        data: {
-          title,
-          content,
-          contact_email,
-          contact_phone,
-          address,
-          logo: logo || "",
-          qr_code: qr_code_json,
-          links: parsedLinks,
-        },
-      });
-
+      footer = await prisma.footer.create({ data });
     }
 
     res.json({
       message: "Footer saved successfully",
-      footer,
+      data: footer,
     });
 
   } catch (error) {
-    console.error("UPDATE FOOTER ERROR:", error);
-
-    res.status(500).json({
-      error: "Footer update failed",
-      message: error.message,
-    });
+    console.error(error);
+    res.status(500).json({ message: "Failed to save footer" });
   }
 };
 
 
-
-/* ==============================
-   DELETE FOOTER
-============================== */
-
+//DELETE
 exports.deleteFooter = async (req, res) => {
   try {
-
     const footer = await prisma.footer.findFirst();
 
     if (!footer) {
       return res.status(404).json({
-        message: "No footer found to delete",
+        message: "No footer found",
       });
     }
 
@@ -196,13 +132,8 @@ exports.deleteFooter = async (req, res) => {
       message: "Footer deleted successfully",
     });
 
-  } catch (err) {
-
-    console.error("DELETE FOOTER ERROR:", err);
-
-    res.status(500).json({
-      message: "Database error",
-      error: err.message,
-    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete footer" });
   }
 };

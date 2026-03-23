@@ -1,6 +1,6 @@
 const prisma = require("../config/prisma");
 
-/* ================= HELPER: BUILD IMAGE PATH ================= */
+//HELPER BUILD IMAGE PATH
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0) {
     return `uploads/${fileArray[0].filename}`;
@@ -8,7 +8,7 @@ const buildImagePath = (fileArray, existingImage = null) => {
   return existingImage;
 };
 
-// ================= GET ALL =================
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.supported_content.findMany({
@@ -21,7 +21,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-// ================= GET ONE =================
+//EDIT
 exports.getById = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -36,15 +36,15 @@ exports.getById = async (req, res) => {
   }
 };
 
-// ================= CREATE =================
+//CREATE
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
 
     const data = {
-      heading: req.body.heading ?? null, // ✅ FIX
-      paragraph1: req.body.paragraph1 ?? null, // ✅ FIX
-      paragraph2: req.body.paragraph2 ?? null, // ✅ FIX
+      heading: req.body.heading ?? null,
+      paragraph1: req.body.paragraph1 ?? null,
+      paragraph2: req.body.paragraph2 ?? null,
       image1: buildImagePath(files.image1),
       image2: buildImagePath(files.image2),
       image3: buildImagePath(files.image3),
@@ -60,7 +60,7 @@ exports.create = async (req, res) => {
   }
 };
 
-// ================= UPDATE =================
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -75,13 +75,13 @@ exports.update = async (req, res) => {
 
     const data = {
       heading: req.body.heading
-        ? req.body.heading // ✅ FIX
+        ? req.body.heading
         : existing.heading,
       paragraph1: req.body.paragraph1
-        ? req.body.paragraph1 // ✅ FIX
+        ? req.body.paragraph1
         : existing.paragraph1,
       paragraph2: req.body.paragraph2
-        ? req.body.paragraph2 // ✅ FIX
+        ? req.body.paragraph2
         : existing.paragraph2,
       image1: buildImagePath(files.image1, existing.image1),
       image2: buildImagePath(files.image2, existing.image2),
@@ -101,7 +101,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// ================= DELETE =================
+//DELETE
 exports.delete = async (req, res) => {
   try {
     const id = Number(req.params.id);

@@ -77,10 +77,34 @@ export default function ContactSettings() {
                       alt="BG"
                     />
                   </td>
-                  <td className="border px-4 py-3 flex gap-2">
+
+                   <td className=" px-10 py-10 flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/master/contact-settings/edit/${settings.id}`
+                          )
+                        }
+                      >
+                        Edit
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        color="red"
+                        onClick={() => handleDelete(msg.id)}
+                      >
+                        Delete
+                      </Button>
+
+                    </td>
+
+                  {/* <td className="border px-4 py-3 flex gap-2">
                     <Button
-                      size="sm"
-                      color="white"
+                       size="sm"
+                      variant="outlined"
                       onClick={() => navigate(`/dashboard/master/contact-settings/edit/${settings.id}`)}
                     >
                       Edit
@@ -91,7 +115,7 @@ export default function ContactSettings() {
                     >
                       Delete
                     </Button>
-                  </td>
+                  </td> */}
                 </tr>
               )}
             </tbody>

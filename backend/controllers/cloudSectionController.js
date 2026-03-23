@@ -2,9 +2,7 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =======================================
-   CONFIG
-======================================= */
+
 const uploadsDir = path.join(__dirname, "../uploads");
 
 
@@ -18,16 +16,12 @@ const deleteFile = (filePath) => {
   }
 };
 
-/* =======================================
-   HELPER: Build Upload Path
-======================================= */
+//BUILD IMAGE PATH
 const buildPath = (filename) => {
   return filename ? `uploads/${filename}` : null;
 };
 
-/* =======================================
-   GET ALL
-======================================= */
+//READ
 exports.getAll = async (req, res) => {
   try {
     const records = await prisma.cloudsection.findMany({
@@ -41,9 +35,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
-/* =======================================
-   GET ONE
-======================================= */
+//EDIT
 exports.getOne = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -67,15 +59,13 @@ exports.getOne = async (req, res) => {
   }
 };
 
-/* =======================================
-   CREATE (FIXED)
-======================================= */
+//CREATE
 exports.create = async (req, res) => {
   try {
     const files = req.files || {};
 
     const data = {
-      // ✅ अब HTML tags ke sath store hoga
+
       heading: req.body.heading || null,
       paragraph1: req.body.paragraph1 || null,
       paragraph2: req.body.paragraph2 || null,
@@ -98,9 +88,7 @@ exports.create = async (req, res) => {
   }
 };
 
-/* =======================================
-   UPDATE (FIXED)
-======================================= */
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -120,7 +108,7 @@ exports.update = async (req, res) => {
     }
 
     const data = {
-      // ✅ अब HTML tags preserve honge
+
       heading: req.body.heading
         ? req.body.heading
         : existing.heading,
@@ -139,7 +127,7 @@ exports.update = async (req, res) => {
       image4: existing.image4,
     };
 
-    // Image replacement
+
     ["image1", "image2", "image3", "image4"].forEach((field) => {
       if (files[field]?.[0]?.filename) {
         if (existing[field]) {
@@ -165,9 +153,7 @@ exports.update = async (req, res) => {
   }
 };
 
-/* =======================================
-   DELETE
-======================================= */
+//DELETE
 exports.remove = async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -184,7 +170,7 @@ exports.remove = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
     }
 
-    // Delete images
+
     ["image1", "image2", "image3", "image4"].forEach((field) => {
       if (existing[field]) {
         deleteFile(existing[field]);

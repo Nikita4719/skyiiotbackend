@@ -2,9 +2,7 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-
-/* DELETE MULTIPLE IMAGES */
-
+//DELETE MULTIPLE IMAGES
 const deleteImages = (imageString) => {
 
   if (!imageString) return;
@@ -29,9 +27,7 @@ const deleteImages = (imageString) => {
 
 };
 
-
-/* CREATE */
-
+//CREATE
 exports.create = async (req, res) => {
 
   try {
@@ -54,18 +50,18 @@ exports.create = async (req, res) => {
         ? parseInt(req.body.solutionCatId)
         : null,
 
-      heading: req.body.heading, // ✅ FIX
+      heading: req.body.heading,
 
-      description1: req.body.description1, // ✅ FIX
-      description2: req.body.description2, // ✅ FIX
+      description1: req.body.description1,
+      description2: req.body.description2,
 
       image1,
       imagechart,
 
-      para1: req.body.para1, // ✅ FIX
-      para2: req.body.para2, // ✅ FIX
-      para3: req.body.para3, // ✅ FIX
-      para4: req.body.para4, // ✅ FIX
+      para1: req.body.para1,
+      para2: req.body.para2,
+      para3: req.body.para3,
+      para4: req.body.para4,
 
       image2
     };
@@ -90,8 +86,7 @@ exports.create = async (req, res) => {
 };
 
 
-/* GET ALL */
-
+//READ
 exports.getAll = async (req, res) => {
 
   try {
@@ -121,8 +116,7 @@ exports.getAll = async (req, res) => {
 };
 
 
-/* GET ONE */
-
+//EDIT
 exports.getOne = async (req, res) => {
 
   const id = parseInt(req.params.id);
@@ -159,9 +153,7 @@ exports.getOne = async (req, res) => {
 
 };
 
-
-/* UPDATE */
-
+//UPDATE
 exports.update = async (req, res) => {
 
   const id = parseInt(req.params.id);
@@ -230,15 +222,15 @@ exports.update = async (req, res) => {
 
       data: {
 
-        heading: req.body.heading, // ✅ FIX
+        heading: req.body.heading,
 
-        description1: req.body.description1, // ✅ FIX
-        description2: req.body.description2, // ✅ FIX
+        description1: req.body.description1,
+        description2: req.body.description2,
 
-        para1: req.body.para1, // ✅ FIX
-        para2: req.body.para2, // ✅ FIX
-        para3: req.body.para3, // ✅ FIX
-        para4: req.body.para4, // ✅ FIX
+        para1: req.body.para1,
+        para2: req.body.para2,
+        para3: req.body.para3,
+        para4: req.body.para4,
 
         image1,
         imagechart,
@@ -266,8 +258,7 @@ exports.update = async (req, res) => {
 };
 
 
-/* DELETE */
-
+//DELETE
 exports.remove = async (req, res) => {
 
   const id = parseInt(req.params.id);

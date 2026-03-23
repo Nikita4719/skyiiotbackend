@@ -48,9 +48,9 @@ export function Sidenav() {
         )}
       </NavLink>
 
-     {/*Navbar */}
+      {/*Navbar */}
 
-        <Button
+      <Button
         variant="text"
         onClick={() => setOpenNavbar(!openNavbar)}
         className="flex items-center justify-between mb-2"
@@ -63,7 +63,7 @@ export function Sidenav() {
         <ChevronDownIcon className="w-4 h-4" />
       </Button>
 
-        <Collapse open={openNavbar}>
+      <Collapse open={openNavbar}>
 
         <NavLink to="/dashboard/navbar/navbar-top">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
@@ -83,12 +83,12 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        </Collapse>
+      </Collapse>
 
 
-     {/* Solution */}
+      {/* Solution */}
 
-       <Button
+      <Button
         variant="text"
         onClick={() => setOpenSolution(!openSolution)}
         className="flex items-center justify-between mb-2"
@@ -101,7 +101,7 @@ export function Sidenav() {
         <ChevronDownIcon className="w-4 h-4" />
       </Button>
 
-        <Collapse open={openSolution}>
+      <Collapse open={openSolution}>
 
         <NavLink to="/dashboard/solution/solution-cat">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
@@ -121,7 +121,7 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        </Collapse>
+      </Collapse>
 
       {/* CMS */}
       <Button
@@ -262,12 +262,6 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        {/* <NavLink to="/dashboard/master/management-section">
-          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            Management Section
-          </Button>
-        </NavLink> */}
-
         <NavLink to="/dashboard/master/supported-section">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
             Supported Content
@@ -294,13 +288,13 @@ export function Sidenav() {
 
         <NavLink to="/dashboard/master/contact-messages">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-           Contact
+            Contact
           </Button>
         </NavLink>
 
         <NavLink to="/dashboard/master/contact-settings">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-           Contact Settings
+            Contact Settings
           </Button>
         </NavLink>
 

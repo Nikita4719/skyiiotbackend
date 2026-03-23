@@ -2,9 +2,8 @@ const prisma = require("../config/prisma");
 const fs = require("fs");
 const path = require("path");
 
-/* =============================== */
-/* BUILD IMAGE PATH */
-/* =============================== */
+
+//BUILD IMAGE PATH 
 const buildImagePath = (fileArray, existingImage = null) => {
   if (fileArray && fileArray.length > 0 && fileArray[0].filename) {
     return "uploads/" + fileArray[0].filename;
@@ -12,9 +11,7 @@ const buildImagePath = (fileArray, existingImage = null) => {
   return existingImage;
 };
 
-/* =============================== */
-/* DELETE IMAGE */
-/* =============================== */
+//DELETE IMAGE
 const deleteImage = (imagePath) => {
   if (!imagePath) return;
 
@@ -25,15 +22,14 @@ const deleteImage = (imagePath) => {
   }
 };
 
-/* =============================== */
-/* CREATE */
-/* =============================== */
+
+//CREATE
 exports.create = (req, res) => {
   const files = req.files || {};
 
   const data = {
-    heading: req.body.heading ?? null, // ✅ FIX
-    paragraph: req.body.paragraph ?? null, // ✅ FIX
+    heading: req.body.heading ?? null, 
+    paragraph: req.body.paragraph ?? null, 
     image1: buildImagePath(files.image1),
     image2: buildImagePath(files.image2),
   };
@@ -53,9 +49,8 @@ exports.create = (req, res) => {
     });
 };
 
-/* =============================== */
-/* GET ALL */
-/* =============================== */
+
+//GET ALL
 exports.getAll = (req, res) => {
   prisma.aboutusenterprise.findMany({
     orderBy: { id: "desc" },
@@ -69,9 +64,8 @@ exports.getAll = (req, res) => {
     });
 };
 
-/* =============================== */
-/* GET ONE */
-/* =============================== */
+//EDIT
+
 exports.getOne = (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -95,9 +89,9 @@ exports.getOne = (req, res) => {
     });
 };
 
-/* =============================== */
-/* UPDATE */
-/* =============================== */
+
+//UPDATE
+
 exports.update = (req, res) => {
   const id = parseInt(req.params.id);
   const files = req.files || {};
@@ -128,12 +122,12 @@ exports.update = (req, res) => {
       const updatedData = {
         heading:
           req.body.heading !== undefined
-            ? req.body.heading // ✅ FIX
+            ? req.body.heading 
             : existing.heading,
 
         paragraph:
           req.body.paragraph !== undefined
-            ? req.body.paragraph // ✅ FIX
+            ? req.body.paragraph 
             : existing.paragraph,
 
         image1,
@@ -161,9 +155,9 @@ exports.update = (req, res) => {
     });
 };
 
-/* =============================== */
-/* DELETE */
-/* =============================== */
+
+// DELETE 
+
 exports.remove = (req, res) => {
   const id = parseInt(req.params.id);
 
