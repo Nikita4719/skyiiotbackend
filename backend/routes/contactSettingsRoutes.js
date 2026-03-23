@@ -22,14 +22,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/contact-settings", upload.single("bg_image"), createContactSettings);
+router.post("/", upload.single("bg_image"), createContactSettings);
 
-router.get("/contact-settings", getContactSettings);
+router.get("/", getContactSettings);
 
-router.get("/contact-settings/:id", getSingleContactSettings);
+router.get("/:id", getSingleContactSettings);
 
-router.put("/contact-settings/:id", upload.single("bg_image"), updateContactSettings);
+router.put("/:id", upload.single("bg_image"), updateContactSettings);
 
-router.delete("/contact-settings/:id", deleteContactSettings);
+router.delete("/:id", deleteContactSettings);
 
 module.exports = router;

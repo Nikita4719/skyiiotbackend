@@ -68,7 +68,7 @@ app.use("/api/faqs" , faqsRoutes);
 app.use("/api/cms-faqs" , cmsFaqRoutes);
 app.use("/api/solution-images" , solutionImageRoutes);
 app.use("/api/contact-messages", contactMessagesRoutes);
-app.use("api/contact-settings", contactSettingsRoutes);
+app.use("/api/contact-settings", contactSettingsRoutes);
 
 
 app.listen(process.env.PORT, () => {
