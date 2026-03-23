@@ -156,16 +156,6 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        {/* <NavLink to="/dashboard/cms/solution">
-          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            Solution
-          </Button>
-        </NavLink> */}
-
-
-        {/* <Button variant="text" className="flex justify-start pl-10 mb-1 normal-case" fullWidth>
-          Contact Us
-        </Button> */}
 
         <NavLink to="/dashboard/cms/footer">
           <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
@@ -205,9 +195,6 @@ export function Sidenav() {
           </Button>
         </NavLink>
 
-        <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-          Enquiry
-        </Button>
       </Collapse>
 
       {/* Master */}
@@ -315,11 +302,6 @@ export function Sidenav() {
       </Button>
 
       <Collapse open={openSettings}>
-        {/* <NavLink to="/auth/sign-in">
-          <Button variant="text" className="flex justify-start pl-12 mb-1 normal-case" fullWidth>
-            Login
-          </Button>
-        </NavLink> */}
 
         <Button
           variant="text"

@@ -301,15 +301,15 @@ model Footer {
   title         String?
   content       String?
 
-  contact_email String?   // ✅ FIXED
+  contact_email String?  
   contact_phone String?
   address       String?
 
-  logo          String?   // ✅ ADD
+  logo          String?   
 
   qr_code       String    @db.Text
 
-  links         Json?     // ✅ ADD (array of objects)
+  links         Json?     
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

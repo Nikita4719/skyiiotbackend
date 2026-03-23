@@ -64,7 +64,7 @@ export default function Footer() {
             <thead className="bg-blue-gray-50">
               <tr>
                 {[
-                  "Logo", // ✅ ADDED
+                  "Logo", 
                   "Title",
                   "Content",
                   "Email",
@@ -100,8 +100,8 @@ export default function Footer() {
                     <td className="border border-blue-gray-200 px-4 py-3 text-center">
                       {item.logo ? (
                         <img
-                          src={`${BASE_URL}/uploads/logo/${item.logo}`}
-                          className="h-14 w-14 object-cover mx-auto"
+                         src={`${BASE_URL}/uploads/qrcodes/${item.logo}`}
+                          className="h-20 w-25 object-cover mx-auto"
                           alt="logo"
                         />
                       ) : (

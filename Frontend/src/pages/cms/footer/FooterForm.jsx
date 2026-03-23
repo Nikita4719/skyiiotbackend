@@ -110,12 +110,11 @@ export default function FooterForm() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Footer saved successfully!");
       navigate("/dashboard/cms/footer");
 
     } catch (err) {
       console.error("Error saving footer:", err);
-      alert("Error saving footer");
+      
     }
   };
 
