@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Typography,
@@ -24,6 +25,8 @@ export function Sidenav() {
   const [openMaster, setOpenMaster] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
 
+  const navigate = useNavigate();
+  
   return (
     <aside className="fixed h-screen w-72 bg-white shadow-lg p-4 
                   overflow-y-auto overflow-x-hidden 
@@ -309,7 +312,7 @@ export function Sidenav() {
           fullWidth
           onClick={() => {
             localStorage.removeItem("token");
-            window.location.href = "/auth/sign-in";
+            navigate("/auth/sign-in");
           }}
         >
           Logout
