@@ -18,6 +18,7 @@ export default function ImageForm() {
     heading: "",
     paragraph: "",
     image: null,
+    bgimage: null,
   });
 
   const [preview, setPreview] = useState({});
@@ -33,6 +34,12 @@ export default function ImageForm() {
             setPreview({
               image: `${BASE_URL}/${res.data.image}`,
             });
+
+          if (res.data.bgimage)
+            setPreview((prev) => ({
+              ...prev,
+              bgimage: `${BASE_URL}/${res.data.bgimage}`,
+            }));
         });
     }
   }, [id]);
@@ -112,6 +119,17 @@ export default function ImageForm() {
           />
           {preview.image && (
             <img src={preview.image} className="h-20 mt-2" />
+          )}
+
+          <Typography>Background Image</Typography>
+          <input
+            type="file"
+            name="bgimage"
+            onChange={handleImageChange}
+          />
+
+          {preview.bgimage && (
+            <img src={preview.bgimage} className="h-20 mt-2" />
           )}
 
           <Button type="submit" fullWidth>

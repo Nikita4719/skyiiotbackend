@@ -56,7 +56,7 @@ export default function Image() {
           <table className="w-full border border-blue-gray-200 table-auto">
             <thead className="bg-blue-gray-50">
               <tr>
-                {["Heading", "Paragraph", "Image", "Action"].map((head) => (
+                {["Heading", "Paragraph", "Image", "BG Image", "Action"].map((head) => (
                   <th
                     key={head}
                     className="border border-blue-gray-200 px-4 py-3 text-left text-xs font-bold uppercase text-blue-gray-600"
@@ -96,6 +96,17 @@ export default function Image() {
                     {item.image && (
                       <img
                         src={`${BASE_URL}/${item.image}`}
+                        className="h-14 w-14 object-cover rounded-lg mx-auto"
+                        alt=""
+                      />
+                    )}
+                  </td>
+
+                  {/* BG Image */}
+                  <td className="border border-blue-gray-200 px-4 py-3 text-center">
+                    {item.bgimage && (
+                      <img
+                        src={`${BASE_URL}/${item.bgimage}`}
                         className="h-14 w-14 object-cover rounded-lg mx-auto"
                         alt=""
                       />

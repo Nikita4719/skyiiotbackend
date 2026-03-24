@@ -3,11 +3,10 @@ import {
   DocumentTextIcon,
   Cog6ToothIcon,
   UserCircleIcon,
-  ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 
 import { Home } from "@/pages/dashboard";
-import { SignIn, SignUp } from "@/pages/auth";
+import { SignIn } from "@/pages/auth";
 
 //NAVABR
 import HeaderTop from "./pages/navbar/header_top/HeaderTopTable";
@@ -52,7 +51,6 @@ import WhatSection from "./pages/master/wh_section/WhatSection";
 import WhatSectionForm from "./pages/master/wh_section/WhatSectionForm";
 import Image from "./pages/master/image/Image";
 import ImageForm from "./pages/master/image/ImageForm";
-// import EmbeddedSection from "./pages/master/embedded_section/Services";
 
 import ServicesCategory from "./pages/master/services_category/ServicesCategory";
 import ServicesCategoryForm from "./pages/master/services_category/ServicesCategoryForm";
@@ -66,7 +64,6 @@ import OfferSection from "./pages/master/offer_section/OfferSection";
 import OfferSectionForm from "./pages/master/offer_section/OfferSectionForm";
 import EverywhereSlide from "./pages/master/everywhere_slide/EverywhereSlide";
 import EverywhereSlideForm from "./pages/master/everywhere_slide/EverywhereSlideForm";
-// import SolutionForm from "./pages/cms/solution/SolutionForm";
 import AIPowered from "./pages/cms/ai_powered/AIPowered";
 import AIPoweredForm from "./pages/cms/ai_powered/AIPoweredForm";
 import Faqs from "./pages/master/faqs/Faqs";
@@ -562,12 +559,12 @@ export const routes = [
         path: "/sign-in",
         element: <SignIn />,
       },
-      {
-        icon: <ArrowRightOnRectangleIcon {...icon} />,
-        name: "sign up",
-        path: "/sign-up",
-        element: <SignUp />,
-      },
+      // {
+      //   icon: <ArrowRightOnRectangleIcon {...icon} />,
+      //   name: "sign up",
+      //   path: "/sign-up",
+      //   element: <SignUp />,
+      // },
     ],
   },
 ];

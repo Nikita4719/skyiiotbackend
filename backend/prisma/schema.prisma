@@ -96,6 +96,7 @@ model image_button_section {
   heading   String? @db.VarChar(255)
   paragraph String? @db.Text
   image     String? @db.VarChar(255)
+  bgimage   String? @db.VarChar(255) 
 }
 
 model managementsection {

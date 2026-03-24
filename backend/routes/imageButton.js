@@ -1,12 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/imageButtonController");
-const upload = require("../middleware/upload"); // your multer config
+const upload = require("../middleware/upload"); 
 
 router.get("/", controller.getAll);
 router.get("/:id", controller.getOne);
-router.post("/", upload.single("image"), controller.create);
-router.put("/:id", upload.single("image"), controller.update);
+
+router.post(
+  "/",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "bgimage", maxCount: 1 }, 
+  ]),
+  controller.create
+);
+
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "bgimage", maxCount: 1 }, 
+  ]),
+  controller.update
+);
+
 router.delete("/:id", controller.remove);
 
 module.exports = router;

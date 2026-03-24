@@ -92,7 +92,7 @@ export function SignIn() {
             Sign In
           </Button>
 
-          <Typography
+          {/* <Typography
             variant="paragraph"
             className="text-center text-blue-gray-500 font-medium mt-4"
           >
@@ -100,7 +100,7 @@ export function SignIn() {
             <Link to="/auth/sign-up" className="text-gray-900 ml-1">
               Create account
             </Link>
-          </Typography>
+          </Typography> */}
         </form>
       </div>
 
