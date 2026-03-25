@@ -44,7 +44,7 @@ export default function FooterForm() {
         });
 
         setLogoPreview(
-          data.logo ? `${BASE_URL}/uploads/${data.logo}` : "" // ✅ FIX
+          data.logo ? `${BASE_URL}/uploads/qrcodes/${data.logo}` : "" 
         );
 
         setPreview(

@@ -6,7 +6,11 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { Home } from "@/pages/dashboard";
+
+//SIGN IN
 import { SignIn } from "@/pages/auth";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 //NAVABR
 import HeaderTop from "./pages/navbar/header_top/HeaderTopTable";
@@ -71,7 +75,6 @@ import FaqsForm from "./pages/master/faqs/FaqsForm";
 import AboutUsBenefits from "./pages/cms/about_us_benefits/AboutUsBenefits";
 import AboutUsBenefitsForm from "./pages/cms/about_us_benefits/AboutUsBenefitsForm";
 import ContactMessages from "./pages/master/contact_messages/ContactMessages";
-import ContactMessageForm from "./pages/master/contact_messages/ContactMessagesForm";
 import ContactSettings from "./pages/master/contact_settings/ContactSettings";
 import ContactSettingsForm from "./pages/master/contact_settings/ContactSettingsForm"
 import Services from "./pages/master/services/Services";
@@ -523,14 +526,14 @@ export const routes = [
         path: "/master/contact-messages",
         element: <ContactMessages />,
       },
-      {
-        path: "/master/contact-messages/add",
-        element: <ContactMessageForm />,
-      },
-      {
-        path: "/master/contact-messages/edit/:id",
-        element: <ContactMessageForm />,
-      },
+      // {
+      //   path: "/master/contact-messages/add",
+      //   element: <ContactMessageForm />,
+      // },
+      // {
+      //   path: "/master/contact-messages/edit/:id",
+      //   element: <ContactMessageForm />,
+      // },
       // CONTACT SETTINGS
       {
         name: "contact-settings",
@@ -559,6 +562,19 @@ export const routes = [
         path: "/sign-in",
         element: <SignIn />,
       },
+      {
+        icon: <UserCircleIcon {...icon} />,
+        name: "sign in",
+        path: "/forgot-password",
+        element:<ForgotPassword />,
+      },
+      {
+        icon: <UserCircleIcon {...icon} />,
+        name: "sign in",
+        path: "/reset-password/:token",
+        element: <ResetPassword />,
+      },
+
       // {
       //   icon: <ArrowRightOnRectangleIcon {...icon} />,
       //   name: "sign up",

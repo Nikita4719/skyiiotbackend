@@ -274,6 +274,8 @@ model users {
   name       String    @db.VarChar(100)
   email      String    @unique(map: "email") @db.VarChar(100)
   password   String    @db.VarChar(255)
+   reset_token          String?  
+  reset_token_expiry   DateTime?
   created_at DateTime? @default(now()) @db.Timestamp(0)
 }
 

@@ -32,6 +32,8 @@ export default function AddSlidesContent() {
   }, [id]);
 
 
+
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setMedia(file);
@@ -40,7 +42,6 @@ export default function AddSlidesContent() {
       setPreview(URL.createObjectURL(file));
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();

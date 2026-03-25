@@ -40,7 +40,7 @@ export default function ContactMessages() {
             Contact Messages
           </Typography>
 
-          <Button
+          {/* <Button
             size="sm"
             color="white"
             onClick={() =>
@@ -48,7 +48,7 @@ export default function ContactMessages() {
             }
           >
             Add
-          </Button>
+          </Button> */}
         </CardHeader>
 
         <CardBody className="overflow-x-auto">
@@ -109,19 +109,6 @@ export default function ContactMessages() {
                     </td>
 
                     <td className="border border-blue-gray-200 px-4 py-3 flex gap-2">
-
-                      <Button
-                        size="sm"
-                        variant="outlined"
-                        onClick={() =>
-                          navigate(
-                            `/dashboard/master/contact-messages/edit/${msg.id}`
-                          )
-                        }
-                      >
-                        Edit
-                      </Button>
-
                       <Button
                         size="sm"
                         color="red"
