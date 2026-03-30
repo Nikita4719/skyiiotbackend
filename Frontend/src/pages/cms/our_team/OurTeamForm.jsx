@@ -5,9 +5,9 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import axios from "axios";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 
 export default function OurTeamForm() {
@@ -46,15 +46,15 @@ export default function OurTeamForm() {
     }
   }, [id]);
 
-  /* ================= CKEDITOR CHANGE ================= */
-  const handleEditorChange = (field, editor) => {
+
+  const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: editor.getData(),
+      [field]: value,
     }));
   };
 
-  /* ================= IMAGE CHANGE ================= */
+ 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -68,7 +68,6 @@ export default function OurTeamForm() {
     }
   };
 
-  /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -109,26 +108,25 @@ export default function OurTeamForm() {
             <Typography variant="small" className="mb-2 font-semibold">
               Heading
             </Typography>
-            <CKEditor
-              editor={ClassicEditor}
-              data={formData.heading}
-              onChange={(e, editor) =>
-                handleEditorChange("heading", editor)
-              }
+
+            <Editor
+              value={formData.heading}
+              onChange={(val) => handleEditorChange("heading", val)}
+              height={150}
             />
           </div>
+
 
           {/* Paragraph */}
           <div>
             <Typography variant="small" className="mb-2 font-semibold">
               Paragraph
             </Typography>
-            <CKEditor
-              editor={ClassicEditor}
-              data={formData.paragraph}
-              onChange={(e, editor) =>
-                handleEditorChange("paragraph", editor)
-              }
+
+            <Editor
+              value={formData.paragraph}
+              onChange={(val) => handleEditorChange("paragraph", val)}
+              height={250}
             />
           </div>
 

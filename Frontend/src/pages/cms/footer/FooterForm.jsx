@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 export default function FooterForm() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function FooterForm() {
         });
 
         setLogoPreview(
-          data.logo ? `${BASE_URL}/uploads/qrcodes/${data.logo}` : "" 
+          data.logo ? `${BASE_URL}/uploads/qrcodes/${data.logo}` : ""
         );
 
         setPreview(
@@ -60,6 +61,13 @@ export default function FooterForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value || "" }));
+  };
+
+  const handleEditorChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   // ================= HANDLE IMAGE =================
@@ -114,7 +122,7 @@ export default function FooterForm() {
 
     } catch (err) {
       console.error("Error saving footer:", err);
-      
+
     }
   };
 
@@ -125,152 +133,152 @@ export default function FooterForm() {
   };
 
   return (
-   <div className="mt-10 px-6">
-  <Card className="w-full p-8 shadow-lg rounded-xl">
-    
-    <Typography variant="h4" className="mb-6">
-      Footer Settings
-    </Typography>
+    <div className="mt-10 px-6">
+      <Card className="w-full p-8 shadow-lg rounded-xl">
 
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <Typography variant="h4" className="mb-6">
+          Footer Settings
+        </Typography>
 
-      {/* ===== BASIC INFO (NOW SINGLE COLUMN) ===== */}
-      <div className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
-        <div>
-          <label className="text-sm font-medium">Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-          />
-        </div>
+          {/* ===== BASIC INFO (NOW SINGLE COLUMN) ===== */}
+          <div className="flex flex-col gap-6">
 
-        <div>
-          <label className="text-sm font-medium">Phone</label>
-          <input
-            type="text"
-            name="contact_phone"
-            value={formData.contact_phone}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium">Email</label>
-          <input
-            type="email"
-            name="contact_email"
-            value={formData.contact_email}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium">Address</label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-          />
-        </div>
-
-      </div>
-
-      {/* ===== CONTENT ===== */}
-      <div>
-        <label className="text-sm font-medium">Content</label>
-        <textarea
-          name="content"
-          value={formData.content}
-          onChange={handleChange}
-          className="border p-2 rounded w-full h-28"
-        />
-      </div>
-
-      {/* ===== LOGO ===== */}
-      <div>
-        <label className="text-sm font-medium">Logo</label>
-
-        {logoPreview && (
-          <img
-            src={logoPreview}
-            alt="Logo"
-            className="w-28 h-28 object-cover border rounded mb-2"
-          />
-        )}
-
-        <input
-          type="file"
-          onChange={(e) => {
-            const file = e.target.files[0];
-            if (file) {
-              setLogo(file);
-              setLogoPreview(URL.createObjectURL(file));
-            }
-          }}
-        />
-      </div>
-
-      {/* ===== QR CODES (SAME LINE - NO CHANGE) ===== */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">
-          QR Codes
-        </label>
-
-        <div className="grid grid-cols-4 gap-4">
-          {formData.qr_codes.map((_, index) => (
-            <div key={index} className="flex flex-col items-center gap-2">
-
-              {preview[index] && (
-                <img
-                  src={preview[index]}
-                  alt="QR"
-                  className="w-20 h-20 object-cover border rounded"
-                />
-              )}
-
+            <div>
+              <label className="text-sm font-medium">Title</label>
               <input
-                type="file"
-                onChange={(e) => handleImageChange(e, index)}
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
               />
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ===== LINKS ===== */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">
-          Links
-        </label>
+            <div>
+              <label className="text-sm font-medium">Phone</label>
+              <input
+                type="text"
+                name="contact_phone"
+                value={formData.contact_phone}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
+              />
+            </div>
 
-        <div className="flex flex-col gap-3">
-          {formData.links.map((linkObj, index) => (
-            <input
-              key={index}
-              type="text"
-              value={linkObj.link}
-              onChange={(e) => handleLinkChange(index, e.target.value)}
-              className="border p-2 rounded w-full"
+            <div>
+              <label className="text-sm font-medium">Email</label>
+              <input
+                type="email"
+                name="contact_email"
+                value={formData.contact_email}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
+              />
+            </div>
+
+          </div>
+
+          {/* ===== CONTENT ===== */}
+          <div>
+            <label className="text-sm font-medium">Content</label>
+
+            <Editor
+              value={formData.content}
+              onChange={(val) => handleEditorChange("content", val)}
+              height={200}
             />
-          ))}
-        </div>
-      </div>
+          </div>
 
-      {/* ===== SUBMIT ===== */}
-      <div className="flex justify-end">
-        <Button type="submit">Save Changes</Button>
-      </div>
+          {/* ===== LOGO ===== */}
+          <div>
+            <label className="text-sm font-medium">Logo</label>
 
-    </form>
-  </Card>
-</div>
+            {logoPreview && (
+              <img
+                src={logoPreview}
+                alt="Logo"
+                className="w-28 h-28 object-cover border rounded mb-2"
+              />
+            )}
+
+            <input
+              type="file"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  setLogo(file);
+                  setLogoPreview(URL.createObjectURL(file));
+                }
+              }}
+            />
+          </div>
+
+          {/* ===== QR CODES (SAME LINE - NO CHANGE) ===== */}
+          <div>
+            <label className="text-sm font-medium mb-2 block">
+              QR Codes
+            </label>
+
+            <div className="grid grid-cols-4 gap-4">
+              {formData.qr_codes.map((_, index) => (
+                <div key={index} className="flex flex-col items-center gap-2">
+
+                  {preview[index] && (
+                    <img
+                      src={preview[index]}
+                      alt="QR"
+                      className="w-20 h-20 object-cover border rounded"
+                    />
+                  )}
+
+                  <input
+                    type="file"
+                    onChange={(e) => handleImageChange(e, index)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ===== LINKS ===== */}
+          <div>
+            <label className="text-sm font-medium mb-2 block">
+              Links
+            </label>
+
+            <div className="flex flex-col gap-3">
+              {formData.links.map((linkObj, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  value={linkObj.link}
+                  onChange={(e) => handleLinkChange(index, e.target.value)}
+                  className="border p-2 rounded w-full"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* ===== SUBMIT ===== */}
+          <div className="flex justify-end">
+            <Button type="submit">Save Changes</Button>
+          </div>
+
+        </form>
+      </Card>
+    </div>
   );
 }

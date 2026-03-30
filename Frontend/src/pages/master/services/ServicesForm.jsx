@@ -5,9 +5,9 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import axios from "axios";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 export default function ServicesForm() {
 
@@ -47,13 +47,11 @@ export default function ServicesForm() {
 
   }, [id]);
 
-  const handleEditorChange = (field, editor) => {
-
+  const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: editor.getData()
+      [field]: value
     }));
-
   };
 
   const handleFileChange = (e) => {
@@ -114,30 +112,24 @@ export default function ServicesForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
 
           <Typography>Title</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.title}
-            onChange={(e, editor) =>
-              handleEditorChange("title", editor)
-            }
+          <Editor
+            value={formData.title}
+            onChange={(val) => handleEditorChange("title", val)}
+            height={120}
           />
 
           <Typography>Heading</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.heading}
-            onChange={(e, editor) =>
-              handleEditorChange("heading", editor)
-            }
+          <Editor
+            value={formData.heading}
+            onChange={(val) => handleEditorChange("heading", val)}
+            height={150}
           />
 
           <Typography>Paragraph</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.paragraph}
-            onChange={(e, editor) =>
-              handleEditorChange("paragraph", editor)
-            }
+          <Editor
+            value={formData.paragraph}
+            onChange={(val) => handleEditorChange("paragraph", val)}
+            height={250}
           />
 
           <Typography>Image</Typography>

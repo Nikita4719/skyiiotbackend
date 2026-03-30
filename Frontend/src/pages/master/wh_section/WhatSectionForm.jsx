@@ -5,9 +5,9 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import axios from "axios";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 
 export default function WhatSectionForm() {
@@ -36,10 +36,10 @@ export default function WhatSectionForm() {
     }
   }, [id]);
 
-  const handleEditorChange = (editor) => {
+  const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      description: editor.getData(),
+      [field]: value,
     }));
   };
 
@@ -107,12 +107,11 @@ export default function WhatSectionForm() {
           {/* Description */}
           <div>
             <Typography>Description</Typography>
-            <CKEditor
-              editor={ClassicEditor}
-              data={formData.description || ""}
-              onChange={(e, editor) =>
-                handleEditorChange(editor)
-              }
+
+            <Editor
+              value={formData.description}
+              onChange={(val) => handleEditorChange("description", val)}
+              height={200}
             />
           </div>
 

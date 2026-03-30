@@ -5,72 +5,76 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import axios from "axios";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 export default function EverywhereSlideForm() {
+
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
     heading: "",
     paragraph: "",
-    image: null,
+    image: null
   });
 
   const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     if (id) {
-      axios
-        .get(`${BASE_URL}/api/everywhere-slide/${id}`)
+      axios.get(`${BASE_URL}/api/everywhere-slide/${id}`)
         .then((res) => {
+
+          const data = res.data;
+
           setFormData({
-            heading: res.data.heading || "",
-            paragraph: res.data.paragraph || "",
-            image: null,
+            heading: data.heading || "",
+            paragraph: data.paragraph || "",
+            image: null
           });
 
-          if (res.data.image) {
-            setPreview(
-              `${BASE_URL}/${res.data.image}`
-            );
+          if (data.image) {
+            setPreview(`${BASE_URL}/${data.image}`);
           }
+
         });
     }
   }, [id]);
 
-  const handleEditorChange = (field, editor) => {
+
+  const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: editor.getData(),
+      [field]: value
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleFileChange = (e) => {
+
     const file = e.target.files[0];
+    if (!file) return;
 
     setFormData((prev) => ({
       ...prev,
-      image: file,
+      image: file
     }));
 
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-    }
+    setPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     const data = new FormData();
-    data.append("heading", formData.heading);
-    data.append("paragraph", formData.paragraph);
 
-    if (formData.image) {
-      data.append("image", formData.image);
-    }
+    Object.keys(formData).forEach((key) => {
+      if (formData[key]) {
+        data.append(key, formData[key]);
+      }
+    });
 
     if (id) {
       await axios.put(
@@ -90,33 +94,38 @@ export default function EverywhereSlideForm() {
   return (
     <div className="mt-12 mb-8 px-6">
       <Card className="w-full p-10">
+
         <form onSubmit={handleSubmit} className="space-y-6">
 
+          {/* Heading */}
           <Typography>Heading</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.heading}
-            onChange={(e, editor) =>
-              handleEditorChange("heading", editor)
-            }
+          <Editor
+            value={formData.heading}
+            onChange={(val) => handleEditorChange("heading", val)}
+            height={150}
           />
 
+          {/* Paragraph */}
           <Typography>Paragraph</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.paragraph}
-            onChange={(e, editor) =>
-              handleEditorChange("paragraph", editor)
-            }
+          <Editor
+            value={formData.paragraph}
+            onChange={(val) => handleEditorChange("paragraph", val)}
+            height={250}
           />
 
+          {/* Image */}
           <Typography>Image</Typography>
-          <input type="file" onChange={handleImageChange} />
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
 
           {preview && (
             <img
               src={preview}
-              className="h-20 mt-3 rounded"
+              className="h-24 mt-2"
               alt=""
             />
           )}
@@ -126,6 +135,7 @@ export default function EverywhereSlideForm() {
           </Button>
 
         </form>
+
       </Card>
     </div>
   );

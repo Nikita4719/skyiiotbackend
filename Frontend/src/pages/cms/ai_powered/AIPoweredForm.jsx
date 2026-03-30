@@ -5,9 +5,9 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import axios from "axios";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 export default function AIPoweredForm() {
   const navigate = useNavigate();
@@ -52,10 +52,10 @@ export default function AIPoweredForm() {
     }
   }, [id]);
 
-  const handleEditorChange = (field, editor) => {
+  const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: editor.getData(),
+      [field]: value,
     }));
   };
 
@@ -123,50 +123,40 @@ export default function AIPoweredForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
 
           <Typography>Heading 1</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.heading1 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("heading1", editor)
-            }
+          <Editor
+            value={formData.heading1}
+            onChange={(val) => handleEditorChange("heading1", val)}
+            height={120}
           />
 
+
           <Typography>Heading 2</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.heading2 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("heading2", editor)
-            }
+          <Editor
+            value={formData.heading2}
+            onChange={(val) => handleEditorChange("heading2", val)}
+            height={120}
           />
 
           <Typography>Heading 3</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.heading3 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("heading3", editor)
-            }
+          <Editor
+            value={formData.heading3}
+            onChange={(val) => handleEditorChange("heading3", val)}
+            height={120}
           />
 
           <Typography>Paragraph 1</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.paragraph1 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("paragraph1", editor)
-            }
+          <Editor
+            value={formData.paragraph1}
+            onChange={(val) => handleEditorChange("paragraph1", val)}
+            height={200}
           />
 
           <Typography>Paragraph 2</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.paragraph2 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("paragraph2", editor)
-            }
+          <Editor
+            value={formData.paragraph2}
+            onChange={(val) => handleEditorChange("paragraph2", val)}
+            height={200}
           />
-
           <Typography>Image / Video</Typography>
           <input
             type="file"

@@ -6,8 +6,8 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import BASE_URL from "../../../configs/api";
+import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 
 export default function FaqForm() {
@@ -21,6 +21,13 @@ export default function FaqForm() {
   });
 
   const [loading, setLoading] = useState(true);
+
+  const handleEditorChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -105,20 +112,16 @@ export default function FaqForm() {
           </div>
 
           {/* Paragraph */}
+          {/* Paragraph */}
           <div>
             <Typography variant="small" className="mb-2 font-semibold">
               Paragraph
             </Typography>
 
-            <CKEditor
-              editor={ClassicEditor}
-              data={formData.para}
-              onChange={(event, editor) => {
-                setFormData({
-                  ...formData,
-                  para: editor.getData(),
-                });
-              }}
+            <Editor
+              value={formData.para}
+              onChange={(val) => handleEditorChange("para", val)}
+              height={200}
             />
           </div>
 

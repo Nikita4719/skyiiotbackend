@@ -2,23 +2,20 @@ import {
   Card,
   Typography,
   Button,
-  Input,
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 export default function SolutionCatForm() {
-
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(""); // now CKEditor value
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
-
-  /* ================= GET DATA FOR EDIT ================= */
 
   useEffect(() => {
     if (id) {
@@ -27,32 +24,28 @@ export default function SolutionCatForm() {
         .then((res) => {
           setTitle(res.data.title);
           setPreview(`${BASE_URL}/${res.data.image}`);
-        });
+        })
+        .catch((err) => console.error("Fetch error:", err));
     }
   }, [id]);
 
-  /* ================= IMAGE CHANGE ================= */
-
   const handleImageChange = (e) => {
-
     const file = e.target.files[0];
-
-    setImage(file);   // ✅ FIXED
+    setImage(file);
 
     if (file) {
       setPreview(URL.createObjectURL(file));
     }
-
   };
 
-  /* ================= SUBMIT ================= */
+  const handleEditorChange = (field, value) => {
+    if (field === "title") setTitle(value);
+  };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     const formData = new FormData();
-
     formData.append("title", title);
 
     if (image) {
@@ -60,60 +53,41 @@ export default function SolutionCatForm() {
     }
 
     try {
-
       if (id) {
-
         await axios.put(
           `${BASE_URL}/api/solution-cat/${id}`,
           formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
-
       } else {
-
         await axios.post(
           `${BASE_URL}/api/solution-cat`,
           formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
-
       }
 
       navigate("/dashboard/solution/solution-cat");
-
     } catch (error) {
-
       console.error("SAVE ERROR:", error.response?.data || error);
-
     }
-
   };
 
   return (
     <div className="mt-12 mb-8 px-6">
-
       <Card className="p-10">
-
         <form onSubmit={handleSubmit} className="space-y-6">
 
+          {/* TITLE */}
           <Typography>Title</Typography>
-
-          <Input
+          <Editor
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+            onChange={(val) => handleEditorChange("title", val)}
+            height={150}
           />
 
+          {/* IMAGE */}
           <Typography>Image</Typography>
-
           <input
             type="file"
             name="image"
@@ -130,13 +104,10 @@ export default function SolutionCatForm() {
           )}
 
           <Button type="submit" fullWidth>
-            Save
+            {id ? "Update" : "Save"}
           </Button>
-
         </form>
-
       </Card>
-
     </div>
   );
 }

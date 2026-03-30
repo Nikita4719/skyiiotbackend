@@ -3,12 +3,11 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../../configs/api";
-
+import Editor from "@/pages/editor/editor";
 
 export default function TestimonialForm() {
   const navigate = useNavigate();
@@ -65,6 +64,12 @@ export default function TestimonialForm() {
     return <div className="p-10">Loading...</div>;
   }
 
+  const handleEditorChange = (field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,44 +111,26 @@ export default function TestimonialForm() {
 
           {/* HEADING */}
           <Typography>Heading</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={form.heading}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              setForm((prev) => ({
-                ...prev,
-                heading: data,
-              }));
-            }}
+          <Editor
+            value={form.heading}
+            onChange={(val) => handleEditorChange("heading", val)}
+            height={150}
           />
 
           {/* PARA 1 */}
           <Typography>Paragraph 1</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={form.para1}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              setForm((prev) => ({
-                ...prev,
-                para1: data,
-              }));
-            }}
+          <Editor
+            value={form.para1}
+            onChange={(val) => handleEditorChange("para1", val)}
+            height={200}
           />
 
           {/* PARA 2 */}
           <Typography>Paragraph 2</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={form.para2}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              setForm((prev) => ({
-                ...prev,
-                para2: data,
-              }));
-            }}
+          <Editor
+            value={form.para2}
+            onChange={(val) => handleEditorChange("para2", val)}
+            height={200}
           />
 
           {/* IMAGES */}

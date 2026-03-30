@@ -5,12 +5,12 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import axios from "axios";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
-
+import Editor from "@/pages/editor/editor";
 
 export default function SupportedContentForm() {
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -29,34 +29,44 @@ export default function SupportedContentForm() {
   useEffect(() => {
     if (id) {
       axios
-        .get(
-          `${BASE_URL}/api/supported-content/${id}`
-        )
+        .get(`${BASE_URL}/api/supported-content/${id}`)
         .then((res) => {
-          setFormData(res.data);
+
+          const data = res.data;
+
+          setFormData({
+            ...data,
+            image1: null,
+            image2: null,
+            image3: null,
+            image4: null,
+          });
 
           const images = {};
           [1, 2, 3, 4].forEach((num) => {
-            if (res.data[`image${num}`]) {
-              images[
-                `image${num}`
-              ] = `${BASE_URL}/${res.data[`image${num}`]}`;
+            if (data[`image${num}`]) {
+              images[`image${num}`] =
+                `${BASE_URL}/${data[`image${num}`]}`;
             }
           });
+
           setPreview(images);
         });
     }
   }, [id]);
 
-  const handleEditorChange = (field, editor) => {
+ 
+  const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: editor.getData(),
+      [field]: value,
     }));
   };
 
   const handleImageChange = (e) => {
     const { name, files } = e.target;
+
+    if (!files[0]) return;
 
     setFormData((prev) => ({
       ...prev,
@@ -73,9 +83,11 @@ export default function SupportedContentForm() {
     e.preventDefault();
 
     const data = new FormData();
+
     Object.keys(formData).forEach((key) => {
-      if (formData[key])
+      if (formData[key]) {
         data.append(key, formData[key]);
+      }
     });
 
     if (id) {
@@ -90,53 +102,51 @@ export default function SupportedContentForm() {
       );
     }
 
-    navigate(
-      "/dashboard/master/supported-section"
-    );
+    navigate("/dashboard/master/supported-section");
   };
 
   return (
     <div className="mt-12 mb-8 px-6">
       <Card className="w-full p-10">
+
         <form onSubmit={handleSubmit} className="space-y-6">
 
+          {/* Heading */}
           <Typography>Heading</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.heading || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("heading", editor)
-            }
+          <Editor
+            value={formData.heading}
+            onChange={(val) => handleEditorChange("heading", val)}
+            height={150}
           />
 
+          {/* Paragraph 1 */}
           <Typography>Paragraph 1</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.paragraph1 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("paragraph1", editor)
-            }
+          <Editor
+            value={formData.paragraph1}
+            onChange={(val) => handleEditorChange("paragraph1", val)}
+            height={200}
           />
 
+          {/* Paragraph 2 */}
           <Typography>Paragraph 2</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={formData.paragraph2 || ""}
-            onChange={(e, editor) =>
-              handleEditorChange("paragraph2", editor)
-            }
+          <Editor
+            value={formData.paragraph2}
+            onChange={(val) => handleEditorChange("paragraph2", val)}
+            height={200}
           />
 
-          {[1].map((num) => (
+          {/* Images (FIXED) */}
+          {[1, 2, 3, 4].map((num) => (
             <div key={num}>
-              <Typography>
-                Image {num}
-              </Typography>
+              <Typography>Image {num}</Typography>
+
               <input
                 type="file"
                 name={`image${num}`}
+                accept="image/*"
                 onChange={handleImageChange}
               />
+
               {preview[`image${num}`] && (
                 <img
                   src={preview[`image${num}`]}
@@ -147,10 +157,13 @@ export default function SupportedContentForm() {
             </div>
           ))}
 
+          {/* Submit */}
           <Button type="submit" fullWidth>
-            Save
+            {id ? "Update" : "Save"}
           </Button>
+
         </form>
+
       </Card>
     </div>
   );

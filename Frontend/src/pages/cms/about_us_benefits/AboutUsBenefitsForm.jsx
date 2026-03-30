@@ -5,154 +5,161 @@ import {
 } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'; import axios from "axios";
+import Editor from "@/pages/editor/editor";
+import axios from "axios";
 import BASE_URL from "../../../configs/api";
 
 export default function AboutUsBenefitsForm() {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  const initialState = {
-    images: []
-  };
+
+  const initialState = { images: [] };
 
   for (let i = 1; i <= 8; i++) {
-    initialState[`heading${i}`] = ""
+    initialState[`heading${i}`] = "";
   }
 
   for (let i = 1; i <= 4; i++) {
-    initialState[`paragraph${i}`] = ""
+    initialState[`paragraph${i}`] = "";
   }
 
-  const [formData, setFormData] = useState(initialState)
-  const [preview, setPreview] = useState([])
+  const [formData, setFormData] = useState(initialState);
+  const [preview, setPreview] = useState([]);
+
 
   useEffect(() => {
-
     if (id) {
-
       axios.get(`${BASE_URL}/api/aboutusbenefits/${id}`)
         .then(res => {
 
-          setFormData(res.data)
+          const data = res.data;
 
-          if (res.data.images) {
+
+          let updatedData = { images: [] };
+
+          for (let i = 1; i <= 8; i++) {
+            updatedData[`heading${i}`] = data[`heading${i}`] || "";
+          }
+
+          for (let i = 1; i <= 4; i++) {
+            updatedData[`paragraph${i}`] = data[`paragraph${i}`] || "";
+          }
+
+          setFormData(updatedData);
+
+
+          if (data.images) {
             setPreview(
-              res.data.images.map(img => `${BASE_URL}/${img}`)
-            )
+              data.images.map(img => `${BASE_URL}/${img}`)
+            );
           }
 
         })
-
+        .catch(err => console.error(err));
     }
+  }, [id]);
 
-  }, [id])
 
-  const handleEditorChange = (field, editor) => {
-
+  const handleEditorChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
-      [field]: editor.getData()
-    }))
+      [field]: value
+    }));
+  };
 
-  }
 
   const handleImageChange = (e) => {
 
-    const files = Array.from(e.target.files)
+    const files = Array.from(e.target.files);
 
     setFormData(prev => ({
       ...prev,
       images: files
-    }))
+    }));
 
     setPreview(
       files.map(file => URL.createObjectURL(file))
-    )
+    );
+  };
 
-  }
 
   const handleSubmit = async (e) => {
 
-    e.preventDefault()
+    e.preventDefault();
 
-    const data = new FormData()
+    const data = new FormData();
 
     Object.keys(formData).forEach(key => {
 
       if (key === "images") {
 
         formData.images.forEach(file => {
-          data.append("images", file)
-        })
+          data.append("images", file);
+        });
 
       } else {
-
-        data.append(key, formData[key])
-
+        data.append(key, formData[key] || "");
       }
 
-    })
+    });
 
-    if (id) {
+    try {
+      if (id) {
+        await axios.put(
+          `${BASE_URL}/api/aboutusbenefits/${id}`,
+          data
+        );
+      } else {
+        await axios.post(
+          `${BASE_URL}/api/aboutusbenefits`,
+          data
+        );
+      }
 
-      await axios.put(
-        `${BASE_URL}/api/aboutusbenefits/${id}`,
-        data
-      )
+      navigate("/dashboard/cms/about-us-benefits");
 
-    } else {
-
-      await axios.post(
-        `${BASE_URL}/api/aboutusbenefits`,
-        data
-      )
-
+    } catch (err) {
+      console.error(err);
     }
-
-    navigate("/dashboard/cms/about-us-benefits")
-
-  }
+  };
 
   return (
-
     <div className="mt-12 mb-8 px-6">
-
       <Card className="w-full p-10">
 
         <form onSubmit={handleSubmit} className="space-y-6">
+
 
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div key={`heading${i}`}>
               <Typography>Heading {i}</Typography>
 
-              <CKEditor
-                editor={ClassicEditor}
-                data={formData[`heading${i}`] || ""}
-                onChange={(e, editor) =>
-                  handleEditorChange(`heading${i}`, editor)
+              <Editor
+                value={formData[`heading${i}`]}
+                onChange={(val) =>
+                  handleEditorChange(`heading${i}`, val)
                 }
+                height={120}
               />
-
             </div>
           ))}
+
 
           {[1, 2, 3, 4].map((i) => (
             <div key={`paragraph${i}`}>
-
               <Typography>Paragraph {i}</Typography>
 
-              <CKEditor
-                editor={ClassicEditor}
-                data={formData[`paragraph${i}`] || ""}
-                onChange={(e, editor) =>
-                  handleEditorChange(`paragraph${i}`, editor)
+              <Editor
+                value={formData[`paragraph${i}`]}
+                onChange={(val) =>
+                  handleEditorChange(`paragraph${i}`, val)
                 }
+                height={200}
               />
-
             </div>
           ))}
+
 
           <Typography>Images</Typography>
 
@@ -163,7 +170,6 @@ export default function AboutUsBenefitsForm() {
           />
 
           <div className="flex gap-3 flex-wrap mt-3">
-
             {preview.map((img, i) => (
               <img
                 key={i}
@@ -172,7 +178,6 @@ export default function AboutUsBenefitsForm() {
                 alt=""
               />
             ))}
-
           </div>
 
           <Button type="submit" fullWidth>
@@ -182,9 +187,6 @@ export default function AboutUsBenefitsForm() {
         </form>
 
       </Card>
-
     </div>
-
-  )
-
+  );
 }

@@ -3,11 +3,11 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../../configs/api";
+import Editor from "@/pages/editor/editor";
 
 
 export default function SmarterForm() {
@@ -22,7 +22,7 @@ export default function SmarterForm() {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
 
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,11 +48,18 @@ export default function SmarterForm() {
     fetchData();
   }, [id]);
 
- 
-  
+
+
   if (loading) {
     return <div className="p-10">Loading...</div>;
   }
+
+  const handleEditorChange = (field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,30 +94,18 @@ export default function SmarterForm() {
 
           {/* HEADING */}
           <Typography>Heading</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={form.heading}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              setForm((prev) => ({
-                ...prev,
-                heading: data,
-              }));
-            }}
+          <Editor
+            value={form.heading}
+            onChange={(val) => handleEditorChange("heading", val)}
+            height={150}
           />
 
           {/* PARAGRAPH */}
           <Typography>Paragraph</Typography>
-          <CKEditor
-            editor={ClassicEditor}
-            data={form.para}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              setForm((prev) => ({
-                ...prev,
-                para: data,
-              }));
-            }}
+          <Editor
+            value={form.para}
+            onChange={(val) => handleEditorChange("para", val)}
+            height={200}
           />
 
           {/* MEDIA */}
