@@ -39,12 +39,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
+
 
 app.use("/api/header-top", headerTopRoutes);
 app.use("/api/navbar-menu", navbarMenuRoutes);
 app.use("/api/navbar-logo", navbarLogoRoutes);
 app.use("/api/footer", footerRoutes);
-app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
 app.use("/api/about", aboutRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);

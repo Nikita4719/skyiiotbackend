@@ -13,7 +13,7 @@ export default function SolutionCatForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [title, setTitle] = useState(""); // now CKEditor value
+  const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -41,6 +41,7 @@ export default function SolutionCatForm() {
   const handleEditorChange = (field, value) => {
     if (field === "title") setTitle(value);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -83,7 +84,7 @@ export default function SolutionCatForm() {
           <Editor
             value={title}
             onChange={(val) => handleEditorChange("title", val)}
-            height={150}
+            height={300}
           />
 
           {/* IMAGE */}

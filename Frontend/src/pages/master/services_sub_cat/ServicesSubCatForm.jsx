@@ -228,7 +228,7 @@ export default function ServicesSubCatForm() {
           <Editor
             value={formData.description}
             onChange={(val) => handleEditorChange("description", val)}
-            height={200}
+            height={300}
           />
 
           {/* Sub Fields */}
@@ -241,7 +241,7 @@ export default function ServicesSubCatForm() {
           <Editor
             value={formData.subtitle_para1}
             onChange={(val) => handleEditorChange("subtitle_para1", val)}
-            height={200}
+            height={300}
           />
 
           {/* Subtitle Para 2 */}
@@ -249,7 +249,7 @@ export default function ServicesSubCatForm() {
           <Editor
             value={formData.subtitle_para2}
             onChange={(val) => handleEditorChange("subtitle_para2", val)}
-            height={200}
+            height={300}
           />
 
           {/* Image */}

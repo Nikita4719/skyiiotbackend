@@ -119,7 +119,7 @@ export default function OfferSectionForm() {
           <Editor
             value={formData.title}
             onChange={(val) => handleEditorChange("title", val)}
-            height={120}
+            height={300}
           />
 
           {/* Headings */}
@@ -132,7 +132,7 @@ export default function OfferSectionForm() {
                 onChange={(val) =>
                   handleEditorChange(`heading${num}`, val)
                 }
-                height={120}
+                height={300}
               />
             </div>
           ))}
@@ -147,7 +147,7 @@ export default function OfferSectionForm() {
                 onChange={(val) =>
                   handleEditorChange(`paragraph${num}`, val)
                 }
-                height={200}
+                height={300}
               />
             </div>
           ))}

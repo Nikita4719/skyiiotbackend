@@ -140,7 +140,7 @@ export default function AboutUsBenefitsForm() {
                 onChange={(val) =>
                   handleEditorChange(`heading${i}`, val)
                 }
-                height={120}
+                height={300}
               />
             </div>
           ))}
@@ -155,7 +155,7 @@ export default function AboutUsBenefitsForm() {
                 onChange={(val) =>
                   handleEditorChange(`paragraph${i}`, val)
                 }
-                height={200}
+                height={300}
               />
             </div>
           ))}

@@ -102,7 +102,7 @@ export default function EverywhereSlideForm() {
           <Editor
             value={formData.heading}
             onChange={(val) => handleEditorChange("heading", val)}
-            height={150}
+            height={300}
           />
 
           {/* Paragraph */}

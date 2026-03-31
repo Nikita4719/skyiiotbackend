@@ -126,7 +126,7 @@ export default function AIPoweredForm() {
           <Editor
             value={formData.heading1}
             onChange={(val) => handleEditorChange("heading1", val)}
-            height={120}
+            height={300}
           />
 
 
@@ -134,28 +134,28 @@ export default function AIPoweredForm() {
           <Editor
             value={formData.heading2}
             onChange={(val) => handleEditorChange("heading2", val)}
-            height={120}
+            height={300}
           />
 
           <Typography>Heading 3</Typography>
           <Editor
             value={formData.heading3}
             onChange={(val) => handleEditorChange("heading3", val)}
-            height={120}
+            height={300}
           />
 
           <Typography>Paragraph 1</Typography>
           <Editor
             value={formData.paragraph1}
             onChange={(val) => handleEditorChange("paragraph1", val)}
-            height={200}
+            height={300}
           />
 
           <Typography>Paragraph 2</Typography>
           <Editor
             value={formData.paragraph2}
             onChange={(val) => handleEditorChange("paragraph2", val)}
-            height={200}
+            height={300}
           />
           <Typography>Image / Video</Typography>
           <input

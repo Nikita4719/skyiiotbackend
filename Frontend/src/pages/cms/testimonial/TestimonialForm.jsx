@@ -114,7 +114,7 @@ export default function TestimonialForm() {
           <Editor
             value={form.heading}
             onChange={(val) => handleEditorChange("heading", val)}
-            height={150}
+            height={300}
           />
 
           {/* PARA 1 */}
@@ -122,7 +122,7 @@ export default function TestimonialForm() {
           <Editor
             value={form.para1}
             onChange={(val) => handleEditorChange("para1", val)}
-            height={200}
+            height={300}
           />
 
           {/* PARA 2 */}
@@ -130,7 +130,7 @@ export default function TestimonialForm() {
           <Editor
             value={form.para2}
             onChange={(val) => handleEditorChange("para2", val)}
-            height={200}
+            height={300}
           />
 
           {/* IMAGES */}

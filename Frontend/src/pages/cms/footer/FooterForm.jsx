@@ -198,7 +198,7 @@ export default function FooterForm() {
             <Editor
               value={formData.content}
               onChange={(val) => handleEditorChange("content", val)}
-              height={200}
+              height={300}
             />
           </div>
 

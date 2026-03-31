@@ -97,7 +97,7 @@ export default function SmarterForm() {
           <Editor
             value={form.heading}
             onChange={(val) => handleEditorChange("heading", val)}
-            height={150}
+            height={300}
           />
 
           {/* PARAGRAPH */}
@@ -105,7 +105,7 @@ export default function SmarterForm() {
           <Editor
             value={form.para}
             onChange={(val) => handleEditorChange("para", val)}
-            height={200}
+            height={300}
           />
 
           {/* MEDIA */}

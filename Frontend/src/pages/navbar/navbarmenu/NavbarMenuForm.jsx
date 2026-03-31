@@ -8,9 +8,8 @@ import {
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
-
-//
 import BASE_URL from "../../../configs/api"
+import Editor from "@/pages/editor/editor";
 
 export default function NavbarMenuForm() {
 
@@ -41,6 +40,11 @@ export default function NavbarMenuForm() {
         }
 
     }, [id])
+
+    const handleEditorChange = (field, value) => {
+        if (field === "title") setTitle(value);
+    };
+
 
     const handleSubmit = async (e) => {
 
@@ -124,15 +128,10 @@ export default function NavbarMenuForm() {
                             Menu Description
                         </Typography>
 
-                        <CKEditor
-                            editor={ClassicEditor}
-                            data={description}
-                            onChange={(event, editor) => {
-
-                                const data = editor.getData()
-                                setDescription(data)
-
-                            }}
+                        <Editor
+                            value={description}
+                            onChange={(val) => handleEditorChange("description", val)}
+                            height={300}
                         />
 
                     </div>

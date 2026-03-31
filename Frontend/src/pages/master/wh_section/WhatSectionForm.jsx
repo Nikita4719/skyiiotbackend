@@ -111,7 +111,7 @@ export default function WhatSectionForm() {
             <Editor
               value={formData.description}
               onChange={(val) => handleEditorChange("description", val)}
-              height={200}
+              height={300}
             />
           </div>
 

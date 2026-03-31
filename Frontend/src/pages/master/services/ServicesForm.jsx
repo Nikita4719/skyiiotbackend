@@ -115,14 +115,14 @@ export default function ServicesForm() {
           <Editor
             value={formData.title}
             onChange={(val) => handleEditorChange("title", val)}
-            height={120}
+            height={300}
           />
 
           <Typography>Heading</Typography>
           <Editor
             value={formData.heading}
             onChange={(val) => handleEditorChange("heading", val)}
-            height={150}
+            height={300}
           />
 
           <Typography>Paragraph</Typography>

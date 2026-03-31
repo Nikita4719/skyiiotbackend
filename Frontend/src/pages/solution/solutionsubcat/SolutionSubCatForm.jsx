@@ -141,15 +141,15 @@ export default function SolutionSubCatForm() {
 
           {/* HEADING */}
           <Typography>Heading</Typography>
-          <Editor value={formData.heading} onChange={(val) => handleEditorChange("heading", val)} height={150} />
+          <Editor value={formData.heading} onChange={(val) => handleEditorChange("heading", val)} height={300} />
 
           {/* DESCRIPTION1 */}
           <Typography>Description 1</Typography>
-          <Editor value={formData.description1} onChange={(val) => handleEditorChange("description1", val)} height={150} />
+          <Editor value={formData.description1} onChange={(val) => handleEditorChange("description1", val)} height={300} />
 
           {/* DESCRIPTION2 */}
           <Typography>Description 2</Typography>
-          <Editor value={formData.description2} onChange={(val) => handleEditorChange("description2", val)} height={150} />
+          <Editor value={formData.description2} onChange={(val) => handleEditorChange("description2", val)} height={300} />
 
           {/* IMAGE1 */}
           <Typography>Upload Image1</Typography>
@@ -165,7 +165,7 @@ export default function SolutionSubCatForm() {
           {["para1", "para2", "para3", "para4"].map((para, idx) => (
             <div key={para}>
               <Typography>Paragraph {idx + 1}</Typography>
-              <Editor value={formData[para]} onChange={(val) => handleEditorChange(para, val)} height={150} />
+              <Editor value={formData[para]} onChange={(val) => handleEditorChange(para, val)} height={300} />
             </div>
           ))}
 

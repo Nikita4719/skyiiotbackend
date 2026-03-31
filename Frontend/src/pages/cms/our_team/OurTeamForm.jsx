@@ -54,7 +54,7 @@ export default function OurTeamForm() {
     }));
   };
 
- 
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -112,7 +112,7 @@ export default function OurTeamForm() {
             <Editor
               value={formData.heading}
               onChange={(val) => handleEditorChange("heading", val)}
-              height={150}
+              height={300}
             />
           </div>
 

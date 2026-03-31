@@ -102,7 +102,7 @@ export default function AboutUsEnterpriseForm() {
             onChange={(val) =>
               handleEditorChange("heading", val)
             }
-            height={150}
+            height={300}
           />
 
           <Typography>Paragraph</Typography>

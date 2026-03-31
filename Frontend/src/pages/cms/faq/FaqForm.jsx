@@ -121,7 +121,7 @@ export default function FaqForm() {
             <Editor
               value={formData.para}
               onChange={(val) => handleEditorChange("para", val)}
-              height={200}
+              height={300}
             />
           </div>
 

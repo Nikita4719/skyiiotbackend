@@ -55,7 +55,7 @@ export default function SupportedContentForm() {
     }
   }, [id]);
 
- 
+
   const handleEditorChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -116,7 +116,7 @@ export default function SupportedContentForm() {
           <Editor
             value={formData.heading}
             onChange={(val) => handleEditorChange("heading", val)}
-            height={150}
+            height={300}
           />
 
           {/* Paragraph 1 */}
@@ -124,7 +124,7 @@ export default function SupportedContentForm() {
           <Editor
             value={formData.paragraph1}
             onChange={(val) => handleEditorChange("paragraph1", val)}
-            height={200}
+            height={300}
           />
 
           {/* Paragraph 2 */}
@@ -132,7 +132,7 @@ export default function SupportedContentForm() {
           <Editor
             value={formData.paragraph2}
             onChange={(val) => handleEditorChange("paragraph2", val)}
-            height={200}
+            height={300}
           />
 
           {/* Images (FIXED) */}
