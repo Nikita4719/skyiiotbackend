@@ -29,29 +29,44 @@ const deleteImages = (imageString) => {
 
 //CREATE
 exports.create = async (req, res) => {
-
   try {
 
     const image1 = req.files?.image1?.[0]
       ? "uploads/" + req.files.image1[0].filename
       : null;
 
-    const image2 = req.files?.image2
-      ? JSON.stringify(req.files.image2.map(f => "uploads/" + f.filename))
-      : null;
-
     const imagechart = req.files?.imagechart?.[0]
       ? "uploads/" + req.files.imagechart[0].filename
       : null;
 
-    const data = {
+    let image2 = null;
 
+    if (req.files?.image2) {
+
+      let orderArray = [];
+
+      if (req.body["image2_order[]"]) {
+        orderArray = Array.isArray(req.body["image2_order[]"])
+          ? req.body["image2_order[]"].map(Number)
+          : [Number(req.body["image2_order[]"])];
+      }
+
+      let uploaded = req.files.image2.map((file, i) => ({
+        path: "uploads/" + file.filename,
+        order: orderArray[i] ?? i
+      }));
+
+      uploaded.sort((a, b) => a.order - b.order);
+
+      image2 = JSON.stringify(uploaded.map(img => img.path));
+    }
+
+    const data = {
       solutionCatId: req.body.solutionCatId
         ? parseInt(req.body.solutionCatId)
         : null,
 
       heading: req.body.heading,
-
       description1: req.body.description1,
       description2: req.body.description2,
 
@@ -74,16 +89,11 @@ exports.create = async (req, res) => {
     });
 
   } catch (error) {
-
     console.log(error);
-
-    res.status(500).json({
-      message: "Create Failed"
-    });
-
+    res.status(500).json({ message: "Create Failed" });
   }
-
 };
+
 
 
 //READ
@@ -155,11 +165,9 @@ exports.getOne = async (req, res) => {
 
 //UPDATE
 exports.update = async (req, res) => {
-
   const id = parseInt(req.params.id);
 
   try {
-
     const existing = await prisma.solution_sub_categories.findUnique({
       where: { id }
     });
@@ -168,76 +176,109 @@ exports.update = async (req, res) => {
       return res.status(404).json({ message: "Not Found" });
     }
 
+    const deleteFlags = req.body.deleteFlags
+      ? JSON.parse(req.body.deleteFlags)
+      : {};
+
+    // ===== IMAGE1 =====
     let image1 = existing.image1;
 
-    if (req.files?.image1?.[0]) {
-
-      if (existing.image1) {
-
-        const oldPath = path.join(__dirname, "../", existing.image1);
-
-        if (fs.existsSync(oldPath)) {
-          fs.unlinkSync(oldPath);
-        }
-
-      }
-
-      image1 = "uploads/" + req.files.image1[0].filename;
-
+    if (deleteFlags.image1 && existing.image1) {
+      const oldPath = path.join(__dirname, "../", existing.image1);
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      image1 = null;
     }
 
+    if (req.files?.image1?.[0]) {
+      if (existing.image1) {
+        const oldPath = path.join(__dirname, "../", existing.image1);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      image1 = "uploads/" + req.files.image1[0].filename;
+    }
+
+    // ===== IMAGE CHART =====
     let imagechart = existing.imagechart;
 
-    if (req.files?.imagechart?.[0]) {
-
-      if (existing.imagechart) {
-
-        const oldPath = path.join(__dirname, "../", existing.imagechart);
-
-        if (fs.existsSync(oldPath)) {
-          fs.unlinkSync(oldPath);
-        }
-
-      }
-
-      imagechart = "uploads/" + req.files.imagechart[0].filename;
-
+    if (deleteFlags.imagechart && existing.imagechart) {
+      const oldPath = path.join(__dirname, "../", existing.imagechart);
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      imagechart = null;
     }
 
-    let image2 = existing.image2;
+    if (req.files?.imagechart?.[0]) {
+      if (existing.imagechart) {
+        const oldPath = path.join(__dirname, "../", existing.imagechart);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      imagechart = "uploads/" + req.files.imagechart[0].filename;
+    }
+
+    // ===== MULTIPLE IMAGES =====
+    let existingImages = [];
+
+    try {
+      existingImages = existing.image2 ? JSON.parse(existing.image2) : [];
+    } catch {
+      existingImages = [];
+    }
+
+    // 🔥 DELETE SELECTED
+    if (deleteFlags.image2?.length) {
+      existingImages.forEach((img, index) => {
+        if (deleteFlags.image2.includes(index)) {
+          const imgPath = path.join(__dirname, "../", img);
+          if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+        }
+      });
+
+      existingImages = existingImages.filter(
+        (_, index) => !deleteFlags.image2.includes(index)
+      );
+    }
+
+    // 🔥 NEW IMAGES WITH CORRECT ORDER
+    let newImages = [];
 
     if (req.files?.image2) {
 
-      deleteImages(existing.image2);
+      // ✅ SAFE ORDER PARSE
+      let orderArray = [];
 
-      image2 = JSON.stringify(
-        req.files.image2.map(f => "uploads/" + f.filename)
-      );
+      if (req.body["image2_order[]"]) {
+        orderArray = Array.isArray(req.body["image2_order[]"])
+          ? req.body["image2_order[]"].map(Number)
+          : [Number(req.body["image2_order[]"])];
+      }
 
+      let uploaded = req.files.image2.map((file, i) => ({
+        path: "uploads/" + file.filename,
+        order: orderArray[i] ?? i
+      }));
+
+      // ✅ SORT
+      uploaded.sort((a, b) => a.order - b.order);
+
+      newImages = uploaded.map(img => img.path);
     }
 
+    // 🔥 FINAL MERGE
+    const image2 = JSON.stringify([...existingImages, ...newImages]);
+
     const updated = await prisma.solution_sub_categories.update({
-
       where: { id },
-
       data: {
-
         heading: req.body.heading,
-
         description1: req.body.description1,
         description2: req.body.description2,
-
         para1: req.body.para1,
         para2: req.body.para2,
         para3: req.body.para3,
         para4: req.body.para4,
-
         image1,
         imagechart,
         image2
-
       }
-
     });
 
     res.json({
@@ -246,15 +287,9 @@ exports.update = async (req, res) => {
     });
 
   } catch (error) {
-
     console.log(error);
-
-    res.status(500).json({
-      message: "Update Failed"
-    });
-
+    res.status(500).json({ message: "Update Failed" });
   }
-
 };
 
 
