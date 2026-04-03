@@ -3,6 +3,32 @@ const cors = require("cors");
 require("dotenv").config();
 
 const path = require("path");
+const app = express();
+
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://skyui.skylabsapp.com"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+
+
+
 
 const authRoutes = require("./routes/authRoutes");
 const aboutRoutes = require("./routes/aboutRoutes");
@@ -34,9 +60,7 @@ const navbarMenuRoutes = require("./routes/navbarMenuRoutes");
 const navbarLogoRoutes = require("./routes/navbarLogoRoutes");
 
 
-const app = express();
 
-app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
