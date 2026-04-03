@@ -8,7 +8,8 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://skyui.skylabsapp.com"
+  "https://skyui.skylabsapp.com",
+  "https://skyfront.skyiiot.com"
 ];
 
 app.use(cors({
