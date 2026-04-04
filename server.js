@@ -5,30 +5,50 @@ require("dotenv").config();
 const path = require("path");
 const app = express();
 
-
 const allowedOrigins = [
   "http://localhost:5173",
   "https://skyui.skylabsapp.com",
   "https://skyfront.skyiiot.com"
 ];
 
+// FIXED CORS CONFIG
 app.use(cors({
   origin: function (origin, callback) {
+
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
+    const isAllowed = allowedOrigins.some(o => origin.startsWith(o));
+
+    if (isAllowed) {
       callback(null, true);
     } else {
-      callback(new Error("CORS not allowed"));
+      callback(null, false); 
     }
   },
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
 
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+// ================= ROUTES =================
+
+app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
 
 
 const authRoutes = require("./routes/authRoutes");
@@ -60,11 +80,6 @@ const headerTopRoutes = require("./routes/headerTopRoutes");
 const navbarMenuRoutes = require("./routes/navbarMenuRoutes");
 const navbarLogoRoutes = require("./routes/navbarLogoRoutes");
 
-
-
-app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
 
 
 app.use("/api/header-top", headerTopRoutes);
