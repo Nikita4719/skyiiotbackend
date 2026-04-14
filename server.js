@@ -11,7 +11,7 @@ const allowedOrigins = [
   "https://skyfront.skyiiot.com"
 ];
 
-// FIXED CORS CONFIG
+
 app.use(cors({
   origin: function (origin, callback) {
 
@@ -44,12 +44,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// ================= ROUTES =================
+
 
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/qrcodes", express.static(path.join(__dirname, "uploads/qrcodes")));
 
+// ================= ROUTES =================
 
 const authRoutes = require("./routes/authRoutes");
 const aboutRoutes = require("./routes/aboutRoutes");
@@ -72,6 +73,7 @@ const faqsRoutes = require("./routes/faqsRoutes");
 const cmsFaqRoutes = require("./routes/cmsFaqRoutes");
 const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
+const solutionCardRoutes = require("./routes/solutionCardRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
 const footerRoutes = require("./routes/footerRoutes");
@@ -90,6 +92,7 @@ app.use("/api/about", aboutRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);
 app.use("/api/aboutusbenefits", aboutUsBenefitsRoutes);
+app.use("/api/solution-card", solutionCardRoutes);
 app.use("/api/solution-cat", solutionCatRoutes);
 app.use("/api/solution-sub-cat", solutionSubCatRoutes);
 app.use("/api/what-section" , whatSectionRoutes);
