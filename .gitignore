@@ -20,6 +20,7 @@ pnpm-debug.log*
 /dist/
 /out/
 
+
 # Vite cache
 /.vite/
 
@@ -43,3 +44,5 @@ Thumbs.db
 # Optional: temporary files
 *.tmp
 *.temp
+
+
