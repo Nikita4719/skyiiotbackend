@@ -9,44 +9,23 @@ const path = require("path");
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173",
+  "http://localhost:5174",
   "https://skyui.skylabsapp.com",
   "https://skyfront.skyiiot.com"
 ];
 
-
 app.use(cors({
   origin: function (origin, callback) {
-
     if (!origin) return callback(null, true);
 
-    const isAllowed = allowedOrigins.some(o => origin.startsWith(o));
-
-    if (isAllowed) {
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(null, false); 
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  credentials: true
 }));
-
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
-
 
 
 app.use(express.json());
@@ -79,6 +58,7 @@ const cmsFaqRoutes = require("./routes/cmsFaqRoutes");
 const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionCardRoutes = require("./routes/solutionCardRoutes");
+const solutoionCardsRoutes = require("./routes/solutionCardsRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
 const footerRoutes = require("./routes/footerRoutes");
@@ -98,6 +78,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);
 app.use("/api/aboutusbenefits", aboutUsBenefitsRoutes);
 app.use("/api/solution-card", solutionCardRoutes);
+app.use("/api/solution-cards", solutoionCardsRoutes);
 app.use("/api/solution-cat", solutionCatRoutes);
 app.use("/api/solution-sub-cat", solutionSubCatRoutes);
 app.use("/api/what-section" , whatSectionRoutes);
