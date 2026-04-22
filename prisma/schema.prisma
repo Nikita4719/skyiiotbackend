@@ -254,6 +254,25 @@ model solution_cards {
   created_at    DateTime? @default(now()) @db.Timestamp(0)
 }
 
+model solution_table_icons {
+  id        Int      @id @default(autoincrement())
+
+  title     String   @db.VarChar(255)
+
+  icon1     String?  @db.VarChar(255)
+  icon2     String?  @db.VarChar(255)
+  icon3     String?  @db.VarChar(255)
+  icon4     String?  @db.VarChar(255)
+  icon5     String?  @db.VarChar(255)
+  icon6     String?  @db.VarChar(255)
+  icon7     String?  @db.VarChar(255)
+  icon8     String?  @db.VarChar(255)
+  icon9     String?  @db.VarChar(255)
+  icon10    String?  @db.VarChar(255)
+
+  created_at DateTime? @default(now())
+}
+
 
 model solution_cat {
   id                      Int                       @id @default(autoincrement())

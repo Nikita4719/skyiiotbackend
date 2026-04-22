@@ -9,7 +9,7 @@ const path = require("path");
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5174",
+  "http://localhost:5173",
   "https://skyui.skylabsapp.com",
   "https://skyfront.skyiiot.com"
 ];
@@ -58,6 +58,7 @@ const cmsFaqRoutes = require("./routes/cmsFaqRoutes");
 const solutionCatRoutes = require("./routes/solutionCatRoutes");
 const solutionSubCatRoutes = require("./routes/solutionSubCatRoutes");
 const solutionCardRoutes = require("./routes/solutionCardRoutes");
+const solutionTableIconsRoutes = require("./routes/solutionTableIconsRoutes");
 const solutoionCardsRoutes = require("./routes/solutionCardsRoutes");
 const solutionImageRoutes = require("./routes/solutionImageRoutes");
 const contactMessagesRoutes = require("./routes/contactMessagesRoutes");
@@ -79,6 +80,7 @@ app.use("/api/aboutusenterprise", aboutUsEnterpriseRoutes);
 app.use("/api/aboutusbenefits", aboutUsBenefitsRoutes);
 app.use("/api/solution-card", solutionCardRoutes);
 app.use("/api/solution-cards", solutoionCardsRoutes);
+app.use("/api/solution-table-icons", solutionTableIconsRoutes);
 app.use("/api/solution-cat", solutionCatRoutes);
 app.use("/api/solution-sub-cat", solutionSubCatRoutes);
 app.use("/api/what-section" , whatSectionRoutes);
