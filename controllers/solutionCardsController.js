@@ -57,7 +57,7 @@ exports.create = async (req, res) => {
     const data = {
       solutionCatId,
 
-      // SVG OPTIONAL 🔥
+      // SVG OPTIONAL 
       svg1: getPath(files, "svg1", null),
       svg2: getPath(files, "svg2", null),
       svg3: getPath(files, "svg3", null),
@@ -65,7 +65,7 @@ exports.create = async (req, res) => {
       svg5: getPath(files, "svg5", null),
       svg6: getPath(files, "svg6", null),
 
-      // ALL OPTIONAL 🔥
+      // ALL OPTIONAL 
       paragraph1: req.body.paragraph1 || "",
       paragraph2: req.body.paragraph2 || "",
       paragraph3: req.body.paragraph3 || "",
@@ -108,7 +108,7 @@ exports.update = async (req, res) => {
       solutionCatId:
         Number(req.body.solutionCatId) || existing.solutionCatId,
 
-      // KEEP OLD IF NOT UPLOADED 🔥
+      // KEEP OLD IF NOT UPLOADED 
       svg1: getPath(files, "svg1", existing.svg1),
       svg2: getPath(files, "svg2", existing.svg2),
       svg3: getPath(files, "svg3", existing.svg3),

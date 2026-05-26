@@ -10,6 +10,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:5174",
   "https://skyui.skylabsapp.com",
   "https://skyfront.skyiiot.com"
 ];
@@ -105,4 +106,5 @@ app.use("/api/contact-settings", contactSettingsRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
+  console.log('mysql connected');
 });

@@ -19,6 +19,7 @@ const deleteFile = (filePath) => {
     }
 };
 
+
 // GET ALL
 exports.getAll = async (req, res) => {
     try {
@@ -47,6 +48,7 @@ exports.getOne = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 // CREATE
 exports.create = async (req, res) => {
