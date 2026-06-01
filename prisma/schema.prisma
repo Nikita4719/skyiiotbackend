@@ -309,6 +309,9 @@ model solution_sub_categories {
   para3         String?       @db.Text
   para4         String?       @db.Text
   imagechart    String?       @db.VarChar(255)
+  image1Size      String? @db.VarChar(255)
+  imageChartSize  String? @db.VarChar(255)
+  image2Size      String? @db.VarChar(255)
   solution_cat  solution_cat? @relation(fields: [solutionCatId], references: [id], onDelete: Cascade, map: "solution_sub_categories_ibfk_1")
 
   @@index([solutionCatId])

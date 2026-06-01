@@ -31,6 +31,7 @@ const deleteImages = (imageString) => {
 exports.create = async (req, res) => {
   try {
 
+
     const image1 = req.files?.image1?.[0]
       ? "uploads/" + req.files.image1[0].filename
       : null;
@@ -78,7 +79,10 @@ exports.create = async (req, res) => {
       para3: req.body.para3,
       para4: req.body.para4,
 
-      image2
+      image2,
+      image1Size: req.body.image1Size,
+      imageChartSize: req.body.imageChartSize,
+      image2Size: req.body.image2Size
     };
 
     const created = await prisma.solution_sub_categories.create({ data });
@@ -165,6 +169,7 @@ exports.getOne = async (req, res) => {
 
 //UPDATE
 exports.update = async (req, res) => {
+
   const id = parseInt(req.params.id);
 
   try {
@@ -276,6 +281,9 @@ exports.update = async (req, res) => {
         para3: req.body.para3,
         para4: req.body.para4,
         image1,
+        image1Size: req.body.image1Size,
+        imageChartSize: req.body.imageChartSize,
+        image2Size: req.body.image2Size,
         imagechart,
         image2
       }
@@ -349,5 +357,4 @@ exports.remove = async (req, res) => {
     });
 
   }
-
 };
