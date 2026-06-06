@@ -68,7 +68,7 @@ const contactSettingsRoutes = require("./routes/contactSettingsRoutes");
 const headerTopRoutes = require("./routes/headerTopRoutes");
 const navbarMenuRoutes = require("./routes/navbarMenuRoutes");
 const navbarLogoRoutes = require("./routes/navbarLogoRoutes");
-
+const aaa_formRoutes = require("./routes/aaa_mailRoutes");
 
 
 app.use("/api/header-top", headerTopRoutes);
@@ -103,8 +103,12 @@ app.use("/api/solution-images" , solutionImageRoutes);
 app.use("/api/contact-messages", contactMessagesRoutes);
 app.use("/api/contact-settings", contactSettingsRoutes);
 
+app.use("/api/aaa_mail", aaa_formRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
   console.log('mysql connected');
 });
+
+
+
