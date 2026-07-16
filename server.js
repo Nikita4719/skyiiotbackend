@@ -12,7 +12,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "https://skyui.skylabsapp.com",
-  "https://skyfront.skyiiot.com"
+  "https://skyfront.skyiiot.com",
+  "https://www.skyiiot.com"
 ];
 
 app.use(cors({
